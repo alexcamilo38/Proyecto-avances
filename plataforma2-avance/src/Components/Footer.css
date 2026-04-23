@@ -1,0 +1,27 @@
+/* FOOTER */
+.footer {
+    background: #020617;
+    color: white;
+    padding: 30px 8%;
+    text-align: center;
+}
+
+.footer-parrafo {
+    color: #cbd5e1;
+    margin-top: 15px;
+}
+.footer-principal {
+    text-align: center;
+    
+}
+.logofo {
+    display: block;
+    margin: 0 auto 20px;
+    width: 160px;
+}
+.logo-footer {
+  width: 150px;   /* ajusta tamaño */
+  margin-bottom: 20px;
+  margin: auto;
+  
+}
