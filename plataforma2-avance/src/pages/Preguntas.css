@@ -1,0 +1,94 @@
+.seccion-faq {
+    all: unset; /* Limpia cualquier herencia extraña */
+    display: flex ;
+    flex-direction: column ;
+    align-items: center ;
+    justify-content: center ;
+    width: 100vw ; /* Fuerza el ancho total de la ventana */
+    min-height: 100vh ; /* Fuerza el alto total de la ventana */
+    background-color: #f8fafc ;
+    padding: 60px 20px ;
+    box-sizing: border-box ;
+}
+
+/* CONTENEDOR */
+.container10 {
+    width: 100% ;
+    max-width: 1200px ; /* Un poco más ancho para que respire como la imagen */
+    margin: 0 auto ;
+    text-align: center ;
+}
+
+/* TITULO */
+.seccion-faq h2 {
+    font-size: 2.8rem ; /* Tamaño aumentado para impacto visual */
+    color: #1e293b ;
+    margin-bottom: 15px ;
+    font-weight: 700 ;
+}
+
+/* LINEA DECORATIVA (VERDE) */
+.line10 {
+    width: 50px ;
+    height: 4px ;
+    background: #24a92b ; /* El verde de tu imagen */
+    margin: 0 auto 50px ;
+    border-radius: 10px ;
+}
+
+/* GRID FAQ */
+.faq-grid {
+    display: grid ;
+    /* Crea dos columnas exactamente iguales */
+    grid-template-columns: repeat(2, 1fr) ;
+    gap: 30px ;
+    width: 100% ;
+    text-align: left ;
+}
+
+/* TARJETA FAQ */
+.faq-item {
+    background: #f8fafc ; /* El gris suave de las tarjetas */
+    padding: 35px ; /* Más espacio interno */
+    border-radius: 20px ;
+    /* El borde azul a la izquierda como en la captura */
+    border-left: 6px solid #2563eb ; 
+    transition: all 0.3s ease ;
+    display: flex ;
+    flex-direction: column ;
+    justify-content: center ;
+    min-height: 180px ; /* Para que todas las tarjetas tengan un tamaño similar */
+}
+
+/* HOVER */
+.faq-item:hover {
+    transform: translateY(-5px) ;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.05) ;
+    background: #ffffff ; /* Cambia ligeramente al pasar el mouse */
+}
+
+/* TITULO PREGUNTA */
+.faq-item h3 {
+    font-size: 1.2rem ;
+    color: #1e293b ;
+    margin-bottom: 12px ;
+    display: flex ;
+    align-items: center ;
+    gap: 12px ;
+    font-weight: 700 ;
+}
+
+/* ICONO AZUL */
+.faq-item h3 i {
+    color: #2563eb ;
+    font-size: 1.4rem ;
+    flex-shrink: 0 ; /* Evita que el icono se aplaste */
+}
+
+/* RESPUESTA */
+.faq-item p {
+    font-size: 1rem ;
+    color: #64748b ;
+    line-height: 1.6 ;
+    margin: 0 ;
+}

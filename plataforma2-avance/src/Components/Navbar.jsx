@@ -5,23 +5,20 @@ import "./Navbar.css"
 const Navbar = () => {
   return (
     <header class="header">
-        <div class="logo">
-            <img src="/img/logo.png" alt="EasyMatric"/>
-        </div>
+      <div class="logo">
+        <img src="/img/logo.png" alt="EasyMatric" />
+      </div>
 
-        <nav class="nav">
-            <Link to="/">Inicio</Link>
-            <a href="#Nosotros">Nosotros</a>
-            <a href="#Servicios">Servicios</a>
-            <a href="#preguntas">Preguntas</a>
-            <a href="#contacto">Contacto</a>
-           
-        </nav>
-        <div class="boton-primero">
-           <Link to="/Login">Acceder</Link>  
-        </div>
+      <nav class="nav">
+        <Link to="/">Inicio</Link>
+        <Link to="/Nosotros">Nosotros</Link>
+        <Link to="/Servicios">Servicios</Link>
+        <Link to="/Preguntas">Preguntas</Link>
+        <Link to="/Contacto">Contacto</Link>
+      </nav>
+
     </header>
-    
+
   )
 }
 

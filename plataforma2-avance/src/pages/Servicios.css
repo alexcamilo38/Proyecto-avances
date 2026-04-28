@@ -1,0 +1,230 @@
+/* La sección ahora fuerza el centrado absoluto */
+.seccion-modulos {
+    all: unset; /* Limpia cualquier herencia extraña */
+    display: flex ;
+    flex-direction: column ;
+    align-items: center ;
+    justify-content: center ;
+    width: 100vw ; /* Fuerza el ancho total de la ventana */
+    min-height: 100vh ; /* Fuerza el alto total de la ventana */
+    background-color: #f8fafc ;
+    padding: 60px 20px ;
+    box-sizing: border-box ;
+}
+.etiqueta-superior {
+    display: inline-block;
+    background: rgba(37, 99, 235, 0.1);
+    color: #2563eb;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+/* Contenedor que limita el ancho para que se vea igual a la foto */
+.container-centrado {
+    width: 100% ;
+    max-width: 1100px ;
+    margin: 0 auto ;
+    display: block ;
+}
+
+/* Títulos y textos */
+.cabecera-modulos {
+    text-align: center ;
+    margin-bottom: 40px ;
+}
+
+.cabecera-modulos h2 {
+    font-size: 2.8rem ;
+    color: #1e293b ;
+    font-weight: 700 ;
+    margin: 15px 0 ;
+}
+
+/* El Grid que separa las dos tarjetas */
+.modulos-grid {
+    display: grid ;
+    grid-template-columns: repeat(2, 1fr) ;
+    gap: 30px ;
+    width: 100% ;
+}
+
+/* Las tarjetas */
+.modulo-item {
+    background: #ffffff ;
+    border-radius: 24px ;
+    padding: 40px ;
+    text-align: left ;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05) ;
+    border-top: 6px solid #60a5fa ;
+    display: flex ;
+    flex-direction: column ;
+}
+
+.modulo-item.destacado {
+    border-top: 6px solid #2563eb ;
+}
+.lista-cheque li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.icono-wrap {
+    width: 60px;
+    height: 60px;
+    background: #eff6ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    font-size: 1.6rem;
+    color: #2563eb;
+}
+
+.bi-check-circle-fill {
+    color: #22c55e;
+    font-size: 1.1rem;
+}
+
+/* Ajustes de iconos y listas para que no se amontonen */
+.modulo-header {
+    display: flex ;
+    align-items: center ;
+    gap: 15px ;
+    margin-bottom: 20px ;
+}
+
+.lista-cheque {
+    list-style: none ;
+    padding: 0 ;
+    margin: 0 ;
+}
+
+.lista-cheque li {
+    display: flex ;
+    align-items: center ;
+    gap: 10px ;
+    margin-bottom: 12px ;
+    color: #475569 ;
+}
+
+/* Responsive para que no se rompa en celulares */
+@media (max-width: 850px) {
+    .modulos-grid {
+        grid-template-columns: 1fr ;
+    }
+}
+/* Contenedor que limita el ancho de la línea de tiempo */
+.timeline-container {
+    position: relative ;
+    width: 100% ;
+    max-width: 900px ; /* Mismo ancho que la cabecera para alineación */
+    margin: 0 auto ;
+    padding: 20px 0 ;
+}
+
+/* 1. LA LÍNEA VERTICAL CENTRAL */
+/* Usamos el pseudoelemento ::before para crear la línea azul */
+.timeline-container::before {
+    content: '' ;
+    position: absolute ;
+    left: 50% ; /* Posiciona la línea en el medio exacto */
+    width: 3px ; /* Grosor de la línea */
+    height: calc(100% - 60px) ; /* Deja espacio al final */
+    background: #2563eb ; /* Color azul puro */
+    transform: translateX(-50%) ; /* Centra la línea */
+    border-radius: 2px ;
+    top: 50px ; /* Espacio antes de que empiece la línea */
+    z-index: 1 ;
+}
+
+/* 2. CADA PASO DE LA LÍNEA DE TIEMPO */
+.timeline-step {
+    position: relative ;
+    width: 100% ;
+    margin-bottom: 70px ; /* Espacio vertical entre pasos */
+    display: flex ;
+    justify-content: space-between ; /* Separa el contenido del icono/espacio */
+    align-items: center ; /* Centra verticalmente los elementos */
+    z-index: 2 ; /* Asegura que el contenido esté sobre la línea */
+}
+
+/* Logica de zig-zag: Alterna el orden de los elementos en pasos pares */
+.timeline-step:nth-child(even) {
+    flex-direction: row-reverse ; /* Invierte el orden */
+}
+
+/* 3. EL CÍRCULO CON EL NÚMERO (CENTRAL) */
+.step-number {
+    position: absolute ;
+    left: 50% ; /* Posiciona el círculo en el medio */
+    transform: translate(-50%, -50%) ; /* Centra el círculo exacto */
+    top: 50% ;
+    background: #2563eb ; /* Color azul */
+    color: #ffffff ; /* Texto blanco */
+    width: 50px ;
+    height: 50px ;
+    border-radius: 50% ; /* Hace el círculo perfecto */
+    display: flex ;
+    align-items: center ;
+    justify-content: center ;
+    font-weight: 700 ;
+    font-size: 1.1rem ;
+    z-index: 10 ;
+    box-shadow: 0 0 0 10px #ffffff ; /* El borde blanco "falso" para cortar la línea */
+}
+
+/* 4. LAS TARJETAS DE CONTENIDO */
+.step-content {
+    width: 44% ; /* Ancho de la tarjeta de texto */
+    background: #ffffff ;
+    border-radius: 24px ; /* Bordes redondeados idénticos a la imagen */
+    padding: 35px 40px ; /* Aire dentro de la tarjeta */
+    box-shadow: 0 10px 35px rgba(0,0,0,0.04) ; /* Sombra muy suave */
+    border: 1px solid #e2e8f0 ; /* Borde muy claro */
+    text-align: left ; /* Por defecto a la izquierda */
+    display: flex ;
+    flex-direction: column ;
+    gap: 10px ; /* Espacio entre título y texto */
+}
+
+/* Alineación de texto inversa para las tarjetas de la derecha (Pasos pares) */
+.timeline-step:nth-child(even) .step-content {
+    text-align: right ; /* Texto a la derecha */
+}
+
+.step-content h4 {
+    font-size: 1.3rem ;
+    font-weight: 700 ;
+    color: #1e293b ;
+    margin: 0 ;
+}
+
+.step-content p {
+    font-size: 0.95rem ;
+    color: #64748b ;
+    line-height: 1.6 ;
+    margin: 0 ;
+}
+
+/* 5. LOS ICONOS DE FONDO (FANTASMA) */
+.step-icon {
+    width: 44% ; /* Mismo ancho que las tarjetas para alineación */
+    display: flex ;
+    justify-content: center ;
+    font-size: 3rem ; /* Tamaño grande del icono */
+    color: #2563eb ;
+    opacity: 0.1 ; /* Muy transparente */
+}
+
+/* Alinear icono a la derecha si la tarjeta está a la izquierda */
+.timeline-step:nth-child(even) .step-icon {
+    justify-content: flex-start ;
+}
+.timeline-step:nth-child(odd) .step-icon {
+    justify-content: flex-end ;
+}
+
+

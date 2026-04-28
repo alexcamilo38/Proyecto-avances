@@ -1,0 +1,135 @@
+/* SECCION NOSOTROS */
+.seccion-nosotros {
+    width: 100%;
+    padding: 100px 8%;
+    background-color: white;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* CONTENEDOR */
+.container12 {
+    width: 100%;
+    text-align: center;
+}
+
+/* CABECERA */
+.nosotros-info {
+    margin-bottom: 20px;
+}
+.principal-nosotros {
+    text-align: left;
+}
+
+.principal-nosotros {
+    color: #2563eb;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    text-align: left;
+    letter-spacing: 1.5px;
+}
+
+/* TITULO */
+.container12 h2 {
+    font-size: 2.8rem;
+    color: #2c3e50;
+    margin: 15px 0;
+    line-height: 1.2;
+}
+
+/* LINEA VERDE */
+.line12 {
+    width: 60px;
+    height: 4px;
+    background: #22298b;
+    margin: 20px auto 40px;
+    border-radius: 5px;
+}
+
+/* TEXTO */
+.texto-nosotros {
+    max-width: 800px;
+    margin: 0 auto 70px;
+    text-align: center;
+}
+
+.texto-nosotros p {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+/* GRID TARJETAS */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+     background: #ffffff1d;
+    
+}
+
+/* TARJETAS */
+.card {
+    background: #ffffff1d;
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    text-align: center;
+    border-bottom: 4px solid #3498db;
+    transition: all 0.3s ease;
+}
+
+/* HOVER */
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+/* TITULO TARJETAS */
+.card h3 {
+    color: #2c3e50;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+}
+
+/* TEXTO TARJETAS */
+.card p {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* COLORES DIFERENTES */
+.card:nth-child(1) {
+    border-color: #3498db;
+}
+
+.card:nth-child(2) {
+    border-color: #22c55e;
+}
+
+.card:nth-child(3) {
+    border-color: #f59e0b;
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .container12 h2 {
+        font-size: 2rem;
+    }
+
+    .texto-nosotros {
+        margin-bottom: 40px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
