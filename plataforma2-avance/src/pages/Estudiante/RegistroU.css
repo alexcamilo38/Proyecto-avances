@@ -1,0 +1,200 @@
+:root {
+    --azul-oscuro: #1a1c2d;
+    --cyan-primario: #4facfe;
+    --cyan-brillante: #2a399c;
+    --blanco-fondo: #ffffff;
+    --gris-suave: #f8fafc;
+    --gris-borde: #e2e8f0;
+    --texto-principal: #334155;
+    --texto-muted: #94a3b8;
+    --sombra-soft: 0 15px 35px rgba(0, 0, 0, 0.05);
+    
+}
+
+
+/* Contenedor Derecho (Donde está el formulario) */
+.contenido-derecho {
+    background: var(--blanco-fondo);
+    width: 500%;
+    height: 100%;
+    max-width: 650px;
+    padding: 40px;
+    border-radius: 30px;
+    
+    box-shadow: var(--sombra-soft);
+    border: 1px solid var(--gris-borde);
+}
+
+/* Cabecera del Registro */
+.registro-header {
+    text-align: center;
+    margin-bottom: 30px;
+    margin: 0 auto;
+}
+
+.logo-easymatric {
+    display: block;    /* Permite que los márgenes automáticos funcionen */
+    margin-left: auto; /* Centra a la izquierda */
+    margin-right: auto;/* Centra a la derecha */
+    height: 50px;
+    margin-bottom: 15px;
+}
+
+.registro-header h1 {
+    color: var(--azul-oscuro);
+    font-size: 2rem;
+    margin: 0;
+}
+
+.registro-header p {
+    color: var(--texto-muted);
+    font-size: 0.95rem;
+    margin-top: 5px;
+}
+
+/* Organización del Formulario (La "Caja") */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Filas de dos columnas */
+.fila-input {
+    display: flex;
+    gap: 15px;
+}
+
+/* Contenedor de cada Input */
+.grupo-input {
+    background: var(--gris-suave);
+    border: 1.5px solid var(--gris-borde);
+    border-radius: 12px;
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    transition: all 0.3s ease;
+}
+
+.grupo-input i {
+    color: var(--cyan-primario);
+    font-size: 1.1rem;
+}
+
+.grupo-input input, 
+.select-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    color: var(--texto-principal);
+    font-weight: 500;
+}
+
+.grupo-input:focus-within {
+    border-color: var(--cyan-primario);
+    background: var(--blanco-fondo);
+    box-shadow: 0 0 8px rgba(79, 172, 254, 0.15);
+}
+
+/* Botón Principal */
+.btn-registrar {
+    background: linear-gradient(135deg, var(--cyan-primario) 0%, var(--cyan-brillante) 100%);
+    color: rgba(255, 255, 255, 0.889);
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
+    transition: 0.3s;
+}
+
+.btn-registrar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(79, 172, 254, 0.4);
+}
+
+/* Estilos para los botones inferiores (Inicio y Soporte) */
+.link-irInicio {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: 0.3s;
+    background: #f1f5f9;
+    color: var(--texto-principal);
+    border: 1px solid var(--gris-borde);
+    width: fit-content;
+    margin: 5px auto 0; /* Centra los botones */
+}
+
+.link-irInicio i {
+    font-size: 1rem;
+}
+
+.link-irInicio:hover {
+    background: var(--azul-oscuro);
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Diferenciar el botón de soporte si deseas */
+.link-irInicio:last-of-type {
+    border-color: var(--cyan-primario);
+    color: var(--cyan-primario);
+}
+
+.link-irInicio:last-of-type:hover {
+    background: var(--cyan-primario);
+    color: white;
+}
+.pie-cuadro {
+    margin-top: 25px;
+    text-align: center;
+}
+
+/* Responsivo para móviles */
+@media (max-width: 600px) {
+    .fila-input {
+        flex-direction: column;
+    }
+    .contenido-derecho {
+        padding: 25px;
+        margin: 15px;
+    }
+}
+
+.contenedor-boton {
+    display: flex;         /* Activa el modo flexible */
+    justify-content: center; /* Lo centra horizontalmente */
+    align-items: center;     /* Lo centra verticalmente (si el div tiene altura) */
+    padding: 20px;          /* Espaciado para que no pegue a otros elementos */
+    width: 100%;            /* Asegura que ocupe todo el ancho disponible */
+}
+
+.btn-registrar {
+    text-decoration: none;
+    padding: 12px 30px;
+    background-color: #1a1c2d; /* El azul oscuro de tu proyecto */
+    color: #4facfe;            /* El cian de tu proyecto */
+    border-radius: 12px;
+    font-weight: bold;
+    transition: 0.3s;
+    border: 1px solid rgba(79, 172, 254, 0.3);
+}
+
+.btn-registrar:hover {
+    background-color: #4facfe;
+    color: #1a1c2d;
+    transform: translateY(-3px);
+}

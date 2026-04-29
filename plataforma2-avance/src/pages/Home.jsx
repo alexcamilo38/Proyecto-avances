@@ -16,7 +16,7 @@ const Home = () => {
 
                 <div className="inicio-botones">
                     <Link to="/Login" className="btn-hero-primary">Iniciar Sesión</Link>
-                    <a href="registro.html" className="btn-hero-secondary">Registrarse</a>
+                    <Link to="/SelecionRol" className="btn-hero-secondary">Registrarse</Link>
                 </div>
             </div>
 

@@ -46,14 +46,14 @@ const Login = () => {
                 <div class="input-group">
                     <label><i class="bi bi-lock"></i> Contraseña</label>
                     <input type="password" placeholder="Tu contraseña" required/>
-                    <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+                    <Link to="/ReperaContra" class="forgot-link">¿Olvidaste tu contraseña?</Link>
                 </div>
 
                 <button type="submit" class="btn-submit">Ingresar</button>
 
                 <div class="extra">
                     <span>¿No tienes cuenta?</span>
-                    <a href="RegistroPaso01.html">Regístrate aquí</a>
+                    <Link to="/SelecionRol">Regístrate aquí</Link>
                 </div>
             </form>
         </div>

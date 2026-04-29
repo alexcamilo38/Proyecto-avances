@@ -1,0 +1,165 @@
+/* Estilos/SeleccionRol.css */
+
+:root {
+    --azul-dark: #1a1c2d;
+    --cyan-em: #4facfe;
+    --blanco: #ffffff;
+    --gris-fondo: #f1f5f9;
+    --gris-borde: #e2e8f0;
+    --texto: #334155;
+    --sombra: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.pantalla-fondo {
+    background-color: var(--gris-fondo);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* El cuadro o rectángulo principal */
+.cuadro-seleccion-principal {
+    background: var(--blanco);
+    width: 100%;
+    max-width: 500px; /* Tamaño tipo tarjeta de login */
+    padding: 45px;
+    border-radius: 30px;
+    box-shadow: var(--sombra);
+    border: 1px solid var(--gris-borde);
+    text-align: center;
+}
+
+.logo-easymatric {
+    height: 55px;
+    display: block;
+    margin: 0 auto 15px;
+}
+
+.registro-header h1 {
+    color: var(--azul-dark);
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.registro-header p {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin-bottom: 35px;
+}
+
+/* Lista de opciones */
+.contenedor-roles {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.opcion-rol {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: var(--gris-fondo);
+    border: 2px solid transparent;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.opcion-rol:hover {
+    border-color: var(--cyan-em);
+    background: var(--blanco);
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px rgba(79, 172, 254, 0.1);
+}
+
+.icono-box {
+    width: 50px;
+    height: 50px;
+    background: var(--blanco);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.icono-box i {
+    font-size: 1.5rem;
+    color: var(--cyan-em);
+}
+
+.texto-rol {
+    text-align: left;
+    flex-grow: 1;
+}
+
+.titulo-rol {
+    display: block;
+    font-weight: 700;
+    color: var(--azul-dark);
+    font-size: 1.1rem;
+}
+
+.desc-rol {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.flecha {
+    color: #cbd5e1;
+    transition: 0.3s;
+}
+
+.opcion-rol:hover .flecha {
+    color: var(--cyan-em);
+    transform: translateX(5px);
+}
+
+/* Pie de página del cuadro */
+.pie-cuadro {
+    margin-top: 30px;
+}
+
+.pie-cuadro p {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.pie-cuadro a {
+    color: var(--cyan-em);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.botones-inferiores {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-mini {
+    background: var(--azul-dark);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: 0.3s;
+}
+
+.btn-mini:hover {
+    background: var(--cyan-em);
+}

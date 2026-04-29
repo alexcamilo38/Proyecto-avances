@@ -1,0 +1,136 @@
+/* Estilos/Recuperar.css */
+
+:root {
+    --azul-dark: #1a1c2d;
+    --cyan-em: #4facfe;
+    --blanco: #ffffff;
+    --gris-fondo: #f1f5f9;
+    --gris-borde: #e2e8f0;
+    --texto-muted: #64748b;
+    --sombra: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--gris-fondo);
+}
+
+.pantalla-fondo {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.cuadro-recuperar {
+    background: var(--blanco);
+    width: 100%;
+    max-width: 450px;
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: var(--sombra);
+    border: 1px solid var(--gris-borde);
+    text-align: center;
+}
+
+.logo-easymatric {
+    height: 40px;
+    margin-bottom: 25px;
+}
+
+.icono-seguridad {
+    width: 70px;
+    height: 70px;
+    background: #f0f9ff;
+    color: var(--cyan-em);
+    font-size: 2rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+}
+
+.recuperar-header h1 {
+    color: var(--azul-dark);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.recuperar-header p {
+    color: var(--texto-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
+
+/* Formulario */
+.grupo-input {
+    background: #f8fafc;
+    border: 1.5px solid var(--gris-borde);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.grupo-input i {
+    color: var(--cyan-em);
+}
+
+.grupo-input input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    font-size: 0.95rem;
+    color: var(--azul-dark);
+}
+
+.grupo-input:focus-within {
+    border-color: var(--cyan-em);
+    background: white;
+    box-shadow: 0 0 12px rgba(79, 172, 254, 0.1);
+}
+
+/* Botón */
+.btn-recuperar {
+    width: 100%;
+    background: var(--azul-dark);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-bottom: 20px;
+}
+
+.btn-recuperar:hover {
+    background: var(--cyan-em);
+    box-shadow: 0 10px 20px rgba(79, 172, 254, 0.2);
+}
+
+/* Link Volver */
+.link-volver {
+    text-decoration: none;
+    color: var(--texto-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: 0.3s;
+}
+
+.link-volver:hover {
+    color: var(--azul-dark);
+}

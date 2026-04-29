@@ -9,22 +9,78 @@ import Nosotros from './pages/Nosotros'
 import Servicios from './pages/Servicios'
 import Preguntas from './pages/Preguntas'
 import Contacto from './pages/Contacto'
+import SelecionRol from './pages/Registro/SelecionRol'
+import ReperaContra from './pages/Contrarecuperar/ReperaContra'
+import RegistroAd from './pages/Administrador/RegistroAd'
+import RegistroU from './pages/Estudiante/RegistroU'
 
 
 const App = () => {
   return (
     <>
-      <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/Nosotros" element={<Nosotros />} />
-        <Route path="/Servicios" element={<Servicios />} />
-        <Route path="/Preguntas" element={<Preguntas />} />
-        <Route path="/Contacto" element={<Contacto />} />
+        {/* Página principal con Navbar y Footer */}
+      <Route 
+        path="/" 
+        element={
+          <>
+            <Navbar />
+            <Home />
+            <Footer />
+          </>
+        } 
+      />
+
+      <Route 
+        path="/Nosotros" 
+        element={
+          <>
+            <Navbar />
+            <Nosotros />
+            <Footer />
+          </>
+        } 
+      />
+
+      <Route 
+        path="/Servicios" 
+        element={
+          <>
+            <Navbar />
+            <Servicios />
+            <Footer />
+          </>
+        } 
+      />
+
+      <Route 
+        path="/Preguntas" 
+        element={
+          <>
+            <Navbar />
+            <Preguntas />
+            <Footer />
+          </>
+        } 
+      />
+
+      <Route 
+        path="/Contacto" 
+        element={
+          <>
+            <Navbar />
+            <Contacto />
+            <Footer />
+          </>
+        } 
+      />
 
         <Route path="/login" element={<Login />} />
+        <Route path="/SelecionRol" element={<SelecionRol />} />
+        <Route path="/ReperaContra" element={<ReperaContra />} />
+        <Route path="/RegistroAd" element={<RegistroAd />} />
+        <Route path="/RegistroU" element={<RegistroU />} />
       </Routes>
-      <Footer />
     </>
   )
 }
