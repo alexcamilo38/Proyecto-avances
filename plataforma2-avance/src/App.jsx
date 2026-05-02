@@ -13,6 +13,10 @@ import SelecionRol from './pages/Registro/SelecionRol'
 import ReperaContra from './pages/Contrarecuperar/ReperaContra'
 import RegistroAd from './pages/Administrador/RegistroAd'
 import RegistroU from './pages/Estudiante/RegistroU'
+import PerfilUsuario from './pages/Estudiante/PerfilUsuario'
+import Colegios from './pages/Estudiante/Colegios'
+import InfoSede from './pages/Estudiante/InfoSede'
+import MatriculasE from './pages/Estudiante/MatriculasE'
 
 
 const App = () => {
@@ -80,6 +84,10 @@ const App = () => {
         <Route path="/ReperaContra" element={<ReperaContra />} />
         <Route path="/RegistroAd" element={<RegistroAd />} />
         <Route path="/RegistroU" element={<RegistroU />} />
+        <Route path="/PerfilUsuario" element={<PerfilUsuario />} />
+        <Route path="/Colegios" element={<Colegios />} />
+        <Route path="/InfoSede" element={<InfoSede />} />
+         <Route path="/MatriculasE" element={<MatriculasE />} />
       </Routes>
     </>
   )

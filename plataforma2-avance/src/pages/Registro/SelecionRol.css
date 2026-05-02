@@ -1,5 +1,4 @@
 /* Estilos/SeleccionRol.css */
-
 :root {
     --azul-dark: #1a1c2d;
     --cyan-em: #4facfe;
@@ -8,13 +7,6 @@
     --gris-borde: #e2e8f0;
     --texto: #334155;
     --sombra: 0 20px 50px rgba(0, 0, 0, 0.1);
-}
-
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: 'Segoe UI', sans-serif;
 }
 
 .pantalla-fondo {

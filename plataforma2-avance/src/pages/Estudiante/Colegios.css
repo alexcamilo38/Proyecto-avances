@@ -1,0 +1,144 @@
+/* Ajuste del cuerpo para el layout con menú lateral */
+.contenido-principal2 {
+    margin-left: 260px;
+    padding: 20px 15px; /* 🔥 menos padding a la izquierda */
+    width: calc(100% - 260px);
+    
+
+}
+
+/* Header de la sección */
+.header-seccion2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    gap: 20px;
+    width: 100%; /* Asegura que ocupe todo el ancho disponible */
+}
+
+.texto-header2 h1 {
+    color: var(--azul-navy);
+    margin: 0;
+    font-size: 2rem;
+}
+
+.texto-header2 p {
+    color: var(--gris-texto);
+    margin: 5px 0 0;
+}
+
+/* Buscador */
+.busqueda-contenedor2 {
+    background: var(--blanco);
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: var(--sombra);
+    border: 1px solid #e2e8f0;
+}
+
+.busqueda-contenedor2 i {
+    color: var(--cyan-em);
+    margin-right: 10px;
+}
+.busqueda-contenedor2 input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-weight: 500;
+}
+
+/* Grid de Sedes */
+.grid-sedes {
+   display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+/* Tarjeta Individual (El Cuadro) */
+.tarjeta-sede {
+    background: var(--blanco);
+    border-radius: 25px;
+    overflow: hidden; /* Para que la imagen respete los bordes redondeados */
+    box-shadow: var(--sombra);
+    border: 1px solid #f1f5f9;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tarjeta-sede:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(79, 172, 254, 0.15);
+}
+
+.imagen-sede {
+    position: relative;
+    height: 180px;
+}
+
+.imagen-sede img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.etiqueta-cupos {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(34, 197, 94, 0.9); /* Verde éxito */
+    color: white;
+    padding: 5px 12px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.info-sede {
+    padding: 20px;
+}
+
+.info-sede h3 {
+    color: var(--azul-navy);
+    margin: 0 0 10px;
+    font-size: 1.2rem;
+}
+
+.ubicacion {
+    font-size: 0.85rem;
+    color: var(--gris-texto);
+    margin-bottom: 15px;
+}
+
+.detalles-mini {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--azul-navy);
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* Botón Ver Más */
+.btn-ver-mas {
+    display: block;
+    text-align: center;
+    background: #f1f5f9;
+    color: var(--azul-navy);
+    text-decoration: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.btn-ver-mas:hover {
+    background: var(--cyan-em);
+    color: white;
+}

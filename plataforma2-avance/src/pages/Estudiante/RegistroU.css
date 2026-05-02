@@ -1,17 +1,3 @@
-:root {
-    --azul-oscuro: #1a1c2d;
-    --cyan-primario: #4facfe;
-    --cyan-brillante: #2a399c;
-    --blanco-fondo: #ffffff;
-    --gris-suave: #f8fafc;
-    --gris-borde: #e2e8f0;
-    --texto-principal: #334155;
-    --texto-muted: #94a3b8;
-    --sombra-soft: 0 15px 35px rgba(0, 0, 0, 0.05);
-    
-}
-
-
 /* Contenedor Derecho (Donde está el formulario) */
 .contenido-derecho {
     background: var(--blanco-fondo);
@@ -23,10 +9,20 @@
     
     box-shadow: var(--sombra-soft);
     border: 1px solid var(--gris-borde);
+
+    --azul-oscuro: #1a1c2d;
+    --cyan-primario: #4facfe;
+    --cyan-brillante: #2a399c;
+    --blanco-fondo: #ffffff;
+    --gris-suave: #f8fafc;
+    --gris-borde: #e2e8f0;
+    --texto-principal: #334155;
+    --texto-muted: #94a3b8;
+    --sombra-soft: 0 15px 35px rgba(0, 0, 0, 0.05);
 }
 
 /* Cabecera del Registro */
-.registro-header {
+.registro-header3 {
     text-align: center;
     margin-bottom: 30px;
     margin: 0 auto;
@@ -40,20 +36,20 @@
     margin-bottom: 15px;
 }
 
-.registro-header h1 {
+.registro-header3 h1 {
     color: var(--azul-oscuro);
     font-size: 2rem;
     margin: 0;
 }
 
-.registro-header p {
+.registro-header3 p {
     color: var(--texto-muted);
     font-size: 0.95rem;
     margin-top: 5px;
 }
 
 /* Organización del Formulario (La "Caja") */
-form {
+.form3 {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -162,18 +158,6 @@ form {
     margin-top: 25px;
     text-align: center;
 }
-
-/* Responsivo para móviles */
-@media (max-width: 600px) {
-    .fila-input {
-        flex-direction: column;
-    }
-    .contenido-derecho {
-        padding: 25px;
-        margin: 15px;
-    }
-}
-
 .contenedor-boton {
     display: flex;         /* Activa el modo flexible */
     justify-content: center; /* Lo centra horizontalmente */

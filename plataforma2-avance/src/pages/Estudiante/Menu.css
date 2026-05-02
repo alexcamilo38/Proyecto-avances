@@ -1,0 +1,84 @@
+:root {
+    --azul-navy: #152e4d;
+    --cyan-em: #4facfe;
+    --cyan-glow: #00f2fe;
+    --blanco: #ffffff;
+    --gris-fondo: #f1f5f9;
+    --gris-texto: #64748b;
+    --borde: #e2e8f0;
+    --sombra: 0 10px 25px rgba(0,0,0,0.05);
+}
+/* --- MENÚ LATERAL --- */
+.menu-lateral {
+    width: 260px;
+    height: 100vh; /* Se mantiene en todo el alto de la pantalla */
+    background: var(--azul-navy);
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 30px 0;
+    z-index: 1000; /* Asegura que siempre esté por encima de las tarjetas */
+}
+
+.menu-logo {
+    padding: 0 30px 40px;
+    text-align: center;
+}
+
+.logo-img {
+    height: 45px;
+}
+
+.menu-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.menu-lista li a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 30px;
+    color: #94a3b8;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.menu-lista li a i {
+    font-size: 1.2rem;
+}
+
+.menu-lista li a:hover, 
+.menu-lista li a.activo {
+    color: white;
+    background: rgba(79, 172, 254, 0.1);
+    border-left: 4px solid var(--cyan-em);
+}
+
+.menu-pie {
+    padding: 20px 30px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.enlace-salir {
+    color: #ef4444;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.perfil-usuario-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    color: var(--cyan-em);
+}

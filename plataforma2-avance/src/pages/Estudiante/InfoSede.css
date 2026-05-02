@@ -1,0 +1,120 @@
+/* --- BANNER PRINCIPAL --- */
+.bienvenida-sede {
+    height: 250px;
+    background: #1a1c2d url('imagenes/fondo-sede.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+    display: flex;
+    align-items: flex-end;
+    padding: 30px;
+    margin-bottom: 30px;
+    color: white;
+}
+
+/* --- ESTRUCTURA DE LA PÁGINA --- */
+.grid-informacion-limpia {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 30px;
+}
+
+.tarjeta-blanca {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+    margin-bottom: 25px;
+}
+
+.tarjeta-blanca h2 {
+    font-size: 1.2rem;
+    color: #1a1c2d;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* --- SERVICIOS EN TAGS --- */
+.mini-grid-servicios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.servicio-tag {
+    background: #f1f5f9;
+    padding: 8px 15px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- LISTA DE DESCARGAS --- */
+.archivo-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 15px;
+    margin-top: 10px;
+    gap: 15px;
+}
+
+.icono-pdf { color: #ef4444; font-size: 1.8rem; }
+.archivo-info strong { display: block; font-size: 0.95rem; }
+.archivo-info small { color: #64748b; font-size: 0.8rem; }
+
+/* --- EL BOTÓN DE MATRÍCULA PREMIUM --- */
+.btn-iniciar-matricula {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1a1c2d;
+    color: #4facfe !important;
+    text-decoration: none;
+    padding: 18px 25px;
+    border-radius: 15px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    transition: 0.4s ease;
+    margin-top: 20px;
+    border: 1px solid rgba(79, 172, 254, 0.3);
+}
+
+.btn-iniciar-matricula:hover {
+    background: #4facfe;
+    color: #1a1c2d !important;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(79, 172, 254, 0.4);
+}
+
+/* --- TARJETA LATERAL --- */
+.tarjeta-accion-matricula {
+    background: white;
+    padding: 30px;
+    border-radius: 25px;
+    border: 1px solid #e2e8f0;
+    position: sticky;
+    top: 30px;
+}
+
+.requisitos-resumen ul {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+}
+
+.requisitos-resumen li {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    color: #475569;
+}
+
+.requisitos-resumen i { color: #10b981; }
