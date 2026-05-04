@@ -17,6 +17,7 @@ import PerfilUsuario from './pages/Estudiante/PerfilUsuario'
 import Colegios from './pages/Estudiante/Colegios'
 import InfoSede from './pages/Estudiante/InfoSede'
 import MatriculasE from './pages/Estudiante/MatriculasE'
+import Formulario from './pages/Estudiante/Formulario'
 
 
 const App = () => {
@@ -88,6 +89,7 @@ const App = () => {
         <Route path="/Colegios" element={<Colegios />} />
         <Route path="/InfoSede" element={<InfoSede />} />
          <Route path="/MatriculasE" element={<MatriculasE />} />
+         <Route path='/Formulario' element={<Formulario/>}></Route>
       </Routes>
     </>
   )

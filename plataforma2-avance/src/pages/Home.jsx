@@ -14,10 +14,6 @@ const Home = () => {
                     organizada y desde cualquier lugar.
                 </p>
 
-                <div className="inicio-botones">
-                    <Link to="/Login" className="btn-hero-primary">Iniciar Sesión</Link>
-                    <Link to="/SelecionRol" className="btn-hero-secondary">Registrarse</Link>
-                </div>
             </div>
 
             <div className="imagen-inicio">

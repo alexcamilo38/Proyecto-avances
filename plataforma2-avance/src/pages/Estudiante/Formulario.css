@@ -1,0 +1,134 @@
+
+/* --- ESTRUCTURA GLOBAL --- */
+.cuerpo-dashboard5 {
+    display: flex;
+    margin: 0;
+    background-color: #f8fafc;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.contenido-principal5 {
+    margin-left: 260px; /* Ancho exacto del menú */
+    width: calc(100% - 260px);
+    padding: 40px;
+    min-height: 100vh;
+}
+
+/* --- CONTENEDOR DE FORMULARIO --- */
+.contenedor-formulario-soft5 {
+    max-width: 1800px; /* Un poco más ancho para los nuevos campos */
+    margin: 0 auto;
+}
+
+.header-pasos5 {
+    margin-bottom: 30px;
+    border-left: 5px solid #4facfe;
+    padding-left: 20px;
+}
+
+.header-pasos5 h2 { color: #1a1c2d; font-size: 1.8rem; margin: 0; }
+.header-pasos5 p { color: #64748b; font-size: 1rem; }
+
+
+
+/**/
+.form-matricula5 {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px; 
+    padding-bottom: 50px;
+}
+/* --- CARDS DE SECCIÓN --- */
+.card-blanca5 {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
+    border: 1px solid #f1f5f9;
+}
+
+.card-header5 {
+    display: flex; align-items: center; gap: 15px;
+    margin-bottom: 25px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px;
+}
+
+.paso-numero {
+    background: #1a1c2d; color: #4facfe;
+    width: 35px; height: 35px; display: flex; align-items: center;
+    justify-content: center; border-radius: 50%; font-weight: 800;
+}
+
+/* --- GRID Y CAMPOS --- */
+
+.grid-inputs5 {
+    display: grid;
+   grid-template-columns: repeat(3, 1fr); 
+    gap: 20px;
+}
+
+.grupo-input5 {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.grupo-input5 label {
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.9rem;
+}
+
+/* inputs */
+.grupo-input5 input,
+.grupo-input5 select {
+    padding: 12px 15px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+    color: #1e293b;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    
+}
+
+/* focus */
+.grupo-input5 input:focus,
+.grupo-input5 select:focus {
+    outline: none;
+    border-color: #4facfe;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.1);
+}
+
+.input:focus, select:focus {
+    outline: none; border-color: #4facfe; background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.1);
+}
+
+/* --- ÁREA DE CARGA DE ARCHIVOS --- */
+.upload-area {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;
+}
+
+.file-item label {
+    background: #f8fafc; border: 2px dashed #cbd5e1; padding: 25px 15px;
+    border-radius: 15px; display: flex; flex-direction: column;
+    align-items: center; gap: 10px; cursor: pointer; transition: 0.3s;
+}
+.file-item label:hover { border-color: #4facfe; background: #f0f9ff; }
+.file-item i { font-size: 1.8rem; color: #4facfe; }
+.file-item input[type="file"] { display: none; }
+
+/* --- BOTÓN DE ENVÍO --- */
+.btn-primario-grande {
+    width: 100%; padding: 18px;
+    background: linear-gradient(135deg, #1a1c2d, #2a2d45);
+    color: white; border: none; border-radius: 15px;
+    font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.4s;
+}
+
+.btn-primario-grande:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }

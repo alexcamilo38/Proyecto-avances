@@ -3,35 +3,41 @@
     align-items: center;
     gap: 10px;
     font-size: 0.8rem;
-    color: var(--cyan-em);
+    color: #4facfe;
 }
 
-.contenido-principal4 {
-    margin-left: 260px;
+
+.contenido-principal4{
+    margin-left: 260px; 
     padding: 40px;
+    margin: auto;
 }
 
-.header-matriculas h1 {
-    color: var(--azul-navy);
+.header-matriculas4 h1 {
+    color: #153051;
     margin-bottom: 5px;
 }
 
-.header-matriculas p {
+.header-matriculas4 p {
     color: #64748b;
     margin-bottom: 30px;
 }
 
 /* Tarjeta Principal */
-.tarjeta-matricula {
-    background: var(--blanco);
+.tarjeta-matricula4 {
+    background: #ffffff;
     border-radius: 25px;
     padding: 30px;
-    box-shadow: var(--sombra);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     margin-bottom: 30px;
     border: 1px solid #f1f5f9;
+     
+}
+.contenedor-historial {
+    width: 100%;
 }
 
-.matricula-encabezado {
+.matricula-encabezado4 {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -49,19 +55,19 @@
 .icono-inst {
     width: 50px;
     height: 50px;
-    background: var(--gris-fondo);
+    background:  #f8fafc;
     border-radius: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 1.5rem;
-    color: var(--cyan-em);
+    color: #4facfe;
 }
 
 .inst-info h2 {
     font-size: 1.3rem;
     margin: 0;
-    color: var(--azul-navy);
+    color: #153051;
 }
 
 .id-proceso {
@@ -77,31 +83,47 @@
     font-weight: 700;
 }
 
-.estado-badge.aprobado { background: #dcfce7; color: var(--verde-ok); }
-.estado-badge.pendiente { background: #fef3c7; color: var(--naranja-wait); }
+.estado-badge.aprobado { background: #dcfce7; color: #22c55e; }
+.estado-badge.pendiente { background: #fef3c7; color:  #f59e0b; }
 
 /* Módulos */
-.seccion-modulos h3 {
-    font-size: 1rem;
-    color: var(--azul-navy);
-    margin-bottom: 15px;
-}
 
-.grid-modulos {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+.seccion-modulos7 {
     margin-bottom: 25px;
 }
 
-.modulo-item {
-    background: var(--gris-fondo);
-    padding: 8px 15px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    color: var(--azul-navy);
+/* título */
+.seccion-modulos7 h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.05rem;
+    color: #153051;
+    margin-bottom: 15px;
+}
+
+/* contenedor */
+.grid-modulos7 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* módulos estilo "pill" */
+.modulos7-item {
+    background: #f1f5f9; /* más suave */
+    padding: 10px 18px; /* 🔥 tamaño exacto */
+    border-radius: 12px; /* 🔥 más redondeado */
+    font-size: 0.9rem;
+    color: #153051;
     font-weight: 600;
     border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+}
+
+/* hover suave (como en dashboard moderno) */
+.modulos7-item:hover {
+    background: #e2e8f0;
 }
 
 /* Línea de Progreso Visual */
@@ -134,8 +156,8 @@
     color: #94a3b8;
 }
 
-.paso.completado span { background: var(--verde-ok); color: white; }
-.paso.activo span { background: var(--cyan-em); color: white; box-shadow: 0 0 15px rgba(79, 172, 254, 0.4); }
+.paso.completado span { background:  #22c55e; color: white; }
+.paso.activo span { background: #4facfe; color: white; box-shadow: 0 0 15px rgba(79, 172, 254, 0.4); }
 
 .paso p { font-size: 0.75rem; color: #64748b; font-weight: 600; }
 
@@ -160,8 +182,8 @@
     gap: 8px;
 }
 
-.btn-accion.primario { background: var(--azul-navy); color: white; }
-.btn-accion.secundario { background: var(--gris-fondo); color: var(--azul-navy); }
-.btn-accion.primario:hover { background: var(--cyan-em); transform: translateY(-3px); }
+.btn-accion.primario { background: #153051; color: white; }
+.btn-accion.secundario { background:  #f8fafc; color: #153051; }
+.btn-accion.primario:hover { background: #4facfe; transform: translateY(-3px); }
 
 .btn-accion.disabled { background: #f1f5f9; color: #cbd5e1; cursor: not-allowed; }

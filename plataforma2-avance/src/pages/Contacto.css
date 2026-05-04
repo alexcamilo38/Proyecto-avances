@@ -1,94 +1,78 @@
 /* SECCION CONTACTO - PANTALLA COMPLETA */
-.seccion-contacto {
+.contenido-contacto {
     width: 100%;
     padding: 100px 8%;
-    background-color: #0a0f1e; /* fondo oscuro */
-    color: #ffffff;
+    color: #252525;
     display: flex;
     justify-content: center;
     width: 100vw ; 
      min-height: 100vh ;
 }
-
-/* CONTENEDOR - Divide en dos columnas */
-.contenedor-contacto {
-    width: 100% ; 
-    display: flex ;
-    flex-direction: row ; /* Horizontal */
-    align-items: flex-start ;
-    justify-content: space-between ;
-    gap: 50px ;
+.boton-primero {
+    padding: 12px 24px;
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: .3s;
 }
 
-/* COLUMNA IZQUIERDA */
-.contacto-col-izquierda {
-    flex: 1 ;
-    text-align: left ;
+/* Organiza las tarjetas y el formulario en dos columnas */
+.layout-contacto {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr; /* Columna pequeña para info, grande para formulario */
+    gap: 30px;
+    margin-top: 40px;
 }
 
-.tag-contacto {
-    display: inline-block ;
-    color: #3b82f6 ; /* Azul vibrante */
-    font-size: 0.8rem ;
-    font-weight: 700 ;
-    letter-spacing: 2px ;
-    text-transform: uppercase ;
-    margin-bottom: 20px ;
+/* Estilo de las tarjetas de info */
+.canales-soporte {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.contacto-col-izquierda h2 {
-    font-size: 3.5rem ; /* Grande como en la imagen */
-    line-height: 1.1 ;
-    margin-bottom: 20px ;
-    font-weight: 700 ;
+.tarjeta-blancas6 {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+    border: 1px solid #eef2f6;
 }
 
-.resaltado-azul {
-    color: #3b82f6 ;
-    display: block ; /* Hace que "Ayudarte" baje de línea */
+/* Colores de iconos */
+.color-cian {
+    color: #4facfe;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    display: block;
 }
 
-.descripcion {
-    color: #94a3b8 ;
-    font-size: 1.1rem ;
-    max-width: 400px ;
-    line-height: 1.5 ;
+/* Formulario */
+.input-grupo {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
 }
 
-/* COLUMNA DERECHA */
-.contacto-col-derecha {
-    flex: 1.2 ;
-    display: flex ;
-    align-items: center ;
+.input-grupo label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1a1c2d;
 }
 
-/* GRID INFO */
-.info-grid-compacto {
-    display: grid ;
-    grid-template-columns: repeat(2, 1fr) ; /* 2 columnas */
-    gap: 40px 60px ; /* Espacio horizontal y vertical */
-    width: 100% ;
+.input-grupo input, .input-grupo textarea {
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
 }
 
-/* ITEM DE INFORMACIÓN */
-.info-item {
-    border-left: 2px solid #1e293b ; /* Línea sutil a la izquierda */
-    padding-left: 20px ;
-}
-
-.label {
-    display: block ;
-    font-size: 0.75rem ;
-    color: #3b82f6 ; /* Azul para el título */
-    font-weight: 600 ;
-    margin-bottom: 8px ;
-    text-transform: uppercase ;
-    letter-spacing: 1px ;
-}
-
-.valor {
-    font-size: 1.1rem ;
-    color: #f1f5f9 ; /* Blanco hueso */
-    margin: 0 ;
-    font-weight: 400 ;
+/* Centrar el botón del formulario */
+.contenedor-boton-form {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
 }

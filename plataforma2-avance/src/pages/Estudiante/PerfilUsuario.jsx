@@ -24,13 +24,13 @@ const PerfilUsuario = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link  to="MatriculasE">
+                        <Link  to="/MatriculasE">
                             <i className="bi bi-journal-bookmark"></i>
                             <span>Mis Matrículas</span>
                         </Link>
                     </li>
                     <li>
-                        <a href="perfilUsuario.html" className="activo">
+                        <a to="/PerfilUsuario" className="activo">
                             <i className="bi bi-person-badge"></i>
                             <span>Mi Perfil</span>
                         </a>
@@ -48,13 +48,13 @@ const PerfilUsuario = () => {
                 </div>
             </nav>
 
-            <main className="contenido-principal4">
+            <main className="contenido-principal1">
                 <div className="perfil-contenedor">
 
                     <header className="perfil-header">
                         <div className="perfil-info-basica">
                             <div className="avatar-zona">
-                                <img src="imagenes/negro.jpg" alt="Foto de Perfil" className="avatar-img" />
+                                <img src="img/Usuario.jpg" alt="Foto de Perfil" className="avatar-img" />
                                 <button className="btn-cambiar-foto"><i className="bi bi-camera"></i></button>
                             </div>
                             <div className="texto-usuario">

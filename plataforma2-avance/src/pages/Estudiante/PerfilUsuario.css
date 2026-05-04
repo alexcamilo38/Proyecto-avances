@@ -9,7 +9,7 @@
     display: flex; /* Para poner el menú al lado del contenido */
     font-family: 'Segoe UI', sans-serif;
 }
-.contenido-principal {
+.contenido-principal1 {
     margin-left: 260px; /* Espacio para el menú fijo */
     width: calc(100% - 260px);
     padding: 40px;
