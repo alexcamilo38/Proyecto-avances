@@ -16,7 +16,7 @@ const ReperaContra = () => {
             </div>
 
             <form action="enviar_recuperacion.php" method="POST">
-                <div className="grupo-input">
+                <div className="grupo1-input">
                     <i className="bi bi-envelope-at"></i>
                     <input type="email" name="correo" placeholder="Correo electrónico registrado" required/>
                 </div>

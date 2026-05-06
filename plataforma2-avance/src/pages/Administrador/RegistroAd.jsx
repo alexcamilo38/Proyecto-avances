@@ -59,7 +59,7 @@ const RegistroAd = () => {
                 </div>
 
                 <div className="contenedor-boton">
-                        <a href="RegistrarSede.html" className="btn-registrar">INICIAR SESIÓN</a>
+                        <Link to="/RegistrarSede" className="btn-registrar">INICIAR SESIÓN</Link>
                 </div>
 
             </form>

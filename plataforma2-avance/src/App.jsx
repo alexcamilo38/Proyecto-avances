@@ -18,6 +18,10 @@ import Colegios from './pages/Estudiante/Colegios'
 import InfoSede from './pages/Estudiante/InfoSede'
 import MatriculasE from './pages/Estudiante/MatriculasE'
 import Formulario from './pages/Estudiante/Formulario'
+import RegistrarSede from './pages/Administrador/RegistrarSede'
+import Roles from './pages/Administrador/Roles'
+import Matriculados from './pages/Administrador/Matriculados'
+import NotasCa from './pages/Administrador/NotasCa'
 
 
 const App = () => {
@@ -88,8 +92,12 @@ const App = () => {
         <Route path="/PerfilUsuario" element={<PerfilUsuario />} />
         <Route path="/Colegios" element={<Colegios />} />
         <Route path="/InfoSede" element={<InfoSede />} />
-         <Route path="/MatriculasE" element={<MatriculasE />} />
-         <Route path='/Formulario' element={<Formulario/>}></Route>
+        <Route path="/MatriculasE" element={<MatriculasE />} />
+        <Route path='/Formulario' element={<Formulario/>}/>
+        <Route path="/RegistrarSede" element={<RegistrarSede />} />
+        <Route path="/Roles" element={<Roles />} />
+        <Route path="/Matriculados" element={<Matriculados />} />
+        <Route path="/NotasCa" element={<NotasCa />} />
       </Routes>
     </>
   )

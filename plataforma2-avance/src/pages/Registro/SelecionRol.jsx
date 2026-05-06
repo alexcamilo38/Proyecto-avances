@@ -41,7 +41,7 @@ const SelecionRol = () => {
                 <p>¿Ya tienes cuenta? <Link to="/Login" >Inicia sesión</Link></p>
                 <div className="botones-inferiores">
                     <Link to="/" className="btn-mini"><i className="bi bi-house"></i> Inicio</Link>
-                    <a href="#contacto" className="btn-mini"><i className="bi bi-headset"></i> Soporte</a>
+                    <Link to="/Contacto" className="btn-mini"><i className="bi bi-headset"></i> Soporte</Link>
                 </div>
             </div>
 

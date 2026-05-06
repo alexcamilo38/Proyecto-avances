@@ -1,0 +1,186 @@
+:root {
+    --azul-navy: #1e293b;
+    --cyan: #4facfe;
+    --blanco: #ffffff;
+    --gris-fondo: #f1f5f9;
+    --gris-borde: #e2e8f0;
+    --texto-gris: #64748b;
+}
+.dashboard-container-matriculas {
+  display: flex;
+  min-height: 100vh; /* Ocupa todo el alto de la pantalla */
+  width: 100%;       /* Ocupa todo el ancho */
+  margin: 0;
+  padding: 0;
+}
+
+
+/* CONTENIDO PRINCIPAL */
+.panel-estudiantes {
+    margin-left: 260px;
+    flex: 1;            /* Ocupa TODO el espacio restante */
+    padding: 25px 30px;
+    background: var(--gris-fondo);
+    display: flex;
+    flex-direction: column;
+    width: 80vw ; 
+}
+
+/* HEADER */
+.encabezado-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.bloque-titulo h1 {
+    font-size: 2rem;
+    color: var(--azul-navy);
+    margin: 0;
+}
+
+.bloque-titulo p {
+    color: var(--texto-gris);
+    margin-top: 5px;
+}
+
+/* BOTÓN */
+.btn-crear {
+    background: linear-gradient(135deg, #4facfe, #3b82f6);
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(79, 172, 254, 0.4);
+    transition: 0.2s;
+}
+
+.btn-crear:hover {
+    transform: translateY(-2px);
+}
+
+/* TARJETA */
+.tarjeta-tabla-matriculados {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    width: 100%;        /* Asegura que use todo el ancho del panel */
+    box-sizing: border-box;
+    flex-grow: 1;
+}
+
+/* BARRA SUPERIOR */
+.barra-superior {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+/* BUSCADOR */
+.buscador {
+    position: relative;
+    width: 320px;
+}
+
+.buscador i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+}
+
+.buscador input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border-radius: 12px;
+    border: 1px solid var(--gris-borde);
+    background: #f8fafc;
+    outline: none;
+}
+
+.buscador input:focus {
+    border-color: var(--cyan);
+    background: white;
+}
+
+/* BOTÓN EDITAR */
+.btn-edicion {
+    background: white;
+    border: 1px solid var(--gris-borde);
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* TABLA */
+.tabla-estudiantes-matriculados {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* HEADER TABLA */
+.tabla-estudiantes-matriculados thead {
+    background: #f8fafc;
+}
+
+.tabla-estudiantes-matriculados th {
+    text-align: left;
+    padding: 14px;
+    font-size: 0.8rem;
+    color: #64748b;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--gris-borde);
+}
+
+/* FILAS */
+.tabla-estudiantes-matriculados td {
+    padding: 14px;
+    border-bottom: 1px solid var(--gris-borde);
+    font-size: 0.95rem;
+}
+
+.tabla-estudiantes-matriculados tr:hover {
+    background: #f0f9ff;
+}
+
+/* NOMBRE */
+.col-nombre {
+    font-weight: 600;
+    color: var(--azul-navy);
+}
+
+/* TAG ID */
+.tag-id {
+    background: #eff6ff;
+    color: #2563eb;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-family: monospace;
+}
+
+/* TAG GRADO */
+.tag-grado {
+    background: #f1f5f9;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+/* BOTÓN OPCIONES */
+.btn-opciones {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #94a3b8;
+    font-size: 1.2rem;
+}
+
+.btn-opciones:hover {
+    color: var(--azul-navy);
+}

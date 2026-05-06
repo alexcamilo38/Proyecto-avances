@@ -1,0 +1,82 @@
+/* --- VARIABLES LOCALES (Por si no cargan del Global) --- */
+:root {
+    --azul-navy: #1a1c2d;
+    --cyan-em: #4facfe;
+    --blanco: #ffffff;
+    --gris-fondo: #f8fafc;
+    --border-color: #eef2f6;
+}
+
+.contenido-principal-roles {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    padding: 40px;
+    min-height: 100vh;
+    width: 80vw ; 
+}
+
+/* --- HEADER Y TITULOS --- */
+.header-tabla-roles { margin-bottom: 30px; }
+.header-tabla-roles h1 { color: var(--azul-navy); font-size: 1.8rem; margin: 0; }
+.header-tabla-roles p { color: #64748b; margin-top: 5px; }
+
+/* --- BANNER INFORMATIVO --- */
+.card-informativa-soft {
+    background: linear-gradient(90deg, #1a1c2d, #2a2d45);
+    color: white; padding: 25px; border-radius: 16px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.info-texto-roles { display: flex; align-items: center; gap: 20px; }
+.info-texto-roles i { font-size: 2.5rem; color: var(--cyan-em); }
+.info-texto-roles strong { display: block; font-size: 1.1rem; margin-bottom: 4px; }
+.info-texto-roles p { margin: 0; font-size: 0.9rem; opacity: 0.8; }
+
+.btn-secundario {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    color: white; padding: 10px 20px; border-radius: 10px; cursor: pointer; transition: 0.3s;
+}
+.btn-secundario:hover { background: var(--cyan-em); border-color: var(--cyan-em); }
+
+/* --- TABLA Y CONTENEDOR --- */
+.contenedor-tabla-soft {
+    background: var(--blanco); border-radius: 20px; padding: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+}
+
+.barra-herramientas {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;
+}
+
+.acciones { display: flex; gap: 15px; }
+.input-busqueda-simple {
+    padding: 10px 15px; border-radius: 10px; border: 1px solid var(--border-color);
+    background: #f8fafc; outline: none; width: 250px;
+}
+
+.btn-primario {
+    background: var(--cyan-em); color: white; border: none;
+    padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer;
+}
+
+.tabla-matriculados { width: 100%; border-collapse: collapse; }
+.tabla-matriculados th {
+    text-align: left; padding: 15px; color: #64748b; font-size: 0.85rem;
+    text-transform: uppercase; border-bottom: 2px solid var(--border-color);
+}
+.tabla-matriculados td { padding: 18px 15px; border-bottom: 1px solid var(--border-color); }
+
+/* --- ETIQUETAS DE ROL --- */
+.rol-tag {
+    padding: 6px 12px; border-radius: 20px; font-size: 0.7rem;
+    font-weight: 800; letter-spacing: 0.5px;
+}
+.rol-tag.admin { background: #fee2e2; color: #dc2626; }
+.rol-tag.rector { background: #fef3c7; color: #d97706; }
+.rol-tag.staff { background: #dcfce7; color: #16a34a; }
+.rol-tag.user { background: #e0f2fe; color: #0284c7; }
+
+.permisos-count { color: #64748b; font-style: italic; }
+
+.btn-tabla { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1.2rem; }

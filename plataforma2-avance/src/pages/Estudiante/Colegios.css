@@ -1,7 +1,7 @@
 /* Ajuste del cuerpo para el layout con menú lateral */
 .contenido-principal2 {
     margin-left: 260px;
-    padding: 20px 15px; /* 🔥 menos padding a la izquierda */
+    padding: 20px 15px; 
     width: calc(100% - 260px);
     
 }
@@ -89,6 +89,28 @@
     top: 15px;
     right: 15px;
     background: rgba(34, 197, 94, 0.9); /* Verde éxito */
+    color: white;
+    padding: 5px 12px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+.etiqueta-cupos-pocos{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(245, 158, 11, 0.9); /* Verde éxito */
+    color: white;
+    padding: 5px 12px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+.etiqueta-cupos-agotados{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(245, 11, 11, 0.9); /* Verde éxito */
     color: white;
     padding: 5px 12px;
     border-radius: 10px;

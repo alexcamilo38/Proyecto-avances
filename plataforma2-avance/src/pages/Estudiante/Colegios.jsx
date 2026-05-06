@@ -79,7 +79,7 @@ const Colegios = () => {
 
                     <div className="tarjeta-sede">
                         <div className="imagen-sede">
-                            <img src="imagenes/cole2.jpg" alt="Institución" />
+                            <img src="img/cole2.jpg" alt="Institución" />
                             <span className="etiqueta-cupos">Cupos Disponibles</span>
                         </div>
                         <div className="info-sede">
@@ -95,7 +95,7 @@ const Colegios = () => {
 
                     <div className="tarjeta-sede">
                         <div className="imagen-sede">
-                            <img src="imagenes/cole3.jpg" alt="Institución" />
+                            <img src="img/cole3.jpg" alt="Institución" />
                             <span className="etiqueta-cupos">Cupos Disponibles</span>
                         </div>
                         <div className="info-sede">
@@ -111,7 +111,7 @@ const Colegios = () => {
 
                     <div className="tarjeta-sede">
                         <div className="imagen-sede">
-                            <img src="imagenes/cole.4.jpg" alt="Institución" />
+                            <img src="img/cole.4.jpg" alt="Institución" />
                             <span className="etiqueta-cupos">Cupos Disponibles</span>
                         </div>
                         <div className="info-sede">
@@ -127,8 +127,8 @@ const Colegios = () => {
 
                     <div className="tarjeta-sede">
                         <div className="imagen-sede">
-                            <img src="imagenes/cole.5.jpg" alt="Institución" />
-                            <span className="etiqueta-cupos" >Pocos Cupos</span>
+                            <img src="img/cole.5.jpg" alt="Institución" />
+                            <span className="etiqueta-cupos-pocos" >Pocos Cupos</span>
                         </div>
                         <div className="info-sede">
                             <h3>I.E. Francisco de Paula Santander</h3>
@@ -143,8 +143,8 @@ const Colegios = () => {
 
                     <div className="tarjeta-sede">
                         <div className="imagen-sede">
-                            <img src="imagenes/cole.6.jpg" alt="Institución" />
-                            <span className="etiqueta-cupos">Agotado</span>
+                            <img src="img/cole.6.jpg" alt="Institución" />
+                            <span className="etiqueta-cupos-agotados">Agotado</span>
                         </div>
                         <div className="info-sede">
                             <h3>Colegio Nuestra Señora del Carmen</h3>
