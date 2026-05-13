@@ -16,7 +16,7 @@
 
 
 /* CONTENIDO PRINCIPAL */
-.panel-estudiantes {
+.panel-estudiantes-prescolar {
     margin-left: 260px;
     flex: 1;            /* Ocupa TODO el espacio restante */
     padding: 25px 30px;
@@ -27,30 +27,22 @@
 }
 
 /* HEADER */
-.encabezado-panel {
+.encabezado-panel-prescolar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
 }
 
-.bloque-titulo h1 {
+.bloque-titulo-prescolar h1 {
     font-size: 2rem;
     color: var(--azul-navy);
     margin: 0;
 }
 
-.bloque-titulo p {
+.bloque-titulo-prescolar p {
     color: var(--texto-gris);
     margin-top: 5px;
-}
-.rutas03{
-    gap: 20px; 
-    display: flex;
-}
-.rutas03 a:hover,
-.rutas03 .active {
-    color: #2563eb;
 }
 /* BOTÓN */
 .btn-crear {
@@ -86,7 +78,7 @@
     color: rgb(255, 255, 255);
 }
 /* TARJETA */
-.tarjeta-tabla-matriculados {
+.tarjeta-tabla-matriculados-prescolar {
     background: white;
     border-radius: 18px;
     padding: 20px;
@@ -97,19 +89,19 @@
 }
 
 /* BARRA SUPERIOR */
-.barra-superior {
+.barra-superior-prescolar {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
 }
 
 /* BUSCADOR */
-.buscador {
+.buscador-prescolar {
     position: relative;
     width: 320px;
 }
 
-.buscador i {
+.buscador-prescolar i {
     position: absolute;
     left: 12px;
     top: 50%;
@@ -117,7 +109,7 @@
     color: #94a3b8;
 }
 
-.buscador input {
+.buscador-prescolar input {
     width: 100%;
     padding: 12px 12px 12px 40px;
     border-radius: 12px;
@@ -126,7 +118,7 @@
     outline: none;
 }
 
-.buscador input:focus {
+.buscador-prescolar input:focus {
     border-color: var(--cyan);
     background: white;
 }
@@ -141,17 +133,17 @@
 }
 
 /* TABLA */
-.tabla-estudiantes-matriculados {
+.tabla-estudiantes-matriculados-prescolar {
     width: 100%;
     border-collapse: collapse;
 }
 
 /* HEADER TABLA */
-.tabla-estudiantes-matriculados thead {
+.tabla-estudiantes-matriculados-prescolar thead {
     background: #f8fafc;
 }
 
-.tabla-estudiantes-matriculados th {
+.tabla-estudiantes-matriculados-prescolar th {
     text-align: left;
     padding: 14px;
     font-size: 0.8rem;
@@ -161,13 +153,13 @@
 }
 
 /* FILAS */
-.tabla-estudiantes-matriculados td {
+.tabla-estudiantes-matriculados-prescolar td {
     padding: 14px;
     border-bottom: 1px solid var(--gris-borde);
     font-size: 0.95rem;
 }
 
-.tabla-estudiantes-matriculados tr:hover {
+.tabla-estudiantes-matriculados-prescolar tr:hover {
     background: #f0f9ff;
 }
 

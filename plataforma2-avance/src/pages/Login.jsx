@@ -12,6 +12,11 @@ const Login = () => {
 
             <div className="brand-container">
                 <img src="img/LogoAzul.png" alt="EasyMatric" className="logo-img1"/>
+                <br/>
+                <div className="brand-text">
+                    <span className="brand-name">EasyMatric</span>
+                    <span className="brand-tagline">Gestión Educativa</span>
+                </div>
             </div>
 
             <div className="welcome-content">

@@ -1,5 +1,5 @@
 //import React from 'react'
-import { Link } from "react-router-dom"
+import { Link, Outlet } from "react-router-dom"
 import "./Matriculas.css"
 const Matriculados = () => {
     return (
@@ -46,15 +46,13 @@ const Matriculados = () => {
                             <i className="bi bi-search"></i>
                             <input type="text" placeholder="Buscar por nombre, ID o grado..." />
                         </div>
-                        <div>
-                            <select className="btn-filtro" name="Filtra por grado" required>
-                                <option value="">Filtra por grado</option>
-                                <option value="6">Prescolar</option>
-                                <option value="7">Primaria</option>
-                                <option value="8">Secundaria</option>
-                            </select>
+                        <nav className="rutas03">
+                            <Link to="GradoPrescolar">Preescolar</Link>
+                            <Link to="GradoPrimaria">Primaria</Link>
+                            <Link to="GradoSecundaria">Secundaria</Link>
+                        </nav>
 
-                        </div>
+                        <Outlet />
 
                     </div>
 
