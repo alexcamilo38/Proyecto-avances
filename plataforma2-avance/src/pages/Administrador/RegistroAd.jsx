@@ -8,7 +8,7 @@ const RegistroAd = () => {
         <div className="cuadro-registro-admin">
             
             <div className="registro-header2">
-                <img src="img/logo.png" alt="EasyMatric" className="logo-easymatric"/>
+                <img src="img/LogoAzul.png" alt="EasyMatric" className="logo-easymatric"/>
                 <div className="badge-admin">PERFIL ADMINISTRATIVO</div>
                 <h1>Crear Cuenta Admin</h1>
                 <p>Ingresa los datos para gestionar tu institución</p>

@@ -22,6 +22,8 @@ import RegistrarSede from './pages/Administrador/RegistrarSede'
 import Roles from './pages/Administrador/Roles'
 import Matriculados from './pages/Administrador/Matriculados'
 import NotasCa from './pages/Administrador/NotasCa'
+import ModulosAcademicos from './pages/Estudiante/ModulosAcademicos'
+import RevicionD from './pages/Administrador/RevicionD'
 
 
 const App = () => {
@@ -98,6 +100,8 @@ const App = () => {
         <Route path="/Roles" element={<Roles />} />
         <Route path="/Matriculados" element={<Matriculados />} />
         <Route path="/NotasCa" element={<NotasCa />} />
+        <Route path="/ModulosAcademicos" element={<ModulosAcademicos />} />
+        <Route path="/RevicionD" element={<RevicionD />} />
       </Routes>
     </>
   )

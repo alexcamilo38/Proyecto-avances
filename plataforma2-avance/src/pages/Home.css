@@ -9,9 +9,17 @@
     gap: 50px;
 }
 
-.inicio-texto {
+.principal-texto02 {
     flex: 1;
 }
+.titulo2-principal02 {
+    font-size: 95px;
+    color: #0f172a;
+    font-weight: 650;
+    line-height: 0.95;
+    margin-bottom: 20px;
+}
+
 .descripcion-inicio {
     font-size: 18px;
     color: #475569;

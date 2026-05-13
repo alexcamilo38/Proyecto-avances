@@ -4,22 +4,22 @@ import "./Matriculas.css"
 const Matriculados = () => {
     return (
         <div className="dashboard-container-matriculas">
-            <nav class="menu-lateral">
-                <div class="menu-logo">
-                    <img src="img/logo.png" alt="EasyMatric" class="logo-img" />
+            <nav className="menu-lateral">
+                <div className="menu-logo">
+                    <img src="img/LogoBlanco.png" alt="EasyMatric" className="logo-img" />
                 </div>
-                <ul class="menu-lista">
-                    <li><Link to="/"><i class="bi bi-house-door"></i> <span>Inicio</span></Link></li>
-                    <li><Link to="/RegistrarSede"><i class="bi bi-bank"></i> <span>Instituciones</span></Link></li>
-                    <li><Link href="Matriculados.html"><i class="bi bi-journal-bookmark"></i> <span>Matrículas</span></Link></li>
-                    <li><Link href="Matriculados.html"><i class="bi bi-people"></i> <span>Estudiantes</span></Link></li>
-                    <li><Link to="/Roles" ><i class="bi bi-shield-lock"></i> <span>Roles</span></Link></li>
-                    <li><Link to="/NotasCa"><i class="bi bi-folder2-open"></i> <span>Catálogos</span></Link></li>
+                <ul className="menu-lista">
+                    <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
+                    <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
+                    <li><Link to="/RevicionD"><i className="bi bi-journal-bookmark"></i> <span>Matrículas</span></Link></li>
+                    <li><Link to="/Matriculados"><i className="bi bi-people"></i> <span>Estudiantes</span></Link></li>
+                    <li><Link to="/Roles" ><i className="bi bi-shield-lock"></i> <span>Roles</span></Link></li>
+                    <li><Link to="/NotasCa"><i className="bi bi-folder2-open"></i> <span>Catálogos</span></Link></li>
                 </ul>
-                <div class="menu-pie">
-                    <a href="index.html" class="enlace-salir"><i class="bi bi-box-arrow-left"></i> Cerrar Sesión</a>
-                    <div class="perfil-usuario-info">
-                        <i class="bi bi-person-circle"></i>
+                <div className="menu-pie">
+                    <a href="index.html" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</a>
+                    <div className="perfil-usuario-info">
+                        <i className="bi bi-person-circle"></i>
                         <span>ADMINISTRADOR</span>
                     </div>
                 </div>
@@ -46,10 +46,15 @@ const Matriculados = () => {
                             <i className="bi bi-search"></i>
                             <input type="text" placeholder="Buscar por nombre, ID o grado..." />
                         </div>
+                        <div>
+                            <select className="btn-filtro" name="Filtra por grado" required>
+                                <option value="">Filtra por grado</option>
+                                <option value="6">Prescolar</option>
+                                <option value="7">Primaria</option>
+                                <option value="8">Secundaria</option>
+                            </select>
 
-                        <button className="btn-edicion">
-                            <i className="bi bi-pencil-square"></i> Modo Editar
-                        </button>
+                        </div>
 
                     </div>
 

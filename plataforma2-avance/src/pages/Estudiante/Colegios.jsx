@@ -7,7 +7,7 @@ const Colegios = () => {
         <div >
             <nav className="menu-lateral">
                 <div className="menu-logo">
-                    <img src="img/logo.png" alt="EasyMatric" className="logo-img" />
+                    <img src="img/LogoBlanco.png" alt="EasyMatric" className="logo-img" />
                 </div>
 
                 <ul className="menu-lista">
@@ -27,6 +27,12 @@ const Colegios = () => {
                         <Link to="/MatriculasE">
                             <i className="bi bi-journal-bookmark"></i>
                             <span>Mis Matrículas</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/ModulosAcademicos">
+                            <i className="bi bi-folder2-open"></i> 
+                            <span>Catálogos</span>
                         </Link>
                     </li>
                     <li>

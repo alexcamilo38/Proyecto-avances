@@ -6,12 +6,12 @@ const NotasCa = () => {
     <div>
         <nav className="menu-lateral">
                 <div className="menu-logo">
-                    <img src="img/logo.png" alt="EasyMatric" className="logo-img" />
+                    <img src="img/LogoBlanco.png" alt="EasyMatric" className="logo-img" />
                 </div>
                 <ul className="menu-lista">
                     <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
                     <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
-                    <li><Link href="matriculas.html"><i className="bi bi-journal-bookmark"></i> <span>Matrículas</span></Link></li>
+                    <li><Link href="/RevicionD"><i className="bi bi-journal-bookmark"></i> <span>Matrículas</span></Link></li>
                     <li><Link to="/Matriculados"><i className="bi bi-people"></i> <span>Estudiantes</span></Link></li>
                     <li><Link to="/Roles" ><i className="bi bi-shield-lock"></i> <span>Roles</span></Link></li>
                     <li><Link to="/NotasCa"><i className="bi bi-folder2-open"></i> <span>Catálogos</span></Link></li>
