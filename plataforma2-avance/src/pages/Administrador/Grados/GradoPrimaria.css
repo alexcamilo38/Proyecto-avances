@@ -1,4 +1,4 @@
-:root {
+root {
     --azul-navy: #1e293b;
     --cyan: #4facfe;
     --blanco: #ffffff;
@@ -16,7 +16,7 @@
 
 
 /* CONTENIDO PRINCIPAL */
-.panel-estudiantes {
+.panel-estudiantes-primaria {
     margin-left: 260px;
     flex: 1;            /* Ocupa TODO el espacio restante */
     padding: 25px 30px;
@@ -27,30 +27,22 @@
 }
 
 /* HEADER */
-.encabezado-panel {
+.encabezado-panel-primaria {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
 }
 
-.bloque-titulo h1 {
+.bloque-titulo-primaria h1 {
     font-size: 2rem;
     color: var(--azul-navy);
     margin: 0;
 }
 
-.bloque-titulo p {
+.bloque-titulo-primaria p {
     color: var(--texto-gris);
     margin-top: 5px;
-}
-.rutas03{
-    gap: 20px; 
-    display: flex;
-}
-.rutas03 a:hover,
-.rutas03 .active {
-    color: #2563eb;
 }
 /* BOTÓN */
 .btn-crear {
@@ -86,7 +78,7 @@
     color: rgb(255, 255, 255);
 }
 /* TARJETA */
-.tarjeta-tabla-matriculados {
+.tarjeta-tabla-matriculados-primaria {
     background: white;
     border-radius: 18px;
     padding: 20px;
@@ -97,19 +89,19 @@
 }
 
 /* BARRA SUPERIOR */
-.barra-superior {
+.barra-superior-primaria {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
 }
 
 /* BUSCADOR */
-.buscador {
+.buscador-primaria {
     position: relative;
     width: 320px;
 }
 
-.buscador i {
+.buscador-primaria i {
     position: absolute;
     left: 12px;
     top: 50%;
@@ -117,7 +109,7 @@
     color: #94a3b8;
 }
 
-.buscador input {
+.buscador-primaria input {
     width: 100%;
     padding: 12px 12px 12px 40px;
     border-radius: 12px;
@@ -126,7 +118,7 @@
     outline: none;
 }
 
-.buscador input:focus {
+.buscador-primaria input:focus {
     border-color: var(--cyan);
     background: white;
 }
@@ -141,17 +133,17 @@
 }
 
 /* TABLA */
-.tabla-estudiantes-matriculados {
+.tabla-estudiantes-matriculados-primaria {
     width: 100%;
     border-collapse: collapse;
 }
 
 /* HEADER TABLA */
-.tabla-estudiantes-matriculados thead {
+.tabla-estudiantes-matriculados-primaria thead {
     background: #f8fafc;
 }
 
-.tabla-estudiantes-matriculados th {
+.tabla-estudiantes-matriculados-primaria th {
     text-align: left;
     padding: 14px;
     font-size: 0.8rem;
@@ -161,13 +153,13 @@
 }
 
 /* FILAS */
-.tabla-estudiantes-matriculados td {
+.tabla-estudiantes-matriculados-primaria td {
     padding: 14px;
     border-bottom: 1px solid var(--gris-borde);
     font-size: 0.95rem;
 }
 
-.tabla-estudiantes-matriculados tr:hover {
+.tabla-estudiantes-matriculados-primaria tr:hover {
     background: #f0f9ff;
 }
 

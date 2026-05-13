@@ -2,18 +2,18 @@
 import "./Footer.css"
 const Footer = () => {
   return (
-    <footer class="footer">
-        <div class="footer-grid">
-            <div class="footer-principal">
-                <img class="logofo" src="img/logo.png" alt="EasyMatric" class="logo-footer"/>
-                <p class="footer-parrafo">
+    <footer className="footer">
+        <div className="footer-grid">
+            <div className="footer-principal">
+                <img className="logofo" src="img/LogoBlanco.png" alt="EasyMatric" className="logo-footer"/>
+                <p className="footer-parrafo">
                     Plataforma digital para optimizar el proceso de matrícula
                     en instituciones públicas.
                 </p>
             </div>
         </div>
 
-        <div class="footer-copyright">
+        <div className="footer-copyright">
             <span>© 2026 EASYMATRIC | Plataforma Educativa</span>
         </div>
     </footer>

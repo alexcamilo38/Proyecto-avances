@@ -8,7 +8,7 @@ const SelecionRol = () => {
         <div className="cuadro-seleccion-principal">
             
             <div className="registro-header">
-                <img src="img/logo.png" alt="EasyMatric" className="logo-easymatric"/>
+                <img src="img/LogoAzul.png" alt="EasyMatric" className="logo-easymatric"/>
                 <h1>Bienvenido a EasyMatric</h1>
                 <p>Selecciona tu perfil para continuar con el registro</p>
             </div>

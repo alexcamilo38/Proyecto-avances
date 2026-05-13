@@ -4,54 +4,54 @@ import "./Login.css"
 const Login = () => {
   return (
 <div>
-    <div class="login-container">
-        <div class="login-left">
+    <div className="login-container">
+        <div className="login-left">
             <Link to="/" className="volver">
             <i className="bi bi-arrow-left-short"></i> Volver al inicio
             </Link>
 
-            <div class="brand-container">
-                <img src="img/logo.png" alt="EasyMatric" class="logo-img"/>
+            <div className="brand-container">
+                <img src="img/LogoAzul.png" alt="EasyMatric" className="logo-img1"/>
                 <br/>
-                <div class="brand-text">
-                    <span class="brand-name">EasyMatric</span>
-                    <span class="brand-tagline">Gestión Educativa</span>
+                <div className="brand-text">
+                    <span className="brand-name">EasyMatric</span>
+                    <span className="brand-tagline">Gestión Educativa</span>
                 </div>
             </div>
 
-            <div class="welcome-content">
+            <div className="welcome-content">
                 <h1>Bienvenido a EasyMatric</h1>
                 <p>
                     Accede a tu cuenta para gestionar tu proceso
                     de matrícula de forma rápida y segura.
                 </p>
-                <img src="https://illustrations.popsy.co/blue/studying.svg" alt="Ilustración" class="main-illustration"/>
+                <img src="https://illustrations.popsy.co/blue/studying.svg" alt="Ilustración" className="main-illustration"/>
             </div>
 
-            <div class="footer-copy">
+            <div className="footer-copy">
                 <p>&copy; 2026 EasyMatric - Gestión Educativa Eficiente</p>
             </div>
         </div>
 
-        <div class="login-right">
-            <form class="login-form">
+        <div className="login-right">
+            <form className="login-form">
                 <h2>Iniciar Sesión</h2>
-                <p class="form-subtitle">Ingresa tus credenciales para continuar</p>
+                <p className="form-subtitle">Ingresa tus credenciales para continuar</p>
 
-                <div class="input-group">
-                    <label><i class="bi bi-envelope"></i> Correo electrónico</label>
+                <div className="input-group">
+                    <label><i className="bi bi-envelope"></i> Correo electrónico</label>
                     <input type="email" placeholder="ejemplo@correo.com" required/>
                 </div>
 
-                <div class="input-group">
-                    <label><i class="bi bi-lock"></i> Contraseña</label>
+                <div className="input-group">
+                    <label><i className="bi bi-lock"></i> Contraseña</label>
                     <input type="password" placeholder="Tu contraseña" required/>
-                    <Link to="/ReperaContra" class="forgot-link">¿Olvidaste tu contraseña?</Link>
+                    <Link to="/ReperaContra" className="forgot-link">¿Olvidaste tu contraseña?</Link>
                 </div>
 
-                <button type="submit" class="btn-submit">Ingresar</button>
+                <button type="submit" className="btn-submit">Ingresar</button>
 
-                <div class="extra">
+                <div className="extra">
                     <span>¿No tienes cuenta?</span>
                     <Link to="/SelecionRol">Regístrate aquí</Link>
                 </div>

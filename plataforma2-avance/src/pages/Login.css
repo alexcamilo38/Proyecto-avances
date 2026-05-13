@@ -57,7 +57,7 @@ body {
     margin-bottom: 20px;
 }
 
-.logo-img {
+.logo-img1 {
     /* Eliminamos align-items de aquí porque solo funciona en contenedores */
     width: 200px;           
     height: auto;

@@ -5,7 +5,7 @@ const RegistroU = () => {
     return (
         <div className="contenido-derecho">
             <div className="registro-header3">
-                <img src="img/logo.png" alt="EasyMatric" className="logo-easymatric" />
+                <img src="img/LogoAzul.png" alt="EasyMatric" className="logo-easymatric" />
                 <h1>Crear Cuenta</h1>
                 <p>Completa tus datos para la matrícula</p>
             </div>

@@ -7,7 +7,7 @@ const InfoSede = () => {
         <div >
             <nav className="menu-lateral">
                 <div className="menu-logo">
-                    <img src="img/logo.png" alt="EasyMatric" className="logo-img" />
+                    <img src="img/LogoBlanco.png" alt="EasyMatric" className="logo-img" />
                 </div>
 
                 <ul className="menu-lista">
@@ -27,6 +27,12 @@ const InfoSede = () => {
                         <Link to="/MatriculasE">
                             <i className="bi bi-journal-bookmark"></i>
                             <span>Mis Matrículas</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/ModulosAcademicos">
+                            <i className="bi bi-folder2-open"></i> 
+                            <span>Catálogos</span>
                         </Link>
                     </li>
                     <li>
@@ -112,7 +118,7 @@ const InfoSede = () => {
                             </Link>
 
                             <div className="pie-ayuda">
-                                <a href="#"><i className="bi bi-whatsapp"></i> ¿Necesitas soporte?</a>
+                                <Link to="/Contacto"><i className="bi bi-whatsapp"></i> ¿Necesitas soporte?</Link>
                             </div>
                         </div>
                     </aside>

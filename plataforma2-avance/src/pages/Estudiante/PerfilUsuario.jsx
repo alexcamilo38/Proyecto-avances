@@ -7,7 +7,7 @@ const PerfilUsuario = () => {
         <div className="cuerpo-dashboard">
             <nav className="menu-lateral">
                 <div className="menu-logo">
-                    <img src="img/logo.png" alt="EasyMatric" className="logo-img" />
+                    <img src="img/LogoBlanco.png" alt="EasyMatric" className="logo-img" />
                 </div>
 
                 <ul className="menu-lista">
@@ -27,6 +27,12 @@ const PerfilUsuario = () => {
                         <Link  to="/MatriculasE">
                             <i className="bi bi-journal-bookmark"></i>
                             <span>Mis Matrículas</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/ModulosAcademicos">
+                            <i className="bi bi-folder2-open"></i> 
+                            <span>Catálogos</span>
                         </Link>
                     </li>
                     <li>
@@ -127,7 +133,8 @@ const PerfilUsuario = () => {
                             <div className="tarjeta-blanca">
                                 <h3><i className="bi bi-shield-check"></i> Seguridad</h3>
                                 <p>Protege tu información personal.</p>
-                                <button className="btn-seguridad">Cambiar Contraseña</button>
+                                <br />
+                                <button className="btn-seguridad"><Link to="/ReperaContra">Cambiar contraseña</Link></button>
                             </div>
 
                             <div className="tarjeta-blanca">

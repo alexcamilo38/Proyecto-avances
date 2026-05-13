@@ -9,6 +9,7 @@ import Nosotros from './pages/Nosotros'
 import Servicios from './pages/Servicios'
 import Preguntas from './pages/Preguntas'
 import Contacto from './pages/Contacto'
+
 import SelecionRol from './pages/Registro/SelecionRol'
 import ReperaContra from './pages/Contrarecuperar/ReperaContra'
 import RegistroAd from './pages/Administrador/RegistroAd'
@@ -22,7 +23,11 @@ import RegistrarSede from './pages/Administrador/RegistrarSede'
 import Roles from './pages/Administrador/Roles'
 import Matriculados from './pages/Administrador/Matriculados'
 import NotasCa from './pages/Administrador/NotasCa'
-
+import ModulosAcademicos from './pages/Estudiante/ModulosAcademicos'
+import RevicionD from './pages/Administrador/RevicionD'
+import GradoPrescolar from './pages/Administrador/Grados/GradoPrescolar'
+import GradoPrimaria from './pages/Administrador/Grados/GradoPrimaria'
+import GradoSecundaria from './pages/Administrador/Grados/GradoSecundaria'
 
 const App = () => {
   return (
@@ -98,6 +103,11 @@ const App = () => {
         <Route path="/Roles" element={<Roles />} />
         <Route path="/Matriculados" element={<Matriculados />} />
         <Route path="/NotasCa" element={<NotasCa />} />
+        <Route path="/ModulosAcademicos" element={<ModulosAcademicos />} />
+        <Route path="/RevicionD" element={<RevicionD />} />
+        <Route path="/Matriculados/GradoPrescolar" element={<GradoPrescolar />} />
+        <Route path="/Matriculados/GradoPrimaria" element={<GradoPrimaria/>} />
+        <Route path="/Matriculados/GradoSecundaria" element={<GradoSecundaria/>} />
       </Routes>
     </>
   )
