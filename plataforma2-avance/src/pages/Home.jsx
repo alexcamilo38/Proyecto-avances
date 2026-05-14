@@ -1,5 +1,6 @@
 //import React from 'react'
 import "./Home.css"
+import matricula from '../assets/img02.png';
 const Home = () => {
   return (
         <section className="seccion-inicio">
@@ -17,7 +18,7 @@ const Home = () => {
             </div>
 
             <div className="imagen-inicio">
-                <img src="img/animacion.jpeg" alt="Matrícula Digital"/>
+                <img src={matricula} alt="Matrícula Digital"/>
             </div>
         </div>
     </section>

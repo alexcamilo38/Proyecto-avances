@@ -21,8 +21,9 @@
 .cuadro-registro-admin {
     background: var(--blanco);
     width: 100%;
-    max-width: 550px;
+    max-width: 650px;
     padding: 60px;
+    margin-top: 220px;
     border-radius: 30px;
     box-shadow: var(--sombra);
     border: 1px solid var(--gris-borde);
@@ -182,4 +183,26 @@
     background-color: #4facfe;
     color: #3641a6;
     transform: translateY(-3px);
+}
+.contenedor-terminos {
+    margin: 20px 0;
+    font-size: 0.8rem; /* más pequeña */
+    color: #64748b; /* gris */
+}
+
+.label-terminos {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.label-terminos span {
+    color: #64748b;
+    line-height: 1.4;
+}
+
+.link-terminos {
+    color: #60a5fa;
+    text-decoration: none;
 }

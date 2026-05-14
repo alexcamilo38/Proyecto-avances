@@ -28,6 +28,7 @@ import RevicionD from './pages/Administrador/RevicionD'
 import GradoPrescolar from './pages/Administrador/Grados/GradoPrescolar'
 import GradoPrimaria from './pages/Administrador/Grados/GradoPrimaria'
 import GradoSecundaria from './pages/Administrador/Grados/GradoSecundaria'
+import PerfilAd from './pages/Administrador/Perfil/PerfilAd'
 
 const App = () => {
   return (
@@ -105,9 +106,12 @@ const App = () => {
         <Route path="/NotasCa" element={<NotasCa />} />
         <Route path="/ModulosAcademicos" element={<ModulosAcademicos />} />
         <Route path="/RevicionD" element={<RevicionD />} />
+
         <Route path="/Matriculados/GradoPrescolar" element={<GradoPrescolar />} />
         <Route path="/Matriculados/GradoPrimaria" element={<GradoPrimaria/>} />
         <Route path="/Matriculados/GradoSecundaria" element={<GradoSecundaria/>} />
+
+        <Route path="/PerfilAd" element={<PerfilAd />} />
       </Routes>
     </>
   )

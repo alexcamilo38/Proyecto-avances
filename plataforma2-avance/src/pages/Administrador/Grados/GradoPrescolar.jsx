@@ -1,12 +1,13 @@
 //import React from 'react'
 import { Link } from "react-router-dom"
 import "./GradoPrescolar.css"
+import logoblanco from '../../../assets/LogoBlanco.png'
 const GradoPrescolar = () => {
   return (
     <div>
       <nav className="menu-lateral">
         <div className="menu-logo">
-          <img src="/img/LogoBlanco.png" alt="EasyMatric" className="logo-img" />
+          <img src={logoblanco} alt="EasyMatric" className="logo-img" />
         </div>
         <ul className="menu-lista">
           <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
@@ -27,7 +28,7 @@ const GradoPrescolar = () => {
       <main className="panel-estudiantes-prescolar">
         <header className="encabezado-panel-prescolar">
           <div className="bloque-titulo-prescolar">
-            <h1>Lista de Estudiantes de Prescolar</h1>
+            <h1>Lista de Estudiantes de Preescolar</h1>
             <p>Visualiza y gestiona la información de todos los alumnos matriculados.</p>
           </div>
         </header>

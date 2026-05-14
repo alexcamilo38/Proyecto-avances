@@ -1,11 +1,12 @@
 //import React from 'react'
 import { Link } from "react-router-dom"
 import "./RegistroU.css"
+import logoazul from '../../assets/LogoAzul.png';
 const RegistroU = () => {
     return (
         <div className="contenido-derecho">
             <div className="registro-header3">
-                <img src="img/LogoAzul.png" alt="EasyMatric" className="logo-easymatric" />
+                <img src={logoazul} alt="EasyMatric" className="logo-easymatric" />
                 <h1>Crear Cuenta</h1>
                 <p>Completa tus datos para la matrícula</p>
             </div>

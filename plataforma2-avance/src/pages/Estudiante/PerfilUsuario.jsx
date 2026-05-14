@@ -2,12 +2,14 @@
 import "./PerfilUsuario.css"
 import "./Menu.css"
 import { Link } from "react-router-dom"
+import usuario from '../../assets/Usuario.jpg'
+import logoblanco from '../../assets/LogoBlanco.png';
 const PerfilUsuario = () => {
     return (
         <div className="cuerpo-dashboard">
             <nav className="menu-lateral">
                 <div className="menu-logo">
-                    <img src="img/LogoBlanco.png" alt="EasyMatric" className="logo-img" />
+                    <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
 
                 <ul className="menu-lista">
@@ -60,7 +62,7 @@ const PerfilUsuario = () => {
                     <header className="perfil-header">
                         <div className="perfil-info-basica">
                             <div className="avatar-zona">
-                                <img src="img/Usuario.jpg" alt="Foto de Perfil" className="avatar-img" />
+                                <img src={usuario} alt="Foto de Perfil" className="avatar-img" />
                                 <button className="btn-cambiar-foto"><i className="bi bi-camera"></i></button>
                             </div>
                             <div className="texto-usuario">

@@ -1,5 +1,6 @@
 //import React from 'react'
  import { Link } from "react-router-dom";
+ import logoazul from '../assets/LogoAzul.png';
 import "./Login.css"
 const Login = () => {
   return (
@@ -11,12 +12,8 @@ const Login = () => {
             </Link>
 
             <div className="brand-container">
-                <img src="img/LogoAzul.png" alt="EasyMatric" className="logo-img1"/>
-                <br/>
-                <div className="brand-text">
-                    <span className="brand-name">EasyMatric</span>
-                    <span className="brand-tagline">Gestión Educativa</span>
-                </div>
+                <img src={logoazul} alt="EasyMatric" className="logo-img1"/>
+            
             </div>
 
             <div className="welcome-content">

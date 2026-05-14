@@ -2,12 +2,13 @@
 import { Link } from "react-router-dom"
 import "./Menu.css"
 import "./Formulario.css"
+import logoblanco from '../../assets/LogoBlanco.png'
 const Formulario = () => {
     return (
         <div className="cuerpo-dashboard5">
             <nav className="menu-lateral">
                 <div className="menu-logo">
-                    <img src="img/LogoBlanco.png" alt="EasyMatric" className="logo-img" />
+                    <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
 
                 <ul className="menu-lista">

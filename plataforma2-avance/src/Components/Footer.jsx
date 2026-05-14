@@ -1,11 +1,12 @@
 //import React from 'react'
 import "./Footer.css"
+import logoblanco from '../assets/LogoBlanco.png'
 const Footer = () => {
   return (
     <footer className="footer">
         <div className="footer-grid">
             <div className="footer-principal">
-                <img className="logofo" src="img/LogoBlanco.png" alt="EasyMatric" className="logo-footer"/>
+                <img className="logofo" src={logoblanco} alt="EasyMatric" className="logo-footer"/>
                 <p className="footer-parrafo">
                     Plataforma digital para optimizar el proceso de matrícula
                     en instituciones públicas.

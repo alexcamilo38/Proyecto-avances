@@ -1,12 +1,13 @@
 //import React from 'react'
 import "./RegistrarSede.css"
 import { Link } from "react-router-dom"
+import logoblanco from '../../assets/LogoBlanco.png'
 const RegistrarSede = () => {
     return (
         <div>
             <nav className="menu-lateral">
                 <div className="menu-logo">
-                    <img src="img/LogoBlanco.png" alt="EasyMatric" className="logo-img" />
+                    <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
                 <ul className="menu-lista">
                     <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
@@ -15,6 +16,7 @@ const RegistrarSede = () => {
                     <li><Link to="/Matriculados"><i className="bi bi-people"></i> <span>Estudiantes</span></Link></li>
                     <li><Link to="/Roles" ><i className="bi bi-shield-lock"></i> <span>Roles</span></Link></li>
                     <li><Link to="/NotasCa"><i className="bi bi-folder2-open"></i> <span>Catálogos</span></Link></li>
+                    <li><Link to="/PerfilAd" ><i className="bi bi-person-badge"></i><span>Mi Perfil</span></Link></li>
                 </ul>
                 <div className="menu-pie">
                     <Link to="/" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</Link>
@@ -74,15 +76,50 @@ const RegistrarSede = () => {
                             </div>
                         </div>
 
-                        <div className="galeria-registro">
-                            <h3><i className="bi bi-images"></i> Galería y Registro</h3>
-                            <div className="grid-fotos">
-                                <div className="caja-foto vacia"><span>Logo</span></div>
-                                <div className="caja-foto vacia"><span>Fachada</span></div>
-                                <div className="caja-foto agregar"><i className="bi bi-plus-lg"></i></div>
-                                <div className="caja-foto agregar"><i className="bi bi-plus-lg"></i></div>
+                        <div class="galeria-registro">
+                            <h3><i class="bi bi-images"></i> Galería e Institución</h3>
+                            <p class="instruccion-galeria">Sube fotos de la fachada y documentos de requisitos legales.</p>
+
+                            <div class="grid-fotos">
+                                <div class="file-item">
+                                    <input type="file" id="file-requisitos" accept="image/*" class="input-oculto" />
+                                    <label for="file-requisitos" class="caja-subida">
+                                        <i class="bi bi-file-earmark-arrow-up"></i>
+                                        <span>Requisitos de Matrícula</span>
+                                        <small>Formatos: JPG, PNG</small>
+                                    </label>
+                                </div>
+
+                                <div class="file-item">
+                                    <div class="caja-foto fachada">
+                                        <div class="overlay-foto">
+                                            <i class="bi bi-pencil"></i>
+                                            <span>Cambiar Fachada</span>
+                                        </div>
+                                        <span class="label-flotante">Fachada Principal</span>
+                                    </div>
+                                </div>
+
+                                <div class="file-item">
+                                    <input type="file" id="file-adicional" accept="image/*" class="input-oculto" />
+                                    <label for="file-adicional" class="caja-subida">
+                                        <i class="bi bi-file-earmark-arrow-up"></i>
+                                        <span>Documentos Extra</span>
+                                        <small>Formatos: JPG, PNG</small>
+                                    </label>
+                                </div>
+
+                                <div class="file-item">
+                                    <div class="caja-foto agregar">
+                                        <i class="bi bi-plus-circle-dotted"></i>
+                                        <span>Añadir Campo</span>
+                                    </div>
+                                </div>
                             </div>
-                            <button className="btn-guardar-todo">Guardar y Continuar</button>
+
+                            <button class="btn-guardar-todo">
+                                <i class="bi bi-cloud-check"></i> Guardar y Finalizar
+                            </button>
                         </div>
                     </div>
                 </section>

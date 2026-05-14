@@ -1,12 +1,13 @@
 //import React from 'react'
 import { Link } from "react-router-dom"
 import "./GradoPrimaria.css"
+import logoblanco from '../../../assets/LogoBlanco.png'
 const GradoPrimaria = () => {
     return (
         <div>
             <nav className="menu-lateral">
                 <div className="menu-logo">
-                    <img src="/img/LogoBlanco.png" alt="EasyMatric" className="logo-img" />
+                    <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
                 <ul className="menu-lista">
                     <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>

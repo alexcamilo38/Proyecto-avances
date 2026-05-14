@@ -1,13 +1,20 @@
 //import React from 'react'
 import "./Colegios.css"
 import { Link } from "react-router-dom"
+import cole1 from '../../assets/cole1.jpg';
+import cole2 from '../../assets/cole2.jpg';
+import cole3 from '../../assets/cole3.jpg';
+import cole4 from '../../assets/cole.4.jpg';
+import cole5 from '../../assets/cole.5.jpg';
+import cole6 from '../../assets/cole.6.jpg';
+import logoblanco from '../../assets/LogoBlanco.png'
 import "./Menu.css"
 const Colegios = () => {
     return (
         <div >
             <nav className="menu-lateral">
                 <div className="menu-logo">
-                    <img src="img/LogoBlanco.png" alt="EasyMatric" className="logo-img" />
+                    <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
 
                 <ul className="menu-lista">
@@ -69,7 +76,7 @@ const Colegios = () => {
 
                     <div className="tarjeta-sede">
                         <div className="imagen-sede">
-                            <img src="img/cole1.jpg" alt="Institución" />
+                            <img src={cole1} alt="Institución" />
                             <span className="etiqueta-cupos">Cupos Disponibles</span>
                         </div>
                         <div className="info-sede">
@@ -85,7 +92,7 @@ const Colegios = () => {
 
                     <div className="tarjeta-sede">
                         <div className="imagen-sede">
-                            <img src="img/cole2.jpg" alt="Institución" />
+                            <img src={cole2} alt="Institución" />
                             <span className="etiqueta-cupos">Cupos Disponibles</span>
                         </div>
                         <div className="info-sede">
@@ -101,7 +108,7 @@ const Colegios = () => {
 
                     <div className="tarjeta-sede">
                         <div className="imagen-sede">
-                            <img src="img/cole3.jpg" alt="Institución" />
+                            <img src={cole3} alt="Institución" />
                             <span className="etiqueta-cupos">Cupos Disponibles</span>
                         </div>
                         <div className="info-sede">
@@ -117,7 +124,7 @@ const Colegios = () => {
 
                     <div className="tarjeta-sede">
                         <div className="imagen-sede">
-                            <img src="img/cole.4.jpg" alt="Institución" />
+                            <img src={cole4} alt="Institución" />
                             <span className="etiqueta-cupos">Cupos Disponibles</span>
                         </div>
                         <div className="info-sede">
@@ -133,7 +140,7 @@ const Colegios = () => {
 
                     <div className="tarjeta-sede">
                         <div className="imagen-sede">
-                            <img src="img/cole.5.jpg" alt="Institución" />
+                            <img src={cole5} alt="Institución" />
                             <span className="etiqueta-cupos-pocos" >Pocos Cupos</span>
                         </div>
                         <div className="info-sede">
@@ -149,7 +156,7 @@ const Colegios = () => {
 
                     <div className="tarjeta-sede">
                         <div className="imagen-sede">
-                            <img src="img/cole.6.jpg" alt="Institución" />
+                            <img src={cole6} alt="Institución" />
                             <span className="etiqueta-cupos-agotados">Agotado</span>
                         </div>
                         <div className="info-sede">

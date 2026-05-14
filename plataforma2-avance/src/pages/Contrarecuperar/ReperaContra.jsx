@@ -1,5 +1,6 @@
 //import React from 'react'
 import { Link } from "react-router-dom"
+import logoazul from '../../assets/LogoAzul.png';
 import "./Recuperacontra.css"
 const ReperaContra = () => {
   return (
@@ -7,7 +8,7 @@ const ReperaContra = () => {
         <div className="cuadro-recuperar2">
             
             <div className="recuperar-header3">
-                <Link to="./Login"><img src="img/LogoAzul.png" alt="EasyMatric" className="logo-easymatric"/></Link>
+                <Link to="./Login"><img src={logoazul} alt="EasyMatric" className="logo-easymatric"/></Link>
                 <div className="icono-seguridad">
                     <i className="bi bi-shield-lock-fill"></i>
                 </div>

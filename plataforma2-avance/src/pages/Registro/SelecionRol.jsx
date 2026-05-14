@@ -1,5 +1,6 @@
 //2import React from 'react'
 import "./SelecionRol.css"
+import logoazul from '../../assets/LogoAzul.png';
 import { Link } from "react-router-dom"
 
 const SelecionRol = () => {
@@ -8,7 +9,7 @@ const SelecionRol = () => {
         <div className="cuadro-seleccion-principal">
             
             <div className="registro-header">
-                <img src="img/LogoAzul.png" alt="EasyMatric" className="logo-easymatric"/>
+                <img src={logoazul} alt="EasyMatric" className="logo-easymatric"/>
                 <h1>Bienvenido a EasyMatric</h1>
                 <p>Selecciona tu perfil para continuar con el registro</p>
             </div>

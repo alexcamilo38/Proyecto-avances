@@ -1,13 +1,14 @@
 //import React from 'react'
 import "./Roles.css"
 import { Link } from "react-router-dom"
+import logoblanco from '../../assets/LogoBlanco.png'
 
 const Roles = () => {
     return (
         <div >
             <nav className="menu-lateral">
                 <div className="menu-logo">
-                    <img src="img/LogoBlanco.png" alt="EasyMatric" className="logo-img" />
+                    <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
                 <ul className="menu-lista">
                     <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
@@ -16,6 +17,7 @@ const Roles = () => {
                     <li><Link to="/Matriculados"><i className="bi bi-people"></i> <span>Estudiantes</span></Link></li>
                     <li><Link to="/Roles" ><i className="bi bi-shield-lock"></i> <span>Roles</span></Link></li>
                     <li><Link to="/NotasCa"><i className="bi bi-folder2-open"></i> <span>Catálogos</span></Link></li>
+                    <li><Link to="/PerfilAd" ><i className="bi bi-person-badge"></i><span>Mi Perfil</span></Link></li>
                 </ul>
                 <div className="menu-pie">
                     <Link to="/" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</Link>

@@ -2,12 +2,13 @@
 import { Link } from "react-router-dom"
 import "./Menu.css"
 import "./InfoSede.css"
+import logoblanco from '../../assets/LogoBlanco.png'
 const InfoSede = () => {
     return (
         <div >
             <nav className="menu-lateral">
                 <div className="menu-logo">
-                    <img src="img/LogoBlanco.png" alt="EasyMatric" className="logo-img" />
+                    <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
 
                 <ul className="menu-lista">
