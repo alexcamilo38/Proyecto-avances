@@ -3,6 +3,7 @@ import "./Nosotros.css"
 const Nosotros = () => {
     return (
         <section className="seccion-nosotros">
+             {/* Contenedor general */}
             <div className="container12">
 
                 <div className="nosotros-info">
@@ -19,7 +20,7 @@ const Nosotros = () => {
                         <strong>EasyMatric</strong> surge como una iniciativa orientada a resolver una necesidad real: la dificultad de gestionar procesos de matrícula de forma ordenada, rápida y transparente. Más que digitalizar formularios, buscamos transformar la relación entre la institución y el estudiante.
                     </p>
                 </div>
-
+                {/* DESCRIPCIÓN DEL PROYECTO*/}
                 <div className="grid">
                     <div className="card">
                         <h3>Misión</h3>

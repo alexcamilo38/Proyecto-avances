@@ -1,6 +1,7 @@
 //import React from 'react'
 import "./Colegios.css"
 import { Link } from "react-router-dom"
+/* Importación de imágenes de colegios */
 import cole1 from '../../assets/cole1.jpg';
 import cole2 from '../../assets/cole2.jpg';
 import cole3 from '../../assets/cole3.jpg';
@@ -12,11 +13,12 @@ import "./Menu.css"
 const Colegios = () => {
     return (
         <div >
+            {/* Menú lateral de navegación */}
             <nav className="menu-lateral">
                 <div className="menu-logo">
                     <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
-
+                {/* Lista de opciones del menú */}
                 <ul className="menu-lista">
                     <li>
                         <Link to="/">
@@ -61,6 +63,7 @@ const Colegios = () => {
                 </div>
             </nav>
             <main className="contenido-principal2">
+                  {/* Encabezado principal */}
                 <div className="header-seccion2">
                     <div className="texto-header2">
                         <h1>Instituciones Disponibles</h1>
@@ -71,7 +74,7 @@ const Colegios = () => {
                         <input type="text" placeholder="Buscar sede o municipio..." />
                     </div>
                 </div>
-
+                {/* Contenedor de tarjetas de colegios */}
                 <div className="grid-sedes">
 
                     <div className="tarjeta-sede">

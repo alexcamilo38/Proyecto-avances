@@ -1,7 +1,9 @@
 //import React from 'react'
 import { Routes, Route } from 'react-router-dom'
+ {/* Conponentes globales */}
 import Footer from "./Components/Footer"
 import Navbar from "./Components/Navbar"
+ {/* pages de inicio*/}
 import Home from "./pages/Home"
 import Login from "./pages/Login"
 import "./App.css"
@@ -9,7 +11,7 @@ import Nosotros from './pages/Nosotros'
 import Servicios from './pages/Servicios'
 import Preguntas from './pages/Preguntas'
 import Contacto from './pages/Contacto'
-
+ {/* pages tanto de Estuante */}
 import SelecionRol from './pages/Registro/SelecionRol'
 import ReperaContra from './pages/Contrarecuperar/ReperaContra'
 import RegistroAd from './pages/Administrador/RegistroAd'
@@ -19,6 +21,7 @@ import Colegios from './pages/Estudiante/Colegios'
 import InfoSede from './pages/Estudiante/InfoSede'
 import MatriculasE from './pages/Estudiante/MatriculasE'
 import Formulario from './pages/Estudiante/Formulario'
+ {/* pages tanto de Administrador */}
 import RegistrarSede from './pages/Administrador/RegistrarSede'
 import Roles from './pages/Administrador/Roles'
 import Matriculados from './pages/Administrador/Matriculados'

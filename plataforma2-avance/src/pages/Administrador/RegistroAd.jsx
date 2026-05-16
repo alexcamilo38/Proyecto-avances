@@ -1,11 +1,13 @@
 //import React from 'react'
 import { Link } from "react-router-dom"
 import "./RegistroAd.css"
+// Importación del logo
 import logoazul from '../../assets/LogoAzul.png';
 
 const RegistroAd = () => {
     return (
         <div className="pantalla-fondo">
+             {/* Contenedor principal del formulario */}
             <div className="cuadro-registro-admin">
 
                 <div className="registro-header2">
@@ -14,7 +16,7 @@ const RegistroAd = () => {
                     <h1>Crear Cuenta Admin</h1>
                     <p>Ingresa los datos para gestionar tu institución</p>
                 </div>
-
+                {/* Formulario principal */}
                 <form className="form2" action="procesar_admin.php" method="POST">
 
                     {/* Nombre */}

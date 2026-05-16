@@ -5,11 +5,12 @@ import logoblanco from '../../assets/LogoBlanco.png'
 const ModulosAcademicos = () => {
     return (
         <div>
+            {/* Menú lateral principal */}
             <nav className="menu-lateral">
                 <div className="menu-logo">
                     <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
-
+                {/* Opciones de navegación del estudiante */}
                 <ul className="menu-lista">
                     <li>
                         <Link to="/">
@@ -59,7 +60,9 @@ const ModulosAcademicos = () => {
                         <h1>Módulos Académicos Disponibles</h1>
                         <p>Explora los cursos, horarios y requisitos para tu formación técnica.</p>
                     </div>
+                    {/* Barra de búsqueda y filtros */}
                     <div className="busqueda-filtro03">
+                         {/* Filtro por modalidad */}
                         <select className="select-filtro03">
                             <option value="">Todas las modalidades</option>
                             <option value="presencial">Presencial</option>
@@ -71,7 +74,7 @@ const ModulosAcademicos = () => {
 
 
                 <section className="grid-modulos03">
-
+                     {/* MÓDULO 1 */}
                     <article className="tarjeta-modulo03">
                         <div className="modulo-header03">
                             <span className="tag-modalidad presencial">Presencial</span>
@@ -114,7 +117,7 @@ const ModulosAcademicos = () => {
                         </div>
                     </article>
 
-
+                    {/* MÓDULO 2 */}
                     <article className="tarjeta-modulo03">
                         <div className="modulo-header03">
                             <span className="tag-modalidad virtual">Virtual</span>
@@ -156,7 +159,7 @@ const ModulosAcademicos = () => {
                             <button className="btn-inscribirse-modulo">Postularme</button>
                         </div>
                     </article>
-
+                     {/* MÓDULO 3 */}
                     <article className="tarjeta-modulo03">
                         <div className="modulo-header03">
                             <span className="tag-modalidad presencial">Presencial</span>

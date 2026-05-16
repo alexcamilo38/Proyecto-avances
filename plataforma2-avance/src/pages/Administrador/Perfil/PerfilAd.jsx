@@ -1,15 +1,19 @@
 //import React from 'react'
+// Importación de React Router
 import { Link } from 'react-router-dom'
 import "./PerfilAd.css"
+// Importación de imágenes
 import admin from '../../../assets/iconLE.png';
 import logoblanco from '../../../assets/LogoBlanco.png'
 const PerfilAd = () => {
     return (
         <div>
+            {/* Menú lateral de navegación */}
             <nav className="menu-lateral">
                 <div className="menu-logo">
                     <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
+                  {/* Lista de enlaces del menú */}
                 <ul className="menu-lista">
                     <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
                     <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
@@ -36,15 +40,16 @@ const PerfilAd = () => {
                                 <img src={admin} alt="Foto de Perfil" className="avatarad02-img" />
                                 <button className="btn-cambiar-foto"><i className="bi bi-camera"></i></button>
                             </div>
+                            {/* Información básica */}
                             <div className="texto-usuario-ad02">
                                 <h1>Gustavo Adolfo Mejía</h1>
                                 <span className="badge-rol-admin">Rector Institucional</span>
                             </div>
                         </div>
                         <button className="boton-accion-principal-ad02"><i className="bi bi-pencil-square"></i> Editar Perfil</button>
-                    </header>
-
+                    </header>              
                     <div className="perfil-grid-contenido-ad02">
+                         {/* Sección de datos */}
                         <section className="seccion-datos">
                             <div className="tarjeta-blanca-ad02">
                                 <h3><i className="bi bi-person-vcard"></i> Datos de Identificación</h3>
@@ -84,8 +89,9 @@ const PerfilAd = () => {
                                 </div>
                             </div>
                         </section>
-
+                        {/* Barra lateral */}
                         <aside className="columna-lateral">
+                            {/* Estadísticas */}
                             <div className="tarjeta-blanca-ad02 estadisticas-admin">
                                 <h3><i className="bi bi-graph-up"></i> Mi Actividad</h3>
                                 <br />

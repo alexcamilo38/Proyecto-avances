@@ -5,11 +5,13 @@ import catalogo from '../../assets/Catalo_perfil.png';
 import logoblanco from '../../assets/LogoBlanco.png'
 const NotasCa = () => {
   return (
-    <div>
+    <div> 
+        {/* Menú lateral de navegación */}
         <nav className="menu-lateral">
                 <div className="menu-logo">
                     <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
+                {/* Lista de enlaces del menú */}
                 <ul className="menu-lista">
                     <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
                     <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
@@ -32,7 +34,7 @@ const NotasCa = () => {
             <h1>Panel de Catálogos y Notas</h1>
             <p>Gestiona los documentos institucionales y el rendimiento académico de los estudiantes.</p>
         </header>
-
+         {/* Sección de catálogos */}
         <section className="seccion-catalogos-notas">
             <div className="grid-catalogos02">
                 <div className="card-catalogo02">
@@ -55,7 +57,7 @@ const NotasCa = () => {
                 </div>
             </div>
         </section>
-
+         {/* Sección de notas académicas */}
         <section className="seccion-notas">
             <div className="grid-notas02">
                 
@@ -68,7 +70,7 @@ const NotasCa = () => {
                         </div>
                         <button className="btn-plus"><i className="bi bi-plus-circle-fill"></i></button>
                     </div>
-
+                     {/* Tabla de notas */}
                     <table className="tabla-notas-em">
                         <thead>
                             <tr>
@@ -78,6 +80,7 @@ const NotasCa = () => {
                             </tr>
                         </thead>
                         <tbody>
+                             {/* Datos académicos */}
                             <tr><td>Artes</td><td>9.0</td><td className="nota-alta">10</td></tr>
                             <tr><td>Inglés</td><td>10</td><td>8.0</td></tr>
                             <tr><td>Historia</td><td>10</td><td>10</td></tr>
@@ -95,7 +98,7 @@ const NotasCa = () => {
                         </div>
                         <button className="btn-plus"><i className="bi bi-plus-circle-fill"></i></button>
                     </div>
-
+                    {/* Tabla de notas */}
                     <table className="tabla-notas-em">
                         <thead>
                             <tr>
@@ -105,6 +108,7 @@ const NotasCa = () => {
                             </tr>
                         </thead>
                         <tbody>
+                             {/* Datos académicos */}
                             <tr><td>Artes</td><td>9.0</td><td>10</td></tr>
                             <tr><td>Inglés</td><td>10</td><td>8.0</td></tr>
                             <tr><td>Ciencias Sociales</td><td className="nota-baja">5.0</td><td>10</td></tr>

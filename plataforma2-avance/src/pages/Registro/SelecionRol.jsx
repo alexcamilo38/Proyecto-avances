@@ -1,6 +1,7 @@
-//2import React from 'react'
+//import React from 'react'
 import "./SelecionRol.css"
 import logoazul from '../../assets/LogoAzul.png';
+// Importación de navegación entre páginas
 import { Link } from "react-router-dom"
 
 const SelecionRol = () => {
@@ -13,7 +14,7 @@ const SelecionRol = () => {
                 <h1>Bienvenido a EasyMatric</h1>
                 <p>Selecciona tu perfil para continuar con el registro</p>
             </div>
-
+                {/* Opciones de roles */}
             <div className="contenedor-roles">
                 <Link to="/RegistroAd" className="opcion-rol">
                     <div className="icono-box">
@@ -25,7 +26,7 @@ const SelecionRol = () => {
                     </div>
                     <i className="bi bi-chevron-right flecha"></i>
                 </Link>
-
+                {/* Rol estudiante */}
                 <Link to="/RegistroU" className="opcion-rol">
                     <div className="icono-box">
                         <i className="bi bi-mortarboard"></i>
@@ -39,6 +40,7 @@ const SelecionRol = () => {
             </div>
 
             <div className="pie-cuadro">
+                {/* Link para iniciar sesión */}
                 <p>¿Ya tienes cuenta? <Link to="/Login" >Inicia sesión</Link></p>
                 <div className="botones-inferiores">
                     <Link to="/" className="btn-mini"><i className="bi bi-house"></i> Inicio</Link>

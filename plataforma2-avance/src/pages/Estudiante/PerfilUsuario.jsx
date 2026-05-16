@@ -7,11 +7,12 @@ import logoblanco from '../../assets/LogoBlanco.png';
 const PerfilUsuario = () => {
     return (
         <div className="cuerpo-dashboard">
+             {/* Menú lateral de navegación */}
             <nav className="menu-lateral">
                 <div className="menu-logo">
                     <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
-
+                {/* Lista de enlaces del menú */}
                 <ul className="menu-lista">
                     <li>
                         <Link to="/">
@@ -65,6 +66,7 @@ const PerfilUsuario = () => {
                                 <img src={usuario} alt="Foto de Perfil" className="avatar-img" />
                                 <button className="btn-cambiar-foto"><i className="bi bi-camera"></i></button>
                             </div>
+                            {/* Información básica */}
                             <div className="texto-usuario">
                                 <h1>Juan Andres Estrada Erazo</h1>
                                 <span className="etiqueta-rol">Aspirante - Ciclo Lectivo 2026</span>
@@ -77,6 +79,7 @@ const PerfilUsuario = () => {
                     <div className="perfil-grid-contenido">
                         <section className="seccion-datos">
                             <div className="tarjeta-blanca">
+                                 {/* Información personal */}
                                 <h3><i className="bi bi-person-lines-fill"></i> Información Personal</h3>
 
                                 <div className="los-datos-grid">
@@ -121,8 +124,10 @@ const PerfilUsuario = () => {
                         </section>
 
                         <aside className="columna-lateral">
+                            {/* Estado de matrícula */}
                             <div className="tarjeta-blanca">
                                 <h3><i className="bi bi-activity"></i> Estado de Matrícula</h3>
+                                {/* Mensaje informativo */}
                                 <div className="indicador-progreso">
                                     <div className="barra-externa">
                                         <div className="barra-interna" style={{ width: "85%" }}></div>
@@ -131,7 +136,7 @@ const PerfilUsuario = () => {
                                 </div>
                                 <p className="nota-ayuda">Tu proceso está en revisión por la secretaría académica.</p>
                             </div>
-
+                        
                             <div className="tarjeta-blanca">
                                 <h3><i className="bi bi-shield-check"></i> Seguridad</h3>
                                 <p>Protege tu información personal.</p>

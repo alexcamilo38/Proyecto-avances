@@ -1,14 +1,18 @@
 //import React from 'react'
 import "./RegistrarSede.css"
+// Importación de rutas de React Router
 import { Link } from "react-router-dom"
+// Importación del logo institucional
 import logoblanco from '../../assets/LogoBlanco.png'
 const RegistrarSede = () => {
     return (
         <div>
+            {/* Menú lateral de navegación */}
             <nav className="menu-lateral">
                 <div className="menu-logo">
                     <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
+                {/* Lista de enlaces del menú */}
                 <ul className="menu-lista">
                     <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
                     <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
@@ -31,7 +35,7 @@ const RegistrarSede = () => {
                     <h1>Registra tu Institución</h1>
                     <p>Configura los detalles básicos para comenzar a recibir matrículas.</p>
                 </header>
-
+                {/* Sección principal del formulario */}
                 <section className="seccion-pasos">
                     <div className="grid-cartas-top">
                         <div className="carta-soft">
@@ -58,6 +62,7 @@ const RegistrarSede = () => {
                         <div className="formulario-detalles">
                             <h3><i className="bi bi-info-circle"></i> Información de Contacto</h3>
                             <div className="grid-inputs">
+                                {/* Inputs de contacto */}
                                 <input type="text" placeholder="Dirección" />
                                 <input type="text" placeholder="Teléfono" />
                                 <input type="email" placeholder="Correo Electrónico" />
@@ -76,49 +81,49 @@ const RegistrarSede = () => {
                             </div>
                         </div>
 
-                        <div class="galeria-registro">
-                            <h3><i class="bi bi-images"></i> Galería e Institución</h3>
-                            <p class="instruccion-galeria">Sube fotos de la fachada y documentos de requisitos legales.</p>
+                        <div className="galeria-registro">
+                            <h3><i className="bi bi-images"></i> Galería e Institución</h3>
+                            <p className="instruccion-galeria">Sube fotos de la fachada y documentos de requisitos legales.</p>
 
-                            <div class="grid-fotos">
-                                <div class="file-item">
-                                    <input type="file" id="file-requisitos" accept="image/*" class="input-oculto" />
-                                    <label for="file-requisitos" class="caja-subida">
-                                        <i class="bi bi-file-earmark-arrow-up"></i>
+                            <div className="grid-fotos">
+                                <div className="file-item">
+                                    <input type="file" id="file-requisitos" accept="image/*" className="input-oculto" />
+                                    <label for="file-requisitos" className="caja-subida">
+                                        <i className="bi bi-file-earmark-arrow-up"></i>
                                         <span>Requisitos de Matrícula</span>
                                         <small>Formatos: JPG, PNG</small>
                                     </label>
                                 </div>
 
-                                <div class="file-item">
-                                    <div class="caja-foto fachada">
-                                        <div class="overlay-foto">
-                                            <i class="bi bi-pencil"></i>
+                                <div className="file-item">
+                                    <div className="caja-foto fachada">
+                                        <div className="overlay-foto">
+                                            <i className="bi bi-pencil"></i>
                                             <span>Cambiar Fachada</span>
                                         </div>
-                                        <span class="label-flotante">Fachada Principal</span>
+                                        <span className="label-flotante">Fachada Principal</span>
                                     </div>
                                 </div>
-
-                                <div class="file-item">
-                                    <input type="file" id="file-adicional" accept="image/*" class="input-oculto" />
-                                    <label for="file-adicional" class="caja-subida">
-                                        <i class="bi bi-file-earmark-arrow-up"></i>
+                                {/* Subir documentos extra */}
+                                <div className="file-item">
+                                    <input type="file" id="file-adicional" accept="image/*" className="input-oculto" />
+                                    <label for="file-adicional" className="caja-subida">
+                                        <i className="bi bi-file-earmark-arrow-up"></i>
                                         <span>Documentos Extra</span>
                                         <small>Formatos: JPG, PNG</small>
                                     </label>
                                 </div>
 
-                                <div class="file-item">
-                                    <div class="caja-foto agregar">
-                                        <i class="bi bi-plus-circle-dotted"></i>
+                                <div className="file-item">
+                                    <div className="caja-foto agregar">
+                                        <i className="bi bi-plus-circle-dotted"></i>
                                         <span>Añadir Campo</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <button class="btn-guardar-todo">
-                                <i class="bi bi-cloud-check"></i> Guardar y Finalizar
+                            <button className="btn-guardar-todo">
+                                <i className="bi bi-cloud-check"></i> Guardar y Finalizar
                             </button>
                         </div>
                     </div>

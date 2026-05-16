@@ -1,15 +1,19 @@
 //import React from 'react'
 import "./Roles.css"
+// Importación de React Router
 import { Link } from "react-router-dom"
+// Importación de logo
 import logoblanco from '../../assets/LogoBlanco.png'
 
 const Roles = () => {
     return (
         <div >
+            {/* Menú lateral de navegación */}
             <nav className="menu-lateral">
                 <div className="menu-logo">
                     <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
+                {/* Lista de enlaces del menú */}
                 <ul className="menu-lista">
                     <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
                     <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
@@ -34,7 +38,7 @@ const Roles = () => {
                         <p>Configura los niveles de seguridad y permisos para los usuarios de la plataforma.</p>
                     </div>
                 </header>
-
+                 {/* Contenedor principal */}
                 <section className="contenedor-roles">
                     <div className="card-informativa-soft">
                         <div className="info-texto-roles">
@@ -60,7 +64,7 @@ const Roles = () => {
                                 <button className="btn-primario"><i className="bi bi-plus-lg"></i> Nuevo Rol</button>
                             </div>
                         </div>
-
+                        {/* Tabla principal */}
                         <table className="tabla-matriculados">
                             <thead>
                                 <tr>
@@ -71,6 +75,7 @@ const Roles = () => {
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
+                               {/* Datos de roles */}
                             <tbody>
                                 <tr>
                                     <td><span className="rol-tag admin">ADMINISTRADOR</span></td>

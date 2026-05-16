@@ -5,10 +5,12 @@ import logoblanco from '../../../assets/LogoBlanco.png'
 const GradoSecundaria = () => {
     return (
         <div>
+            {/* Menú lateral de navegación */}
             <nav className="menu-lateral">
                 <div className="menu-logo">
                     <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
+                 {/* Lista de enlaces del menú */}
                 <ul className="menu-lista">
                     <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
                     <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
@@ -18,7 +20,7 @@ const GradoSecundaria = () => {
                     <li><Link to="/NotasCa"><i className="bi bi-folder2-open"></i> <span>Catálogos</span></Link></li>
                 </ul>
                 <div className="menu-pie">
-                    <a href="index.html" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</a>
+                    <Link to="/" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</Link>
                     <div className="perfil-usuario-info">
                         <i className="bi bi-person-circle"></i>
                         <span>ADMINISTRADOR</span>
@@ -32,8 +34,9 @@ const GradoSecundaria = () => {
                         <p>Visualiza y gestiona la información de todos los alumnos matriculados.</p>
                     </div>
                 </header>
-
+                {/* Tarjeta principal de estudiantes */}
                 <section className="tarjeta-tabla-matriculados-secundaria ">
+                     {/* Barra superior con buscador */}
                     <div className="barra-superior-secundaria ">
 
                         <div className="buscador-secundaria ">
@@ -44,7 +47,9 @@ const GradoSecundaria = () => {
                     </div>
 
                     <div className="contenedor-scroll">
+                        {/* Tabla de estudiantes */}
                         <table className="tabla-estudiantes-matriculados-secundaria ">
+                            {/* Encabezados de la tabla */}
                             <thead>
                                 <tr>
                                     <th>N°</th>

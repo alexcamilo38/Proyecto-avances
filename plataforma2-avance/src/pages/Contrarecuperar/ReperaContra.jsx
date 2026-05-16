@@ -8,14 +8,14 @@ const ReperaContra = () => {
         <div className="cuadro-recuperar2">
             
             <div className="recuperar-header3">
-                <Link to="./Login"><img src={logoazul} alt="EasyMatric" className="logo-easymatric"/></Link>
+                <Link to="/Login"><img src={logoazul} alt="EasyMatric" className="logo-easymatric"/></Link>
                 <div className="icono-seguridad">
                     <i className="bi bi-shield-lock-fill"></i>
                 </div>
                 <h1>¿Olvidaste tu contraseña?</h1>
                 <p>Ingresa tu correo institucional o personal y te enviaremos las instrucciones para restablecerla.</p>
             </div>
-
+             {/* Formulario de recuperación */}
             <form action="enviar_recuperacion.php" method="POST">
                 <div className="grupo1-input">
                     <i className="bi bi-envelope-at"></i>
@@ -24,7 +24,7 @@ const ReperaContra = () => {
 
                 <button type="submit" className="btn-recuperar">ENVIAR INSTRUCCIONES</button>
             </form>
-
+            {/* Enlace para volver al login */}
             <div className="pie-cuadro">
                 <Link to="/" className="link-volver">
                     <i className="bi bi-arrow-left"></i> Volver al inicio de sesión

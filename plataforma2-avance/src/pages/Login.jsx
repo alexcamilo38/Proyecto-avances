@@ -7,6 +7,7 @@ const Login = () => {
 <div>
     <div className="login-container">
         <div className="login-left">
+            {/* Botón para regresar al inicio */}
             <Link to="/" className="volver">
             <i className="bi bi-arrow-left-short"></i> Volver al inicio
             </Link>
@@ -31,6 +32,7 @@ const Login = () => {
         </div>
 
         <div className="login-right">
+             {/* Formulario de inicio de sesión */}
             <form className="login-form">
                 <h2>Iniciar Sesión</h2>
                 <p className="form-subtitle">Ingresa tus credenciales para continuar</p>

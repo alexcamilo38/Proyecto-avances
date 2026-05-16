@@ -2,15 +2,17 @@
 import { Link } from "react-router-dom"
 import "./Menu.css"
 import "./Formulario.css"
+//importamos la imagen de el logo
 import logoblanco from '../../assets/LogoBlanco.png'
 const Formulario = () => {
     return (
         <div className="cuerpo-dashboard5">
+            {/* Menú lateral principal */}
             <nav className="menu-lateral">
                 <div className="menu-logo">
                     <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
-
+                {/* Lista de navegación */}
                 <ul className="menu-lista">
                     <li>
                         <Link to="/">
@@ -56,12 +58,13 @@ const Formulario = () => {
             </nav>
 
             <main className="contenido-principal5">
+                 {/* Contenedor general del formulario */}
                 <section className="contenedor-formulario-soft5">
                     <div className="header-pasos5">
                         <h2><i className="bi bi-person-plus-fill"></i> Proceso de Matrícula Institucional</h2>
                         <p>Asegúrate de que toda la información coincida con tus documentos físicos.</p>
                     </div>
-
+                     {/* Formulario principal */}
                     <form action="#" className="form-matricula5">
 
                         <div className="card-blanca5">

@@ -6,11 +6,12 @@ import logoblanco from '../../assets/LogoBlanco.png'
 const MatriculasE = () => {
     return (
         <div className="dashboard-container4">
+            {/* Menú lateral principal */}
             <nav className="menu-lateral">
                 <div className="menu-logo">
                     <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
-
+                 {/* Opciones de navegación del estudiante */}
                 <ul className="menu-lista">
                     <li>
                         <Link to="/">
@@ -66,6 +67,7 @@ const MatriculasE = () => {
 
                     <div className="tarjeta-matricula4">
                         <div className="matricula-encabezado4">
+                            {/* Información básica */}
                             <div className="inst-info">
                                 <div className="icono-inst"><i className="bi bi-building"></i></div>
                                 <div>
@@ -77,6 +79,7 @@ const MatriculasE = () => {
                         </div>
 
                         <div className="matricula-cuerpo7">
+                             {/* Módulos inscritos */}
                             <div className="seccion-modulos7">
                                 <h3><i className="bi bi-layers"></i> Módulos Inscritos:</h3>
                                 <div className="grid-modulos7">
@@ -86,7 +89,7 @@ const MatriculasE = () => {
                                     <span className="modulos7-item">Lenguaje y Comunicación</span>
                                 </div>
                             </div>
-
+                            {/* Barra de progreso */}
                             <div className="seccion-progreso">
                                 <h3><i className="bi bi-activity"></i> Estado del Proceso:</h3>
                                 <div className="linea-progreso">
@@ -97,7 +100,7 @@ const MatriculasE = () => {
                                 </div>
                             </div>
                         </div>
-
+                        {/* Botones de acciones */}
                         <div className="matricula-acciones">
                             <button className="btn-accion secundario"><i className="bi bi-eye"></i> Detalles</button>
                             <button className="btn-accion primario"><i className="bi bi-file-earmark-pdf"></i> Descargar Comprobante</button>
@@ -106,6 +109,7 @@ const MatriculasE = () => {
 
                     <div className="tarjeta-matricula4">
                         <div className="matricula-encabezado4">
+                              {/* Información básica */}
                             <div className="inst-info">
                                 <div className="icono-inst"><i className="bi bi-building"></i></div>
                                 <div>
@@ -115,11 +119,11 @@ const MatriculasE = () => {
                             </div>
                             <div className="estado-badge pendiente">En Revisión</div>
                         </div>
-
+                        {/* Información del estado */}
                         <div className="matricula-cuerpo">
                             <p className="nota-espera">Tu documentación está siendo validada por la secretaría de la institución. Este proceso puede tardar hasta 48 horas.</p>
                         </div>
-
+                        {/* Acciones disponibles */}
                         <div className="matricula-acciones">
                             <button className="btn-accion disabled" disabled><i className="bi bi-file-earmark-lock"></i> Comprobante no disponible</button>
                         </div>

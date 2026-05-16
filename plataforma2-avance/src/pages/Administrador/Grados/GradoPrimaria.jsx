@@ -1,14 +1,18 @@
 //import React from 'react'
+// Importación de React Router
 import { Link } from "react-router-dom"
 import "./GradoPrimaria.css"
+// Importación del logo institucional
 import logoblanco from '../../../assets/LogoBlanco.png'
 const GradoPrimaria = () => {
     return (
         <div>
+            {/* Menú lateral de navegación */}
             <nav className="menu-lateral">
                 <div className="menu-logo">
                     <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
+                {/* Lista de enlaces del menú */}
                 <ul className="menu-lista">
                     <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
                     <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
@@ -18,7 +22,7 @@ const GradoPrimaria = () => {
                     <li><Link to="/NotasCa"><i className="bi bi-folder2-open"></i> <span>Catálogos</span></Link></li>
                 </ul>
                 <div className="menu-pie">
-                    <a href="index.html" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</a>
+                    <Link to="/" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</Link>
                     <div className="perfil-usuario-info">
                         <i className="bi bi-person-circle"></i>
                         <span>ADMINISTRADOR</span>
@@ -26,13 +30,14 @@ const GradoPrimaria = () => {
                 </div>
             </nav>
             <main className="panel-estudiantes-primaria">
+                {/* Encabezado */}
                 <header className="encabezado-panel-primaria">
                     <div className="bloque-titulo-primaria">
                         <h1>Lista de Estudiantes de Primaria</h1>
                         <p>Visualiza y gestiona la información de todos los alumnos matriculados.</p>
                     </div>
                 </header>
-
+                {/* Contenedor tabla */}
                 <section className="tarjeta-tabla-matriculados-primaria">
                     <div className="barra-superior-primaria">
 
@@ -44,6 +49,7 @@ const GradoPrimaria = () => {
                     </div>
 
                     <div className="contenedor-scroll">
+                        {/* Tabla principal */}
                         <table className="tabla-estudiantes-matriculados-primaria">
                             <thead>
                                 <tr>

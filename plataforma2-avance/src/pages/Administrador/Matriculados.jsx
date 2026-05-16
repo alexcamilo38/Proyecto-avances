@@ -5,10 +5,12 @@ import logoblanco from '../../assets/LogoBlanco.png'
 const Matriculados = () => {
     return (
         <div className="dashboard-container-matriculas">
+            {/* Menú lateral de navegación */}
             <nav className="menu-lateral">
                 <div className="menu-logo">
                     <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
+                {/* Lista de enlaces del menú */}
                 <ul className="menu-lista">
                     <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
                     <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
@@ -19,7 +21,7 @@ const Matriculados = () => {
                      <li><Link to="/PerfilAd" ><i className="bi bi-person-badge"></i><span>Mi Perfil</span></Link></li>
                 </ul>
                 <div className="menu-pie">
-                    <a href="index.html" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</a>
+                    <Link to="/" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</Link>
                     <div className="perfil-usuario-info">
                         <i className="bi bi-person-circle"></i>
                         <span>ADMINISTRADOR</span>
@@ -40,25 +42,28 @@ const Matriculados = () => {
                         </button>
                     </div>
                 </header>
-
+                {/* Tarjeta principal de la tabla */}
                 <section className="tarjeta-tabla-matriculados">
+                     {/* Barra superior con buscador y rutas */}
                     <div className="barra-superior">
-
+                        {/* Buscador de estudiantes */}
                         <div className="buscador">
                             <i className="bi bi-search"></i>
                             <input type="text" placeholder="Buscar por nombre, ID o grado..." />
                         </div>
+                         {/* Navegación por niveles escolares */}
                         <nav className="rutas03">
                             <Link to="GradoPrescolar">Preescolar</Link>
                             <Link to="GradoPrimaria">Primaria</Link>
                             <Link to="GradoSecundaria">Secundaria</Link>
                         </nav>
-
+                        {/* Renderiza las rutas hijas */}
                         <Outlet />
 
                     </div>
 
                     <div className="contenedor-scroll">
+                        {/* Tabla de estudiantes */}
                         <table className="tabla-estudiantes-matriculados">
                             <thead>
                                 <tr>

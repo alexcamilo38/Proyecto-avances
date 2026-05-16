@@ -5,10 +5,12 @@ import logoblanco from '../../assets/LogoBlanco.png'
 const RevicionD = () => {
     return (
         <div>
+            {/* Menú lateral de navegación */}
             <nav className="menu-lateral">
                 <div className="menu-logo">
                     <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
+                {/* Lista de enlaces del menú */}
                 <ul className="menu-lista">
                     <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
                     <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
@@ -30,6 +32,7 @@ const RevicionD = () => {
                 <div className="header02">
                     <h2>Revisión de Documentación</h2>
                 </div>
+                {/* Filtro por grado */}
                 <div className="tabla-box02">
                     <div className="acciones-header02">
                         <select className="btn-primario08" name="Filtra por grado" required>
@@ -40,8 +43,10 @@ const RevicionD = () => {
                         </select>
 
                     </div>
+                     {/* Sección tabla */}
                     <section className="contenedor-tabla-revisar">
                         <div className="barra-herramientas">
+                            {/* Tabla de revisión */}
                             <table className="tabla-revision ">
                                 <thead>
                                     <tr>

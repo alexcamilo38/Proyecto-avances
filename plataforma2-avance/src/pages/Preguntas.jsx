@@ -6,7 +6,7 @@ const Preguntas = () => {
             <div className="container10">
                 <h2>Preguntas Frecuentes</h2>
                 <div className="line10"></div>
-
+                 {/* Contenedor de preguntas */}
                 <div className="faq-grid">
                     <div className="faq-item">
                         <h3><i className="bi bi-phone"></i> ¿Se puede usar desde celular?</h3>

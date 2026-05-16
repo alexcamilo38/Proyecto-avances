@@ -3,6 +3,7 @@ import "./Servicios.css"
 const Servicios = () => {
     return (
         <div>
+            {/* Sección de funcionalidades principales */}
             <section className="seccion-modulos">
                 <div className="container-centrado">
                     <div className="cabecera-modulos">
@@ -10,7 +11,7 @@ const Servicios = () => {
                         <h2>Ecosistema Digital EasyMatric</h2>
                         <p>Una plataforma diseñada para conectar a toda la comunidad educativa de manera eficiente.</p>
                     </div>
-
+                    {/* Tarjetas de módulos */}
                     <div className="modulos-grid">
                         <div className="modulo-item">
                             <div className="modulo-header">
@@ -21,6 +22,7 @@ const Servicios = () => {
                             </div>
                             <div className="modulo-body">
                                 <p>Autogestión total desde cualquier lugar para facilitar el acceso a la educación.</p>
+                                {/* Lista de funcionalidades */}
                                 <ul className="lista-cheque">
                                     <li><i className="bi bi-check-circle-fill"></i> Pre-registro y Matrícula 24/7</li>
                                     <li><i className="bi bi-check-circle-fill"></i> Carga digital de documentos</li>
@@ -28,7 +30,7 @@ const Servicios = () => {
                                 </ul>
                             </div>
                         </div>
-
+                        {/* Módulo administrativo */}
                         <div className="modulo-item destacado">
                             <div className="modulo-header">
                                 <div className="icono-wrap">

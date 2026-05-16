@@ -6,11 +6,12 @@ import logoblanco from '../../assets/LogoBlanco.png'
 const InfoSede = () => {
     return (
         <div >
+            {/* Menú lateral principal */}
             <nav className="menu-lateral">
                 <div className="menu-logo">
                     <img src={logoblanco} alt="EasyMatric" className="logo-img" />
                 </div>
-
+                {/* Opciones de navegación del estudiante */}
                 <ul className="menu-lista">
                     <li>
                         <Link to="/">
@@ -65,6 +66,7 @@ const InfoSede = () => {
                 <div className="grid-informacion-limpia">
 
                     <div className="bloque-lectura">
+                          {/* Información general de la sede */}
                         <section className="tarjeta-blanca">
                             <h2><i className="bi bi-info-circle-fill"></i> Acerca de nuestra Sede</h2>
                             <p>Nuestra institución se destaca por ofrecer un ambiente educativo moderno, enfocado en el desarrollo integral y técnico de los estudiantes en la región. Contamos con instalaciones adecuadas para el aprendizaje práctico y teórico, asegurando una formación de alta calidad.</p>
@@ -75,7 +77,7 @@ const InfoSede = () => {
                                 <div className="servicio-tag"><i className="bi bi-cup-hot"></i> Comedor</div>
                             </div>
                         </section>
-
+                         {/* Documentos importantes de la institución */}
                         <section className="tarjeta-blanca">
                             <h2><i className="bi bi-file-earmark-text-fill"></i> Documentos Institucionales</h2>
                             <div className="lista-descargas">
@@ -100,6 +102,7 @@ const InfoSede = () => {
                     </div>
 
                     <aside className="bloque-lateral-accion">
+                         {/* Tarjeta para iniciar matrícula */}
                         <div className="tarjeta-accion-matricula">
                             <h3>Inicia tu Proceso</h3>
                             <p>Asegura tu cupo de manera fácil y 100% digital a través de nuestra plataforma.</p>

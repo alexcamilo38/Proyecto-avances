@@ -10,7 +10,7 @@ const RegistroU = () => {
                 <h1>Crear Cuenta</h1>
                 <p>Completa tus datos para la matrícula</p>
             </div>
-
+            {/* Formulario de registro */}
             <form className="form3" action="procesar_registro.php" method="POST">
                 <div className="fila-input">
                     <div className="grupo-input">

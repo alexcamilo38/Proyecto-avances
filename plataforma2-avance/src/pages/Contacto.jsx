@@ -31,6 +31,7 @@ const Contacto = () => {
 
                     <div className="formulario-contacto tarjeta-blanca">
                         <h2>Envíanos un mensaje</h2>
+                        {/* formulario sobre las dudas*/}
                         <form>
                             <div className="input-grupo">
                                 <label>Nombre Completo</label>
