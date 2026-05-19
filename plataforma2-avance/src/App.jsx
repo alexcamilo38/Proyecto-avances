@@ -32,6 +32,7 @@ import GradoPrescolar from './pages/Administrador/Grados/GradoPrescolar'
 import GradoPrimaria from './pages/Administrador/Grados/GradoPrimaria'
 import GradoSecundaria from './pages/Administrador/Grados/GradoSecundaria'
 import PerfilAd from './pages/Administrador/Perfil/PerfilAd'
+import EditarPerfil from './pages/Estudiante/EditarPerfil'
 
 const App = () => {
   return (
@@ -115,6 +116,7 @@ const App = () => {
         <Route path="/Matriculados/GradoSecundaria" element={<GradoSecundaria/>} />
 
         <Route path="/PerfilAd" element={<PerfilAd />} />
+        <Route path="/EditarPerfil" element={<EditarPerfil />} />
       </Routes>
     </>
   )

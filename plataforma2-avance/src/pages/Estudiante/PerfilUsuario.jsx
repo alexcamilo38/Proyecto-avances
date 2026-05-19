@@ -2,9 +2,15 @@
 import "./PerfilUsuario.css"
 import "./Menu.css"
 import { Link } from "react-router-dom"
+import {useNavigate} from 'react-router-dom'
 import usuario from '../../assets/Usuario.jpg'
 import logoblanco from '../../assets/LogoBlanco.png';
-const PerfilUsuario = () => {
+function PerfilUsuario() {
+    const navigate = useNavigate();
+
+const irEditarperfil = () => {
+    navigate("/EditarPerfil");
+}
     return (
         <div className="cuerpo-dashboard">
              {/* Menú lateral de navegación */}
@@ -73,7 +79,9 @@ const PerfilUsuario = () => {
                                 <p><i className="bi bi-geo-alt"></i> Popayán, Colombia</p>
                             </div>
                         </div>
-                        <button className="boton-accion-principal"><i className="bi bi-pencil-square"></i> Actualizar Datos</button>
+                       <button className="boton-accion-principal" onClick={irEditarperfil}>
+                            <i className="bi bi-pencil-square"></i> Actualizar Datos
+                        </button>
                     </header>
 
                     <div className="perfil-grid-contenido">

@@ -1,0 +1,118 @@
+/* ===== TARJETA ===== */
+
+.profile-card-editarperfil {
+    width: 850px;
+    background: #ffffff;
+    padding: 45px;
+    border-radius: 28px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== HEADER ===== */
+
+.editar {
+    margin-bottom: 35px;
+}
+
+.editar h1 {
+    font-size: 42px;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.editar p {
+    color: #64748b;
+    font-size: 16px;
+}
+
+/* ===== FORMULARIO ===== */
+
+.profile-editarperil {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+/* ===== FILAS ===== */
+
+.form-editarperfil {
+    display: flex;
+    gap: 20px;
+}
+
+/* ===== INPUTS ===== */
+
+.input-editarperfil {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid #dbe2ea;
+    border-radius: 16px;
+    padding: 16px 18px;
+    background: #fff;
+    transition: all 0.3s ease;
+}
+
+.input-editarperfil:focus-within {
+    border: 1px solid #2563eb;
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.15);
+}
+
+.input-editarperfil i {
+    font-size: 18px;
+    color: #334155;
+}
+
+/* ===== INPUTS Y SELECT ===== */
+
+.input-editarperfil input,
+.form-select-editarperfil {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    background: transparent;
+    color: #0f172a;
+}
+
+.input-editarperfil input::placeholder {
+    color: #64748b;
+}
+
+.form-select-editarperfil {
+    cursor: pointer;
+}
+
+/* ===== INPUT ANCHO COMPLETO ===== */
+
+.full-editarperfil {
+    width: 100%;
+}
+
+/* ===== BOTÓN ===== */
+
+.form-editarperfil {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.btn-update {
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    padding: 14px 28px;
+    border-radius: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s ease;
+}
+
+.btn-update:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
