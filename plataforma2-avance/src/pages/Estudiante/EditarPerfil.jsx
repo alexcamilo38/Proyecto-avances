@@ -54,99 +54,180 @@ const EditarPerfil = () => {
           </div>
         </div>
       </nav>
-      {/*  TARJETA DEL FORMULARIO  */}
-      <div className="profile-card-editarperfil">
-        {/* Encabezado del formulario */}
-        <header className="editar">
-          <h1>Editar Perfil</h1>
-          <p>Actualiza tu información personal</p>
-        </header>
-        {/* Formulario de edición */}
-        <form className="profile-editarperil">
-          {/*  Fila de nombres a modificar*/}
-          <div className="form-editarperfil">
+      <main className="perfil-container">
 
-            <div className="input-editarperfil">
-              <i className="bi bi-person"></i>
-              <input type="text" placeholder="Primer Nombre" />
-            </div>
+        <section className="card-formulario">
 
-            <div className="input-editarperfil">
-              <i className="bi bi-person"></i>
-              <input type="text" placeholder="Segundo Nombre" />
-            </div>
-
-          </div>
-          {/*  Fila de apellidos a modificar*/}
-          <div className="form-editarperfil">
-
-            <div className="input-editarperfil">
+          <div className="encabezado-formulario">
+            <h3>
               <i className="bi bi-person-vcard"></i>
-              <input type="text" placeholder="Primer Apellido" />
-            </div>
-
-            <div className="input-editarperfil">
-              <i className="bi bi-person-vcard"></i>
-              <input type="text" placeholder="Segundo Apellido" />
-            </div>
-
-          </div>
-          {/*  DOCUMENTO */}
-          <div className="form-editarperfil">
-
-            <div className="input-editarperfil">
-              <select className="form-select-editarperfil">
-                <option>Tipo</option>
-                <option>T.I.</option>
-                <option>C.C.</option>
-              </select>
-            </div>
-
-            <div className="input-editarperfil">
-              <i className="bi bi-card-text"></i>
-              <input type="text" placeholder="Número de Documento" />
-            </div>
-
-          </div>
-          {/*  CONTACTO Y GRADO  */}
-          <div className="form-editarperfil">
-
-            <div className="input-editarperfil">
-              <i className="bi bi-telephone"></i>
-              <input type="tel" placeholder="Teléfono / Celular" />
-            </div>
-
-            <div className="input-editarperfil">
-              <i className="bi bi-mortarboard"></i>
-
-              <select className="form-select-editarperfil">
-                <option>Grado a ingresar</option>
-                <option>Sexto</option>
-                <option>Séptimo</option>
-                <option >Octavo</option>
-                <option >Noveno</option>
-                <option>Décimo</option>
-                <option>Once</option>
-              </select>
-
-            </div>
-
-          </div>
-          {/*  CORREO  */}
-          <div className="input-editarperfil full-editarperfil">
-            <i className="bi bi-envelope-at"></i>
-            <input type="email" placeholder="Correo Electrónico" />
-          </div>
-          {/*  BOTÓN GUARDAR  */}
-          <div className="form-editarperfil">
-            <Link to="/PerfilUsuario" className="btn-update">
-              <i className="bi bi-check2-circle"></i>
-              Guardar Cambios
-            </Link>
+              Información Personal
+            </h3>
           </div>
 
-        </form>
-      </div>
+          <form className="formulario-usuario">
+
+            <div className="contenedor-fila">
+
+              <div className="campo-formulario">
+                <label htmlFor="primerNombre">Primer Nombre</label>
+                <input
+                  type="text"
+                  id="primerNombre"
+                  name="primerNombre"
+                  defaultValue="Juan"
+                />
+              </div>
+
+              <div className="campo-formulario">
+                <label htmlFor="segundoNombre">Segundo Nombre</label>
+                <input
+                  type="text"
+                  id="segundoNombre"
+                  name="segundoNombre"
+                  defaultValue="Andres"
+                />
+              </div>
+
+            </div>
+
+            <div className="contenedor-fila">
+
+              <div className="campo-formulario">
+                <label htmlFor="primerApellido">Primer Apellido</label>
+                <input
+                  type="text"
+                  id="primerApellido"
+                  name="primerApellido"
+                  defaultValue="Estrada"
+                />
+              </div>
+
+              <div className="campo-formulario">
+                <label htmlFor="segundoApellido">Segundo Apellido</label>
+                <input
+                  type="text"
+                  id="segundoApellido"
+                  name="segundoApellido"
+                  defaultValue="Erazo"
+                />
+              </div>
+
+            </div>
+
+            <div className="contenedor-fila">
+
+              <div className="campo-formulario">
+                <label htmlFor="tipoDocumento">
+                  Tipo de Documento
+                </label>
+
+                <select id="tipoDocumento" name="tipoDocumento">
+                  <option value="C.C.">
+                    C.C. (Cédula de Ciudadanía)
+                  </option>
+
+                  <option value="T.I.">
+                    T.I. (Tarjeta de Identidad)
+                  </option>
+                  <option value="R.C.">R.C. (Registro Civil)</option>
+                  <option value="C.E.">C.E. (Cédula de Extranjería)</option>
+                </select>
+              </div>
+
+              <div className="campo-formulario">
+                <label htmlFor="numeroDocumento">
+                  Número de Identificación
+                </label>
+
+                <input
+                  type="text"
+                  id="numeroDocumento"
+                  name="numeroDocumento"
+                  defaultValue="10058191"
+                />
+              </div>
+
+            </div>
+
+            <div className="separador-formulario"></div>
+
+            <div className="encabezado-formulario">
+              <h3>
+                <i className="bi bi-telephone"></i>
+                Datos de Contacto
+              </h3>
+            </div>
+
+            <div className="contenedor-fila">
+
+              <div className="campo-formulario">
+                <label htmlFor="telefono">
+                  Teléfono
+                </label>
+
+                <input
+                  type="tel"
+                  id="telefono"
+                  name="telefono"
+                  defaultValue="3101234567"
+                />
+              </div>
+
+              <div className="campo-formulario">
+                <label htmlFor="correo">
+                  Correo Electrónico
+                </label>
+
+                <input
+                  type="email"
+                  id="correo"
+                  name="correo"
+                  defaultValue="juan@gmail.com"
+                />
+              </div>
+
+            </div>
+
+            <div className="fila-completa">
+
+              <div className="campo-formulario">
+                <label htmlFor="institucion">
+                  Institución
+                </label>
+
+                <select id="institucion" name="institucion">
+                  <option value="San Vicente">
+                    Institución San Vicente
+                  </option>
+
+                  <option value="Inem">
+                    INEM Francisco José de Caldas
+                  </option>
+                  <option value="Don Bosco">Colegio Don Bosco</option>
+                </select>
+              </div>
+
+            </div>
+
+            <div className="acciones-formulario">
+
+              <button type="button"className="boton-cancelar">
+                Cancelar
+              </button>
+              
+
+              <button type="submit" className="boton-guardar" >
+    
+                <i className="bi bi-check-circle" ></i>
+                Guardar Cambios
+              </button>
+
+            </div>
+
+          </form>
+        </section>
+      </main>
     </div>
   )
 }

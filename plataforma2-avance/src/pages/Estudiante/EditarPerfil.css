@@ -1,118 +1,147 @@
-/* ===== TARJETA ===== */
-
-.profile-card-editarperfil {
-    width: 850px;
-    background: #ffffff;
-    padding: 45px;
-    border-radius: 28px;
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
-}
-
-/* ===== HEADER ===== */
-
-.editar {
-    margin-bottom: 35px;
-}
-
-.editar h1 {
-    font-size: 42px;
-    color: #0f172a;
-    margin-bottom: 8px;
-}
-
-.editar p {
-    color: #64748b;
-    font-size: 16px;
-}
-
-/* ===== FORMULARIO ===== */
-
-.profile-editarperil {
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-}
-
-/* ===== FILAS ===== */
-
-.form-editarperfil {
-    display: flex;
-    gap: 20px;
-}
-
-/* ===== INPUTS ===== */
-
-.input-editarperfil {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border: 1px solid #dbe2ea;
-    border-radius: 16px;
-    padding: 16px 18px;
-    background: #fff;
-    transition: all 0.3s ease;
-}
-
-.input-editarperfil:focus-within {
-    border: 1px solid #2563eb;
-    box-shadow: 0 0 12px rgba(37, 99, 235, 0.15);
-}
-
-.input-editarperfil i {
-    font-size: 18px;
-    color: #334155;
-}
-
-/* ===== INPUTS Y SELECT ===== */
-
-.input-editarperfil input,
-.form-select-editarperfil {
+/* CONTENEDOR PRINCIPAL */
+.perfil-container{
     width: 100%;
-    border: none;
-    outline: none;
-    font-size: 15px;
-    background: transparent;
-    color: #0f172a;
-}
-
-.input-editarperfil input::placeholder {
-    color: #64748b;
-}
-
-.form-select-editarperfil {
-    cursor: pointer;
-}
-
-/* ===== INPUT ANCHO COMPLETO ===== */
-
-.full-editarperfil {
-    width: 100%;
-}
-
-/* ===== BOTÓN ===== */
-
-.form-editarperfil {
+    min-height: 100vh;
+    padding: 40px;
     display: flex;
     justify-content: center;
-    margin-top: 10px;
+    align-items: center;
 }
 
-.btn-update {
-    background: #2563eb;
-    color: white;
-    text-decoration: none;
-    padding: 14px 28px;
-    border-radius: 14px;
-    font-weight: 600;
+/* TARJETA FORMULARIO */
+.card-formulario{
+    width: 80vw ; 
+    margin-left: 260px;
+    background: #fff;
+    padding: 45px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* TITULOS */
+.encabezado-formulario{
+    margin-bottom: 25px;
+}
+
+.encabezado-formulario h3{
+    color: #1e293b;
+    font-size: 24px;
     display: flex;
     align-items: center;
     gap: 10px;
-    transition: 0.3s ease;
 }
 
-.btn-update:hover {
+/* FORMULARIO */
+.formulario-usuario{
+    width: 100%;
+}
+
+/* FILAS */
+.contenedor-fila{
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* INPUTS */
+.campo-formulario{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.campo-formulario label{
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.campo-formulario input,
+.campo-formulario select{
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    outline: none;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+/* EFECTO */
+.campo-formulario input:focus,
+.campo-formulario select:focus{
+    border-color: #2563eb;
+    box-shadow: 0 0 5px rgba(37,99,235,0.3);
+}
+
+/* LINEA */
+.separador-formulario{
+    width: 100%;
+    height: 1px;
+    background: #e2e8f0;
+    margin: 30px 0;
+}
+
+/* FILA COMPLETA */
+.fila-completa{
+    margin-bottom: 25px;
+}
+
+/* BOTONES */
+.acciones-formulario{
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.boton-cancelar{
+    background: #e2e8f0;
+    color: #1e293b;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.boton-cancelar:hover{
+    background: #cbd5e1;
+}
+
+.boton-guardar{
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.boton-guardar:hover{
     background: #1d4ed8;
-    transform: translateY(-2px);
 }
 
+/* RESPONSIVE */
+@media(max-width: 768px){
+
+    .perfil-container{
+        padding: 20px;
+    }
+
+    .contenedor-fila{
+        flex-direction: column;
+    }
+
+    .acciones-formulario{
+        flex-direction: column;
+    }
+
+    .boton-cancelar,
+    .boton-guardar{
+        width: 100%;
+    }
+}
