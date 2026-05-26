@@ -1,0 +1,208 @@
+/* Estilos/RegistroAdmin.css */
+
+:root {
+    --azul-admin: #1e293b; /* Un azul más serio para administradores */
+    --cyan-em: #4facfe;
+    --blanco: #ffffff;
+    --gris-fondo: #f1f5f9;
+    --gris-borde: #e2e8f0;
+    --sombra: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+
+.pantalla-fondo-docente {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.cuadro-registro-docente {
+    background: #ffffff;
+    width: 100%;
+    max-width: 650px;
+    padding: 60px;
+    
+    border-radius: 30px;
+    box-shadow: var(--sombra);
+    border: 1px solid var(--gris-borde);
+}
+
+.logo-easymatric {
+    height: 45px;
+    display: block;
+    margin: 0 auto 10px;
+}
+
+/* Etiqueta de Perfil */
+.badge-docente {
+    background: #e0f2fe;
+    color: var(--cyan-em);
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 5px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.registro-header-docente {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.registro-header-docente h1 {
+    color: var(--azul-admin);
+    font-size: 1.8rem;
+    margin: 5px 0;
+}
+
+.registro-header-docente p {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+/* Formulario */
+.form-docente {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.fila-input-docente {
+    display: flex;
+    gap: 15px;
+}
+
+.grupo-input-docente {
+    background: #f8fafc;
+    border: 1.5px solid var(--gris-borde);
+    border-radius: 12px;
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    transition: 0.3s;
+}
+
+.grupo-input-docente i {
+    color: var(--azul-admin); /* Iconos más oscuros para admin */
+    font-size: 1.1rem;
+}
+
+.grupo-input-docente input, .select-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    color: var(--azul-admin);
+    font-weight: 500;
+}
+
+.grupo-input-docente:focus-within {
+    border-color: var(--cyan-em);
+    background: white;
+    box-shadow: 0 0 10px rgba(79, 172, 254, 0.1);
+}
+
+/* Botón de Registro Admin */
+.btn-registrar-docente {
+    background: var(--azul-admin);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.3s;
+    box-shadow: 0 8px 20px rgba(72, 113, 180, 0.2);
+}
+
+.btn-registrar-docente:hover {
+    background: var(--cyan-em);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3);
+}
+
+/* Pie */
+.pie-cuadro-docente {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.botones-inferiores-docente {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-mini {
+    background: #f1f5f9;
+    color: #64748b;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    display: center;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-mini:hover {
+    background: var(--azul-admin);
+    color: white;
+}
+.contenedor-boton {
+    display: flex;         /* Activa el modo flexible */
+    justify-content: center; /* Lo centra horizontalmente */
+    align-items: center;     /* Lo centra verticalmente (si el div tiene altura) */
+    padding: 20px;          /* Espaciado para que no pegue a otros elementos */
+    width: 100%;            /* Asegura que ocupe todo el ancho disponible */
+}
+
+.btn-registrar-docente {
+    text-decoration: none;
+    padding: 12px 30px;
+    background-color: #1a1c2d; /* El azul oscuro de tu proyecto */
+    color: #4facfe;            /* El cian de tu proyecto */
+    border-radius: 12px;
+    font-weight: bold;
+    transition: 0.3s;
+    border: 1px solid rgba(79, 172, 254, 0.3);
+}
+
+.btn-registrar-docente:hover {
+    background-color: #4facfe;
+    color: #3641a6;
+    transform: translateY(-3px);
+}
+.contenedor-terminos-docente {
+    margin: 20px 0;
+    font-size: 0.8rem; /* más pequeña */
+    color: #64748b; /* gris */
+}
+
+.label-terminos-docente {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.label-terminos-docente span {
+    color: #64748b;
+    line-height: 1.4;
+}
+
+.link-terminos-docente {
+    color: #60a5fa;
+    text-decoration: none;
+}

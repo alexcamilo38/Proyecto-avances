@@ -33,6 +33,11 @@ import GradoPrimaria from './pages/Administrador/Grados/GradoPrimaria'
 import GradoSecundaria from './pages/Administrador/Grados/GradoSecundaria'
 import PerfilAd from './pages/Administrador/Perfil/PerfilAd'
 import EditarPerfil from './pages/Estudiante/EditarPerfil'
+import PerfilDocente from './pages/Docente/PerfilDocente'
+import RegistroDo from './pages/Docente/RegistroDo'
+import SubirModulo from './pages/Docente/SubirModulo'
+import DocenteMo from './pages/Docente/DocenteMo'
+import GrupoModulo from './pages/Docente/GrupoModulo'
 
 const App = () => {
   return (
@@ -117,6 +122,12 @@ const App = () => {
 
         <Route path="/PerfilAd" element={<PerfilAd />} />
         <Route path="/EditarPerfil" element={<EditarPerfil />} />
+
+        <Route path="/RegistroDo" element={<RegistroDo />} />
+        <Route path="/PerfilDocente" element={<PerfilDocente />} />
+        <Route path="/SubirModulo" element={<SubirModulo />} />
+        <Route path="/DocenteMo" element={<DocenteMo />} />
+        <Route path="/GrupoModulo" element={<GrupoModulo />} />
       </Routes>
     </>
   )

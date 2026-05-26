@@ -1,0 +1,170 @@
+/* CONTENEDOR PRINCIPAL */
+.contenido-principal-docentess04{
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    min-height: 100vh;
+    background: #f4f6fa;
+    padding: 40px;
+    width: 82vw ; 
+}
+
+/* HEADER */
+.header-tabla-docentess04{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 20px;
+}
+
+.titulo-area-docentess04 h1{
+    font-size: 34px;
+    color: #0d1b3d;
+    margin-bottom: 8px;
+}
+
+.titulo-area-docentess04 p{
+   
+    font-size: 15px;
+}
+
+/* BOTON */
+.btn-primario-docentess04{
+    background: #4da3ff;
+    color: white;
+    padding: 14px 22px;
+    border-radius: 12px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-primario-docentess04:hover{
+    background: #318cff;
+}
+
+/* CONTENEDOR TABLA */
+.contenedor-tabla-soft-docentess04{
+    background: white;
+    border-radius: 22px;
+    padding: 25px;
+}
+
+/* BARRA */
+.barra-herramientas-docentess04{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+/* BUSCADOR */
+.caja-busqueda-docentess04{
+    width: 350px;
+    background: #f3f6fa;
+    border: 1px solid #dbe2ea;
+    border-radius: 12px;
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.caja-busqueda-docentess04 i{
+    color: #6b7280;
+    font-size: 15px;
+}
+
+.caja-busqueda-docentess04 input{
+    width: 100%;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+}
+
+/* TABLA */
+.tabla-scroll-docentess04{
+    overflow-x: auto;
+}
+
+.tabla-matriculados-docentess04{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-matriculados-docentess04 thead{
+    background: #f5f7fb;
+}
+
+.tabla-matriculados-docentess04 th{
+    padding: 16px;
+    text-align: left;
+    color: #0d1b3d;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.tabla-matriculados-docentess04 td{
+    padding: 18px 16px;
+    border-bottom: 1px solid #edf1f5;
+    color: #44506b;
+    font-size: 14px;
+}
+
+/* NOMBRE */
+.nombre-est-docentess04{
+    font-weight: 600;
+    color: #0d1b3d;
+}
+
+/* TAG GRADO */
+.grado-tag-docentess04{
+    background: #e8f1ff;
+    color: #2563eb;
+    padding: 7px 12px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* BADGES */
+.badge-activo-docentess04{
+    background: #e2f0d9;
+    color: #385723;
+    padding: 7px 12px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.badge-pendiente-docentess04{
+    background: #fce4d6;
+    color: #c65911;
+    padding: 7px 12px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* BOTON TABLA */
+.btn-tabla-docentess04{
+    background: #4da3ff;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.btn-tabla-docentess04:hover{
+    background: #318cff;
+}
+

@@ -26,6 +26,17 @@ const SelecionRol = () => {
                     </div>
                     <i className="bi bi-chevron-right flecha"></i>
                 </Link>
+                {/* Rol docente*/}
+                <Link to="/RegistroDo" className="opcion-rol">
+                    <div className="icono-box">
+                        <i className="bi bi-folder2-open"></i>
+                    </div>
+                    <div className="texto-rol">
+                        <span className="titulo-rol">Docente</span>
+                        <span className="desc-rol">Gestión de módulos y evaluación</span>
+                    </div>
+                    <i className="bi bi-chevron-right flecha"></i>
+                </Link>
                 {/* Rol estudiante */}
                 <Link to="/RegistroU" className="opcion-rol">
                     <div className="icono-box">

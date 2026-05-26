@@ -1,0 +1,159 @@
+/* CONTENEDOR PRINCIPAL */
+.contenido-principal-docentes-modulos{
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    min-height: 100vh;
+    background: #f6f6f6;
+    padding: 40px;
+    width: 82vw ; 
+}
+
+/* HEADER */
+.header-tabla-docentes-modulos{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+/* TITULO */
+.titulo-area-docentes-modulos h1{
+    font-size: 34px;
+    color: #0d1b3d;
+    margin: 0;
+}
+
+.titulo-area-docentes-modulos p{
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 15px;
+}
+
+/* FLEX TITULO */
+.titulo-flex-docentes-modulos{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* BOTON VOLVER */
+.btn-volver-docentes-modulos{
+    color: #64748b;
+    font-size: 38px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+/* BOTON PRINCIPAL */
+.btn-primario-docentes-modulos{
+    background: #4da3ff;
+    color: white;
+    border: none;
+    padding: 14px 22px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
+}
+
+.btn-primario-docentes-modulos:hover{
+    background: #318cff;
+}
+
+/* CONTENEDOR TABLA */
+.contenedor-tabla-soft-docentes-modulos{
+    background: white;
+    border-radius: 22px;
+    padding: 25px;
+}
+
+/* SCROLL TABLA */
+.tabla-scroll-docentes-modulos{
+    overflow-x: auto;
+}
+
+/* TABLA */
+.tabla-matriculados-docentes-modulos{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* HEAD */
+.tabla-matriculados-docentes-modulos thead{
+    background: #f5f7fb;
+}
+
+.tabla-matriculados-docentes-modulos th{
+    padding: 16px;
+    text-align: left;
+    color: #0d1b3d;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* BODY */
+.tabla-matriculados-docentes-modulos td{
+    padding: 18px 16px;
+    border-bottom: 1px solid #edf1f5;
+    color: #44506b;
+    font-size: 14px;
+}
+
+/* NOMBRE */
+.nombre-est-docentes-modulos{
+    font-weight: 600;
+    color: #0d1b3d;
+}
+
+
+/* BADGE */
+.badge-id-docentes-modulos{
+    background: #e8f1ff;
+    color: #2563eb;
+    padding: 7px 12px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* INPUT NOTAS */
+.input-nota-docentes-modulos{
+    width: 80px;
+    padding: 8px;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    background: #f8fafc;
+    outline: none;
+}
+
+/* BOTON TABLA */
+.btn-tabla-docentes-modulos{
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    background: #ecfdf5;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.btn-tabla-docentes-modulos:hover{
+    background: #d1fae5;
+}
+
+/* ICONO CHECK */
+.btn-tabla-docentes-modulos i{
+    color: #10b981;
+    font-size: 18px;
+}

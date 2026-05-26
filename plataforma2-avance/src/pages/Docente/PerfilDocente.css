@@ -1,0 +1,185 @@
+/* --- CONTENIDO PRINCIPAL --- */
+.cuerpo-dashboard {
+    background-color: var(--gris-fondo);
+    margin: auto;
+    display: flex; /* Para poner el menú al lado del contenido */
+    font-family: 'Segoe UI', sans-serif;
+}
+.contenido-principal-docente {
+   margin-left: 260px; /* Espacio para el menú fijo */
+    
+    padding: 40px;
+     width: 80vw ; 
+}
+
+.perfil-contenedor-docente {
+    max-width: 1100px;
+    margin: auto;
+}
+
+/* Header del Perfil */
+.perfil-header-docente {
+    background: var(--blanco);
+    padding: 30px;
+    border-radius: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--sombra);
+    margin-bottom: 30px;
+}
+
+.perfil-info-basica-docente {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.avatar-zona-docente {
+    position: relative;
+}
+
+.avatar-docente-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--cyan-em);
+}
+
+.btn-cambiar-foto-docente {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--azul-navy);
+    color: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.texto-usuario-docente h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: var(--azul-navy);
+}
+
+.etiqueta-rol-docente {
+    color: var(--cyan-em);
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.boton-accion-principal-docente {
+    background: var(--cyan-em);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.boton-accion-principal-docente:hover {
+    background: var(--azul-navy);
+}
+
+/* Grid de Información */
+.perfil-grid-contenido-docente {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Una columna grande y otra pequeña */
+    gap: 30px;
+}
+
+.tarjeta-blanca-docente02 {
+    background: var(--blanco);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: var(--sombra);
+    margin-bottom: 20px;
+}
+
+.tarjeta-blanca-docente02 h3 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--azul-navy);
+}
+
+.tarjeta-blanca-docente02 h3 i {
+    color: var(--cyan-em);
+}
+
+/* Grid de datos */
+.los-datos-grid-docente {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.dato-item-docente label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--gris-texto);
+    margin-bottom: 5px;
+}
+
+.caja-dato-docente {
+    background: var(--gris-fondo);
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    color: var(--azul-navy);
+}
+
+.dato-item-ancho {
+    grid-column: span 2;
+}
+
+/* Sidebar lateral */
+.indicador-progreso {
+    margin: 20px 0;
+}
+
+.barra-externa {
+    background: var(--gris-fondo);
+    height: 10px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+
+.barra-interna {
+    background: linear-gradient(to right, var(--cyan-em), var(--cyan-glow));
+    height: 100%;
+    border-radius: 10px;
+}
+
+.btn-seguridad {
+    width: 100%;
+    background: var(--gris-fondo);
+    color: var(--azul-navy);
+    border: 1px solid var(--borde);
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.control-switch {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    font-size: 0.9rem;
+}
+
+.control-switch i {
+    font-size: 1.5rem;
+    color: var(--cyan-em);
+    cursor: pointer;
+}

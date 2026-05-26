@@ -20,7 +20,7 @@
 /* El cuadro o rectángulo principal */
 .cuadro-seleccion-principal {
     background: var(--blanco);
-    width: 100%;
+    width: 100vh;
     max-width: 500px; /* Tamaño tipo tarjeta de login */
     padding: 45px;
     border-radius: 30px;

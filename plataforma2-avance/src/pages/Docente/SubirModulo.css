@@ -1,0 +1,207 @@
+/* CONTENEDOR GENERAL */
+.contenido-principal-docente02{
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    min-height: 100vh;
+    background: #eef1f5;
+    padding: 25px;
+}
+
+/* CONTENEDOR */
+.perfil-contenedor-docente02{
+    width: 100%;
+}
+
+/* HEADER */
+.perfil-header-docente02{
+    background: #fff;
+    border-radius: 20px;
+    padding: 25px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.perfil-header-docente02 h1{
+    font-size: 35px;
+    font-weight: 700;
+    color: #0d1b3d;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.perfil-header-docente02 h1 i{
+    color: #4da3ff;
+}
+
+.etiqueta-rol-docente02{
+    color: #4da3ff;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* BOTON */
+.boton-accion-principal-docente02{
+    background: #4da3ff;
+    border: none;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.boton-accion-principal-docente02:hover{
+    background: #318cff;
+}
+
+/* GRID PRINCIPAL */
+.perfil-grid-contenido-docente02{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 25px;
+}
+
+/* TARJETAS */
+.tarjeta-blanca-docentes02{
+    background: #fff;
+    border-radius: 20px;
+    padding: 25px;
+}
+
+.tarjeta-blanca-docentes02 h3{
+    font-size: 22px;
+    color: #0d1b3d;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.tarjeta-blanca-docentes02 h3 i{
+    color: #4da3ff;
+}
+
+/* GRID FORM */
+.los-datos-grid-docente02{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 20px;
+}
+
+.dato-item-docente02,
+.dato-item-ancho-docente02{
+    display: flex;
+    flex-direction: column;
+}
+
+.dato-item-ancho-docente02{
+    grid-column: span 2;
+}
+
+/* LABEL */
+.dato-item-docente02 label,
+.dato-item-ancho-docente02 label{
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #23304d;
+}
+
+/* INPUTS */
+.dato-item-docente02 input,
+.dato-item-docente02 select,
+.dato-item-ancho-docente02 input,
+.dato-item-ancho-docente02 textarea{
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #d7dce4;
+    background: #f5f7fa;
+    font-size: 14px;
+    outline: none;
+}
+
+.dato-item-ancho-docente02 textarea{
+    resize: none;
+    min-height: 130px;
+}
+
+/* ZONA ARCHIVOS */
+.zona-carga-archivo-docente02{
+    border: 2px dashed #56b4ff;
+    border-radius: 16px;
+    padding: 50px 20px;
+    text-align: center;
+    background: #f8fbff;
+    position: relative;
+    cursor: pointer;
+}
+
+.zona-carga-archivo-docente02 i{
+    font-size: 55px;
+    color: #4da3ff;
+    margin-bottom: 15px;
+}
+
+.zona-carga-archivo-docente02 p{
+    color: #0d1b3d;
+    font-size: 16px;
+}
+
+.texto-secundario-docente02{
+    color: #7c879b;
+    margin-top: 8px;
+    font-size: 13px;
+}
+
+.input-file-oculto-docente02{
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    inset: 0;
+    cursor: pointer;
+}
+
+/* COLUMNA DERECHA */
+.columna-lateral-docente02{
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.nota-ayuda-docente02{
+    color: #44506b;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+/* SWITCH */
+.control-switch-docente02{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #e5e8ee;
+    padding-top: 20px;
+}
+
+.control-switch-docente02 i{
+    font-size: 35px;
+    color: #4da3ff;
+}
+
+/* LISTA */
+.tarjeta-blanca-docentes02 ul{
+    padding-left: 18px;
+}
+
+.tarjeta-blanca-docentes02 li{
+    margin-bottom: 15px;
+    color: #44506b;
+    line-height: 1.6;
+}
+
