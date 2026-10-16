@@ -1,27 +1,131 @@
-/* FOOTER */
 .footer {
-    background: #020617;
-    color: white;
-    padding: 30px 8%;
-    text-align: center;
+  background-color: #152e4d;
+  color: #f3f4f6;
+  padding-top: 50px;
+  padding-bottom: 25px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.logo-footer {
+  height: 45px;
+  width: auto;
+  margin-bottom: 15px;
 }
 
 .footer-parrafo {
-    color: #cbd5e1;
-    margin-top: 15px;
+  color: #9ca3af;
+  font-size: 0.92rem;
+  line-height: 1.6;
 }
-.footer-principal {
+
+.footer-title {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.footer-links,
+.footer-contact {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: #9ca3af;
+  text-decoration: none;
+  font-size: 0.92rem;
+  transition: color 0.2s ease-in-out;
+}
+
+.footer-links a:hover {
+  color: #60a5fa;
+}
+
+.footer-contact li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #9ca3af;
+  font-size: 0.92rem;
+  margin-bottom: 12px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 12px;
+}
+
+.social-icons a {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  transition: all 0.2s ease-in-out;
+}
+
+.social-icons a:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+}
+
+.footer-divider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin-bottom: 25px;
+}
+
+.footer-copyright {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  color: #9ca3af;
+  font-size: 0.85rem;
+}
+
+.legal-links {
+  display: flex;
+  gap: 20px;
+}
+
+.legal-links a {
+  color: #9ca3af;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.legal-links a:hover {
+  color: #ffffff;
+}
+
+/* Adaptación responsive para pantallas pequeñas */
+@media (max-width: 640px) {
+  .footer-copyright {
+    flex-direction: column;
     text-align: center;
-    
-}
-.logofo {
-    display: block;
-    margin: 0 auto 20px;
-    width: 160px;
-}
-.logo-footer {
-  width: 150px;   /* ajusta tamaño */
-  margin-bottom: 20px;
-  margin: auto;
-  
+  }
 }

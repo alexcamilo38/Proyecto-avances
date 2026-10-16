@@ -20,7 +20,7 @@ const Contacto = () => {
                             <br />
                             <i className="bi bi-envelope-at-fill color-cian"></i>
                             <h3>Correo Electrónico</h3>
-                            <p>secretaria@easymatric.edu.co</p>
+                            <p>easymatric76@gmail.com</p>
                             <br />
 
                             <i className="bi bi-clock-fill color-cian"></i>

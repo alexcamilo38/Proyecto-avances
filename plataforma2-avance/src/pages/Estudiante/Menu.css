@@ -52,7 +52,6 @@
 .menu-lista li a i {
     font-size: 1.2rem;
 }
-
 .menu-lista li a:hover, 
 .menu-lista li a.activo {
     color: white;
