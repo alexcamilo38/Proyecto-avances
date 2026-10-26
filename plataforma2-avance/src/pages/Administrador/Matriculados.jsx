@@ -1,61 +1,40 @@
 //import React from 'react'
 import { Link, Outlet } from "react-router-dom"
-import "./Matriculas.css"
-import logoblanco from '../../assets/LogoBlanco.png'
+
+
 const Matriculados = () => {
     return (
-        <div className="dashboard-container-matriculas">
+        <div className={"dashboard-container-matriculas [display:flex] [min-height:100vh] [width:100%] [margin:0] [padding:0]"}>
             {/* Menú lateral de navegación */}
-            <nav className="menu-lateral">
-                <div className="menu-logo">
-                    <img src={logoblanco} alt="EasyMatric" className="logo-img" />
-                </div>
-                {/* Lista de enlaces del menú */}
-                <ul className="menu-lista">
-                    <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
-                    <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
-                    <li><Link to="/RevicionD"><i className="bi bi-journal-bookmark"></i> <span>Matrículas</span></Link></li>
-                    <li><Link to="/Matriculados"><i className="bi bi-people"></i> <span>Estudiantes</span></Link></li>
-                    <li><Link to="/Roles" ><i className="bi bi-shield-lock"></i> <span>Roles</span></Link></li>
-                    <li><Link to="/NotasCa"><i className="bi bi-folder2-open"></i> <span>Catálogos</span></Link></li>
-                     <li><Link to="/PerfilAd" ><i className="bi bi-person-badge"></i><span>Mi Perfil</span></Link></li>
-                </ul>
-                <div className="menu-pie">
-                    <Link to="/" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</Link>
-                    <div className="perfil-usuario-info">
-                        <i className="bi bi-person-circle"></i>
-                        <span>ADMINISTRADOR</span>
-                    </div>
-                </div>
-            </nav>
 
-            <main className="panel-estudiantes">
-                <header className="encabezado-panel">
+
+            <div className={"panel-estudiantes [margin-left:260px] [flex:1] [padding:25px_30px] [background:var(--gris-fondo)] [display:flex] [flex-direction:column] [width:80vw]"}>
+                <header className={"encabezado-panel [display:flex] [justify-content:space-between] [align-items:center] [margin-bottom:25px]"}>
                     <div className="bloque-titulo">
-                        <h1>Lista de Estudiantes</h1>
-                        <p>Visualiza y gestiona la información de todos los alumnos matriculados.</p>
+                        <h1 className={"[.bloque-titulo_&]:[font-size:2rem] [.bloque-titulo_&]:[color:var(--azul-navy)] [.bloque-titulo_&]:[margin:0]"}>Lista de Estudiantes</h1>
+                        <p className={"[.bloque-titulo_&]:[color:var(--texto-gris)] [.bloque-titulo_&]:[margin-top:5px]"}>Visualiza y gestiona la información de todos los alumnos matriculados.</p>
                     </div>
 
                     <div className="acciones-panel">
-                        <button className="btn-crear">
-                            <i className="bi bi-person-plus"></i> Nuevo Registro
+                        <button className={"btn-crear [background:linear-gradient(135deg,_#4facfe,_#3b82f6)] [color:white] [border:none] [padding:12px_18px] [border-radius:12px] [font-weight:600] [cursor:pointer] [box-shadow:0_6px_18px_rgba(79,_172,_254,_0.4)] [transition:0.2s] [&:hover]:[transform:translateY(-2px)]"}>
+                            <i className={"bi bi-person-plus [.buscador_&]:[position:absolute] [.buscador_&]:[left:12px] [.buscador_&]:[top:50%] [.buscador_&]:[transform:translateY(-50%)] [.buscador_&]:[color:#94a3b8]"}></i> Nuevo Registro
                         </button>
                     </div>
                 </header>
                 {/* Tarjeta principal de la tabla */}
-                <section className="tarjeta-tabla-matriculados">
+                <section className={"tarjeta-tabla-matriculados [background:white] [border-radius:18px] [padding:20px] [box-shadow:0_10px_30px_rgba(0,0,0,0.05)] [width:100%] [box-sizing:border-box] [flex-grow:1]"}>
                      {/* Barra superior con buscador y rutas */}
-                    <div className="barra-superior">
+                    <div className={"barra-superior [display:flex] [justify-content:space-between] [margin-bottom:20px]"}>
                         {/* Buscador de estudiantes */}
-                        <div className="buscador">
-                            <i className="bi bi-search"></i>
-                            <input type="text" placeholder="Buscar por nombre, ID o grado..." />
+                        <div className={"buscador [position:relative] [width:320px]"}>
+                            <i className={"bi bi-search [.buscador_&]:[position:absolute] [.buscador_&]:[left:12px] [.buscador_&]:[top:50%] [.buscador_&]:[transform:translateY(-50%)] [.buscador_&]:[color:#94a3b8]"}></i>
+                            <input className={"[.buscador_&]:[width:100%] [.buscador_&]:[padding:12px_12px_12px_40px] [.buscador_&]:[border-radius:12px] [.buscador_&]:[border:1px_solid_var(--gris-borde)] [.buscador_&]:[background:#f8fafc] [.buscador_&]:[outline:none] [.buscador_&:focus]:[border-color:var(--cyan)] [.buscador_&:focus]:[background:white]"} type="text" placeholder="Buscar por nombre, ID o grado..." />
                         </div>
                          {/* Navegación por niveles escolares */}
-                        <nav className="rutas03">
-                            <Link to="GradoPrescolar">Preescolar</Link>
-                            <Link to="GradoPrimaria">Primaria</Link>
-                            <Link to="GradoSecundaria">Secundaria</Link>
+                        <nav className={"rutas03 [gap:20px] [display:flex]"}>
+                            <Link className={"[.rutas03_&:hover]:[color:#2563eb]"} to="GradoPrescolar">Preescolar</Link>
+                            <Link className={"[.rutas03_&:hover]:[color:#2563eb]"} to="GradoPrimaria">Primaria</Link>
+                            <Link className={"[.rutas03_&:hover]:[color:#2563eb]"} to="GradoSecundaria">Secundaria</Link>
                         </nav>
                         {/* Renderiza las rutas hijas */}
                         <Outlet />
@@ -64,164 +43,164 @@ const Matriculados = () => {
 
                     <div className="contenedor-scroll">
                         {/* Tabla de estudiantes */}
-                        <table className="tabla-estudiantes-matriculados">
-                            <thead>
-                                <tr>
-                                    <th>N°</th>
-                                    <th>Nombre Completo</th>
-                                    <th>ID Matrícula</th>
-                                    <th>Grado</th>
-                                    <th>Edad</th>
-                                    <th>Género</th>
-                                    <th>Acciones</th>
+                        <table className={"tabla-estudiantes-matriculados [width:100%] [border-collapse:collapse]"}>
+                            <thead className={"[.tabla-estudiantes-matriculados_&]:[background:#f8fafc]"}>
+                                <tr className={"[.tabla-estudiantes-matriculados_&:hover]:[background:#f0f9ff]"}>
+                                    <th className={"[.tabla-estudiantes-matriculados_&]:[text-align:left] [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados_&]:[color:#64748b] [.tabla-estudiantes-matriculados_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>N°</th>
+                                    <th className={"[.tabla-estudiantes-matriculados_&]:[text-align:left] [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados_&]:[color:#64748b] [.tabla-estudiantes-matriculados_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Nombre Completo</th>
+                                    <th className={"[.tabla-estudiantes-matriculados_&]:[text-align:left] [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados_&]:[color:#64748b] [.tabla-estudiantes-matriculados_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>ID Matrícula</th>
+                                    <th className={"[.tabla-estudiantes-matriculados_&]:[text-align:left] [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados_&]:[color:#64748b] [.tabla-estudiantes-matriculados_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Grado</th>
+                                    <th className={"[.tabla-estudiantes-matriculados_&]:[text-align:left] [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados_&]:[color:#64748b] [.tabla-estudiantes-matriculados_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Edad</th>
+                                    <th className={"[.tabla-estudiantes-matriculados_&]:[text-align:left] [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados_&]:[color:#64748b] [.tabla-estudiantes-matriculados_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Género</th>
+                                    <th className={"[.tabla-estudiantes-matriculados_&]:[text-align:left] [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados_&]:[color:#64748b] [.tabla-estudiantes-matriculados_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Acciones</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                <tr>
-                                    <td>01</td>
-                                    <td className="col-nombre">Ana Rodriguez Sandoval</td>
-                                    <td><span className="tag-id">19AB3</span></td>
-                                    <td><span className="tag-grado">6°</span></td>
-                                    <td>12</td>
-                                    <td>Femenino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>01</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Ana Rodriguez Sandoval</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>19AB3</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>6°</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>12</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>Femenino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador_&]:[position:absolute] [.buscador_&]:[left:12px] [.buscador_&]:[top:50%] [.buscador_&]:[transform:translateY(-50%)] [.buscador_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>02</td>
-                                    <td className="col-nombre">Breiner Andres Perez</td>
-                                    <td><span className="tag-id">29AB5</span></td>
-                                    <td><span className="tag-grado">6°</span></td>
-                                    <td>14</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>02</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Breiner Andres Perez</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>29AB5</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>6°</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>14</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador_&]:[position:absolute] [.buscador_&]:[left:12px] [.buscador_&]:[top:50%] [.buscador_&]:[transform:translateY(-50%)] [.buscador_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>03</td>
-                                    <td className="col-nombre">Andres Camilo Dominguez</td>
-                                    <td><span className="tag-id">39AG2</span></td>
-                                    <td><span className="tag-grado">6°</span></td>
-                                    <td>15</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>03</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Andres Camilo Dominguez</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>39AG2</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>6°</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>15</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador_&]:[position:absolute] [.buscador_&]:[left:12px] [.buscador_&]:[top:50%] [.buscador_&]:[transform:translateY(-50%)] [.buscador_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>04</td>
-                                    <td className="col-nombre">Carla Maria Sanchez</td>
-                                    <td><span className="tag-id">39JB9</span></td>
-                                    <td><span className="tag-grado">7°</span></td>
-                                    <td>17</td>
-                                    <td>Femenino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>04</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Carla Maria Sanchez</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>39JB9</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>7°</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>17</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>Femenino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador_&]:[position:absolute] [.buscador_&]:[left:12px] [.buscador_&]:[top:50%] [.buscador_&]:[transform:translateY(-50%)] [.buscador_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>05</td>
-                                    <td className="col-nombre">Jorge Enrique Rivera</td>
-                                    <td><span className="tag-id">40JB1</span></td>
-                                    <td><span className="tag-grado">8°</span></td>
-                                    <td>16</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>05</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Jorge Enrique Rivera</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>40JB1</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>8°</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>16</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador_&]:[position:absolute] [.buscador_&]:[left:12px] [.buscador_&]:[top:50%] [.buscador_&]:[transform:translateY(-50%)] [.buscador_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>06</td>
-                                    <td className="col-nombre">Juan Pablo Gómez</td>
-                                    <td><span className="tag-id">40JB9</span></td>
-                                    <td><span className="tag-grado">8°</span></td>
-                                    <td>17</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>06</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Juan Pablo Gómez</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>40JB9</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>8°</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>17</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador_&]:[position:absolute] [.buscador_&]:[left:12px] [.buscador_&]:[top:50%] [.buscador_&]:[transform:translateY(-50%)] [.buscador_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>07</td>
-                                    <td className="col-nombre">Luisa Valentina Rodriguez</td>
-                                    <td><span className="tag-id">38KB9</span></td>
-                                    <td><span className="tag-grado">9°</span></td>
-                                    <td>18</td>
-                                    <td>Femenino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>07</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Luisa Valentina Rodriguez</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>38KB9</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>9°</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>18</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>Femenino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador_&]:[position:absolute] [.buscador_&]:[left:12px] [.buscador_&]:[top:50%] [.buscador_&]:[transform:translateY(-50%)] [.buscador_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>08</td>
-                                    <td className="col-nombre">Sebastián Ramírez López</td>
-                                    <td><span className="tag-id">39HB5</span></td>
-                                    <td><span className="tag-grado">9°</span></td>
-                                    <td>15</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>08</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Sebastián Ramírez López</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>39HB5</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>9°</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>15</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador_&]:[position:absolute] [.buscador_&]:[left:12px] [.buscador_&]:[top:50%] [.buscador_&]:[transform:translateY(-50%)] [.buscador_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>09</td>
-                                    <td className="col-nombre">Daniela Rodríguez Cruz</td>
-                                    <td><span className="tag-id">37AB1</span></td>
-                                    <td><span className="tag-grado">10°</span></td>
-                                    <td>16</td>
-                                    <td>Femenino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>09</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Daniela Rodríguez Cruz</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>37AB1</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>10°</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>16</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>Femenino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador_&]:[position:absolute] [.buscador_&]:[left:12px] [.buscador_&]:[top:50%] [.buscador_&]:[transform:translateY(-50%)] [.buscador_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>10</td>
-                                    <td className="col-nombre">Kevin Santiago López</td>
-                                    <td><span className="tag-id">40LB7</span></td>
-                                    <td><span className="tag-grado">10°</span></td>
-                                    <td>18</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>10</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Kevin Santiago López</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>40LB7</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>10°</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>18</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador_&]:[position:absolute] [.buscador_&]:[left:12px] [.buscador_&]:[top:50%] [.buscador_&]:[transform:translateY(-50%)] [.buscador_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>11</td>
-                                    <td className="col-nombre">Natalia Andrea Pardo</td>
-                                    <td><span className="tag-id">39OM2</span></td>
-                                    <td><span className="tag-grado">11°</span></td>
-                                    <td>19</td>
-                                    <td>Femenino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>11</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Natalia Andrea Pardo</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>39OM2</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>11°</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>19</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>Femenino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador_&]:[position:absolute] [.buscador_&]:[left:12px] [.buscador_&]:[top:50%] [.buscador_&]:[transform:translateY(-50%)] [.buscador_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>12</td>
-                                    <td className="col-nombre">Cristian Camilo Sánchez</td>
-                                    <td><span className="tag-id">37WT3</span></td>
-                                    <td><span className="tag-grado">11°</span></td>
-                                    <td>18</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>12</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Cristian Camilo Sánchez</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>37WT3</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>11°</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>18</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador_&]:[position:absolute] [.buscador_&]:[left:12px] [.buscador_&]:[top:50%] [.buscador_&]:[transform:translateY(-50%)] [.buscador_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>13</td>
-                                    <td className="col-nombre">Laura Vanessa Rincón</td>
-                                    <td><span className="tag-id">39JP4</span></td>
-                                    <td><span className="tag-grado">11°</span></td>
-                                    <td>17</td>
-                                    <td>Femenino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>13</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Laura Vanessa Rincón</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>39JP4</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>11°</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>17</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>Femenino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador_&]:[position:absolute] [.buscador_&]:[left:12px] [.buscador_&]:[top:50%] [.buscador_&]:[transform:translateY(-50%)] [.buscador_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>14</td>
-                                    <td className="col-nombre">Mateo Alexander Ortiz</td>
-                                    <td><span className="tag-id">41XZ9</span></td>
-                                    <td><span className="tag-grado">6°</span></td>
-                                    <td>12</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>14</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Mateo Alexander Ortiz</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>41XZ9</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>6°</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>12</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados_&]:[padding:14px] [.tabla-estudiantes-matriculados_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador_&]:[position:absolute] [.buscador_&]:[left:12px] [.buscador_&]:[top:50%] [.buscador_&]:[transform:translateY(-50%)] [.buscador_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </section>
-            </main>
+            </div>
         </div>
     )
 }

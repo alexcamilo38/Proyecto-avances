@@ -1,50 +1,32 @@
 //import React from 'react'
 import { Link } from "react-router-dom"
-import logoblanco from "../../assets/LogoBlanco.png"
-import "./GrupoModulo.css"
+
+
 const GrupoModulo = () => {
     return (
         <div>
             {/* Menú lateral de navegación */}
-            <nav className="menu-lateral">
-                <div className="menu-logo">
-                    <img src={logoblanco} alt="EasyMatric" className="logo-img" />
-                </div>
-                {/* Lista de enlaces del menú */}
-                <ul className="menu-lista">
-                    <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
-                    <li><Link to="/DocenteMo"><i class="bi bi-journal-bookmark"></i> <span>Mis Módulos</span></Link></li>
-                    <li><Link to="/SubirModulo"><i class="bi bi-cloud-upload"></i> <span>Subir Módulo</span></Link></li>
-                    <li><Link to="/PerfilDocente" ><i className="bi bi-person-badge"></i><span>Mi Perfil</span></Link></li>
-                </ul>
-                <div className="menu-pie">
-                    <Link to="/" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</Link>
-                    <div className="perfil-usuario-info">
-                        <i className="bi bi-person-circle"></i>
-                        <span>DOCENTE</span>
-                    </div>
-                </div>
-            </nav>
-            <main className="contenido-principal-docentes-modulos">
 
-                <header className="header-tabla-docentes-modulos">
+            <div className={"contenido-principal-docentes-modulos [margin-left:260px] [width:calc(100%_-_260px)] [min-height:100vh] [background:#f6f6f6] [padding:40px] [width:82vw]"}>
+
+                <header className={"header-tabla-docentes-modulos [display:flex] [justify-content:space-between] [align-items:center] [gap:20px] [margin-bottom:25px]"}>
 
                     <div className="titulo-area-docentes-modulos">
 
-                        <div className="titulo-flex-docentes-modulos">
+                        <div className={"titulo-flex-docentes-modulos [display:flex] [align-items:center] [gap:10px]"}>
 
                             <Link
                                 to="/DocenteMo"
-                                className="btn-volver-docentes-modulos"
+                                className={"btn-volver-docentes-modulos [color:#64748b] [font-size:38px] [text-decoration:none] [display:flex] [align-items:center]"}
                             >
-                                <i className="bi bi-arrow-left-short"></i>
+                                <i className={"bi bi-arrow-left-short [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
                             </Link>
 
-                            <h1>Estudiantes e Historial de Notas</h1>
+                            <h1 className={"[.titulo-area-docentes-modulos_&]:[font-size:34px] [.titulo-area-docentes-modulos_&]:[color:#0d1b3d] [.titulo-area-docentes-modulos_&]:[margin:0]"}>Estudiantes e Historial de Notas</h1>
 
                         </div>
 
-                        <p>
+                        <p className={"[.titulo-area-docentes-modulos_&]:[margin-top:8px] [.titulo-area-docentes-modulos_&]:[color:#64748b] [.titulo-area-docentes-modulos_&]:[font-size:15px]"}>
                             Módulo:
                             <strong>
                                 {" "}Comprensión Lectora y Redacción (3° Primaria)
@@ -53,358 +35,358 @@ const GrupoModulo = () => {
 
                     </div>
 
-                    <button className="btn-primario-docentes-modulos">
-                        <i className="bi bi-save"></i>
+                    <button className={"btn-primario-docentes-modulos [background:#4da3ff] [color:white] [border:none] [padding:14px_22px] [border-radius:12px] [font-size:15px] [font-weight:600] [cursor:pointer] [display:flex] [align-items:center] [gap:10px] [transition:0.3s] [&:hover]:[background:#318cff]"}>
+                        <i className={"bi bi-save [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
                         Guardar Todas las Notas
                     </button>
 
                 </header>
 
-                <section className="contenedor-tabla-soft-docentes-modulos">
+                <section className={"contenedor-tabla-soft-docentes-modulos [background:white] [border-radius:22px] [padding:25px]"}>
 
-                    <div className="tabla-scroll-docentes-modulos">
+                    <div className={"tabla-scroll-docentes-modulos [overflow-x:auto]"}>
 
-                        <table className="tabla-matriculados-docentes-modulos">
+                        <table className={"tabla-matriculados-docentes-modulos [width:100%] [border-collapse:collapse]"}>
 
-                            <thead>
+                            <thead className={"[.tabla-matriculados-docentes-modulos_&]:[background:#f5f7fb]"}>
                                 <tr>
-                                    <th>N°</th>
-                                    <th>Nombre Completo</th>
-                                    <th>ID Matrícula</th>
-                                    <th>Género</th>
-                                    <th>Nota Final</th>
-                                    <th>Acciones</th>
+                                    <th className={"[.tabla-matriculados-docentes-modulos_&]:[padding:16px] [.tabla-matriculados-docentes-modulos_&]:[text-align:left] [.tabla-matriculados-docentes-modulos_&]:[color:#0d1b3d] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [.tabla-matriculados-docentes-modulos_&]:[font-weight:700]"}>N°</th>
+                                    <th className={"[.tabla-matriculados-docentes-modulos_&]:[padding:16px] [.tabla-matriculados-docentes-modulos_&]:[text-align:left] [.tabla-matriculados-docentes-modulos_&]:[color:#0d1b3d] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [.tabla-matriculados-docentes-modulos_&]:[font-weight:700]"}>Nombre Completo</th>
+                                    <th className={"[.tabla-matriculados-docentes-modulos_&]:[padding:16px] [.tabla-matriculados-docentes-modulos_&]:[text-align:left] [.tabla-matriculados-docentes-modulos_&]:[color:#0d1b3d] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [.tabla-matriculados-docentes-modulos_&]:[font-weight:700]"}>ID Matrícula</th>
+                                    <th className={"[.tabla-matriculados-docentes-modulos_&]:[padding:16px] [.tabla-matriculados-docentes-modulos_&]:[text-align:left] [.tabla-matriculados-docentes-modulos_&]:[color:#0d1b3d] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [.tabla-matriculados-docentes-modulos_&]:[font-weight:700]"}>Género</th>
+                                    <th className={"[.tabla-matriculados-docentes-modulos_&]:[padding:16px] [.tabla-matriculados-docentes-modulos_&]:[text-align:left] [.tabla-matriculados-docentes-modulos_&]:[color:#0d1b3d] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [.tabla-matriculados-docentes-modulos_&]:[font-weight:700]"}>Nota Final</th>
+                                    <th className={"[.tabla-matriculados-docentes-modulos_&]:[padding:16px] [.tabla-matriculados-docentes-modulos_&]:[text-align:left] [.tabla-matriculados-docentes-modulos_&]:[color:#0d1b3d] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [.tabla-matriculados-docentes-modulos_&]:[font-weight:700]"}>Acciones</th>
                                 </tr>
                             </thead>
 
                             <tbody>
 
                                 <tr>
-                                    <td>01</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>01</td>
 
-                                    <td className="nombre-est-docentes-modulos">
+                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
                                         Nicolás Mateo Salazar
                                     </td>
 
-                                    <td>
-                                        <span className="badge-id-docentes-modulos">
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
                                             PRI01
                                         </span>
                                     </td>
 
-                                    <td>Masculino</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Masculino</td>
 
-                                    <td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
                                         <input
                                             type="number"
                                             step="0.1"
                                             min="0"
                                             max="5"
                                             defaultValue="4.5"
-                                            className="input-nota-docentes-modulos"
+                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
                                         />
                                     </td>
 
-                                    <td>
-                                        <button className="btn-tabla-docentes-modulos" title="Guardar Nota Individual" >
-                                            <i className="bi bi-check-lg"></i>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual" >
+                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
                                         </button>
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td>02</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>02</td>
 
-                                    <td className="nombre-est-docentes-modulos">
+                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
                                         Salome Catalina López
                                     </td>
 
-                                    <td>
-                                        <span className="badge-id-docentes-modulos">
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
                                             PRI02
                                         </span>
                                     </td>
 
-                                    <td>Femenino</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Femenino</td>
 
-                                    <td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
                                         <input
                                             type="number"
                                             step="0.1"
                                             min="0"
                                             max="5"
                                             defaultValue="3.8"
-                                            className="input-nota-docentes-modulos"
+                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
                                         />
                                     </td>
 
-                                    <td>
-                                        <button className="btn-tabla-docentes-modulos" title="Guardar Nota Individual">
-                                            <i className="bi bi-check-lg"></i>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual">
+                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
                                         </button>
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td>03</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>03</td>
 
-                                    <td className="nombre-est-docentes-modulos">
+                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
                                         Ginna Gabriela Goyes
                                     </td>
 
-                                    <td>
-                                        <span className="badge-id-docentes-modulos">
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
                                             PRI03
                                         </span>
                                     </td>
 
-                                    <td>Femenino</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Femenino</td>
 
-                                    <td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
                                         <input
                                             type="number"
                                             step="0.1"
                                             min="0"
                                             max="5"
                                             defaultValue="3.8"
-                                            className="input-nota-docentes-modulos"
+                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
                                         />
                                     </td>
 
-                                    <td>
-                                        <button className="btn-tabla-docentes-modulos" title="Guardar Nota Individual">
-                                            <i className="bi bi-check-lg"></i>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual">
+                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
                                         </button>
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td>04</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>04</td>
 
-                                    <td className="nombre-est-docentes-modulos">
+                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
                                         Alex Santiago Gomez Ayala
                                     </td>
 
-                                    <td>
-                                        <span className="badge-id-docentes-modulos">
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
                                             PRI04
                                         </span>
                                     </td>
 
-                                    <td>Masculino</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Masculino</td>
 
-                                    <td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
                                         <input
                                             type="number"
                                             step="0.1"
                                             min="0"
                                             max="5"
                                             defaultValue="3.8"
-                                            className="input-nota-docentes-modulos"
+                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
                                         />
                                     </td>
 
-                                    <td>
-                                        <button className="btn-tabla-docentes-modulos" title="Guardar Nota Individual">
-                                            <i className="bi bi-check-lg"></i>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual">
+                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
                                         </button>
                                     </td>
 
                                 </tr>
                                 <tr>
-                                    <td>05</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>05</td>
 
-                                    <td className="nombre-est-docentes-modulos">
+                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
                                         Jhosntin Fabian Castillo
                                     </td>
 
-                                    <td>
-                                        <span className="badge-id-docentes-modulos">
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
                                             PRI05
                                         </span>
                                     </td>
 
-                                    <td>Masculino</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Masculino</td>
 
-                                    <td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
                                         <input
                                             type="number"
                                             step="0.1"
                                             min="0"
                                             max="5"
                                             defaultValue="3.8"
-                                            className="input-nota-docentes-modulos"
+                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
                                         />
                                     </td>
 
-                                    <td>
-                                        <button className="btn-tabla-docentes-modulos" title="Guardar Nota Individual" >
-                                            <i className="bi bi-check-lg"></i>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual" >
+                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
                                         </button>
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td>06</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>06</td>
 
-                                    <td className="nombre-est-docentes-modulos">
+                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
                                         Yeraldin Fernanda España
                                     </td>
 
-                                    <td>
-                                        <span className="badge-id-docentes-modulos">
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
                                             PRI06
                                         </span>
                                     </td>
 
-                                    <td>Femenino</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Femenino</td>
 
-                                    <td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
                                         <input
                                             type="number"
                                             step="0.1"
                                             min="0"
                                             max="5"
                                             defaultValue="3.8"
-                                            className="input-nota-docentes-modulos"
+                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
                                         />
                                     </td>
 
-                                    <td>
-                                        <button className="btn-tabla-docentes-modulos" title="Guardar Nota Individual">
-                                            <i className="bi bi-check-lg"></i>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual">
+                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
                                         </button>
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td>07</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>07</td>
 
-                                    <td className="nombre-est-docentes-modulos">
+                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
                                         María Alejandra Gomez Gomez
                                     </td>
 
-                                    <td>
-                                        <span className="badge-id-docentes-modulos">
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
                                             PRI07
                                         </span>
                                     </td>
 
-                                    <td>Femenino</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Femenino</td>
 
-                                    <td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
                                         <input
                                             type="number"
                                             step="0.1"
                                             min="0"
                                             max="5"
                                             defaultValue="3.8"
-                                            className="input-nota-docentes-modulos"
+                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
                                         />
                                     </td>
 
-                                    <td>
-                                        <button className="btn-tabla-docentes-modulos" title="Guardar Nota Individual">
-                                            <i className="bi bi-check-lg"></i>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual">
+                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
                                         </button>
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td>08</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>08</td>
 
-                                    <td className="nombre-est-docentes-modulos">
+                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
                                         Yannin Ayala
                                     </td>
 
-                                    <td>
-                                        <span className="badge-id-docentes-modulos">
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
                                             PRI08
                                         </span>
                                     </td>
 
-                                    <td>Femenino</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Femenino</td>
 
-                                    <td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
                                         <input
                                             type="number"
                                             step="0.1"
                                             min="0"
                                             max="5"
                                             defaultValue="3.8"
-                                            className="input-nota-docentes-modulos"
+                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
                                         />
                                     </td>
 
-                                    <td>
-                                        <button className="btn-tabla-docentes-modulos" title="Guardar Nota Individual">
-                                            <i className="bi bi-check-lg"></i>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual">
+                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
                                         </button>
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td>09</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>09</td>
 
-                                    <td className="nombre-est-docentes-modulos">
+                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
                                         Yuneidi Rincon
                                     </td>
 
-                                    <td>
-                                        <span className="badge-id-docentes-modulos">
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
                                             PRI09
                                         </span>
                                     </td>
 
-                                    <td>Femenino</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Femenino</td>
 
-                                    <td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
                                         <input
                                             type="number"
                                             step="0.1"
                                             min="0"
                                             max="5"
                                             defaultValue="3.8"
-                                            className="input-nota-docentes-modulos"
+                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
                                         />
                                     </td>
 
-                                    <td>
-                                        <button className="btn-tabla-docentes-modulos" title="Guardar Nota Individual">
-                                            <i className="bi bi-check-lg"></i>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual">
+                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
                                         </button>
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td>10</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>10</td>
 
-                                    <td className="nombre-est-docentes-modulos">
+                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
                                         Cristian Alejandro Guerrero
                                     </td>
 
-                                    <td>
-                                        <span className="badge-id-docentes-modulos">
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
                                             PRI10
                                         </span>
                                     </td>
 
-                                    <td>Masculino</td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Masculino</td>
 
-                                    <td>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
                                         <input
                                             type="number"
                                             step="0.1"
                                             min="0"
                                             max="5"
                                             defaultValue="3.8"
-                                            className="input-nota-docentes-modulos"
+                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
                                         />
                                     </td>
 
-                                    <td>
-                                        <button className="btn-tabla-docentes-modulos" title="Guardar Nota Individual">
-                                            <i className="bi bi-check-lg"></i>
+                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
+                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual">
+                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -412,7 +394,7 @@ const GrupoModulo = () => {
                         </table>
                     </div>
                 </section>
-            </main>
+            </div>
         </div>
     )
 }

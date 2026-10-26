@@ -1,77 +1,30 @@
-import { Link } from "react-router-dom"
-import logoblanco from '../../assets/LogoBlanco.png';
-import "./EditarPerfil.css"
-import "./Menu.css"
+
+
+
+
 
 const EditarPerfil = () => {
   return (
     <div>
-      <nav className="menu-lateral">
-        <div className="menu-logo">
-          <img src={logoblanco} alt="EasyMatric" className="logo-img" />
-        </div>
-        {/* Lista de navegación */}
-        <ul className="menu-lista">
-          <li>
-            <Link to="/">
-              <i className="bi bi-house-door"></i>
-              <span>Inicio</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/Colegios">
-              <i className="bi bi-bank"></i>
-              <span>Instituciones</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/MatriculasE">
-              <i className="bi bi-journal-bookmark"></i>
-              <span>Mis Matrículas</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/ModulosAcademicos">
-              <i className="bi bi-folder2-open"></i>
-              <span>Catálogos</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/PerfilUsuario" className="activo">
-              <i className="bi bi-person-badge"></i>
-              <span>Mi Perfil</span>
-            </Link>
-          </li>
-        </ul>
 
-        <div className="menu-pie">
-          <Link to="/" className="enlace-salir">
-            <i className="bi bi-box-arrow-left"></i> Cerrar Sesión
-          </Link>
-          <div className="perfil-usuario-info">
-            <i className="bi bi-person-circle"></i>
-            <span>ESTUDIANTE</span>
-          </div>
-        </div>
-      </nav>
-      <main className="perfil-container">
+      <div className={"perfil-container [width:100%] [min-height:100vh] [padding:40px] [display:flex] [justify-content:center] [align-items:center] max-[768px]:[padding:20px]"}>
 
-        <section className="card-formulario">
+        <section className={"card-formulario [width:80vw] [margin-left:260px] [background:#fff] [padding:45px] [border-radius:20px] [box-shadow:0_4px_15px_rgba(0,0,0,0.1)]"}>
 
-          <div className="encabezado-formulario">
-            <h3>
-              <i className="bi bi-person-vcard"></i>
+          <div className={"encabezado-formulario [margin-bottom:25px]"}>
+            <h3 className={"[.encabezado-formulario_&]:[color:#1e293b] [.encabezado-formulario_&]:[font-size:24px] [.encabezado-formulario_&]:[display:flex] [.encabezado-formulario_&]:[align-items:center] [.encabezado-formulario_&]:[gap:10px]"}>
+              <i className={"bi bi-person-vcard [.menu-lista_li_a_&]:[font-size:1.2rem]"}></i>
               Información Personal
             </h3>
           </div>
 
-          <form className="formulario-usuario">
+          <form className={"formulario-usuario [width:100%]"}>
 
-            <div className="contenedor-fila">
+            <div className={"contenedor-fila [display:flex] [gap:20px] [margin-bottom:20px] max-[768px]:[flex-direction:column]"}>
 
-              <div className="campo-formulario">
-                <label htmlFor="primerNombre">Primer Nombre</label>
-                <input
+              <div className={"campo-formulario [width:100%] [display:flex] [flex-direction:column]"}>
+                <label className={"[.campo-formulario_&]:[margin-bottom:8px] [.campo-formulario_&]:[font-weight:600] [.campo-formulario_&]:[color:#334155]"} htmlFor="primerNombre">Primer Nombre</label>
+                <input className={"[.campo-formulario_&]:[width:100%] [.campo-formulario_&]:[padding:14px] [.campo-formulario_&]:[border:1px_solid_#cbd5e1] [.campo-formulario_&]:[border-radius:12px] [.campo-formulario_&]:[outline:none] [.campo-formulario_&]:[font-size:15px] [.campo-formulario_&]:[transition:0.3s] [.campo-formulario_&:focus]:[border-color:#2563eb] [.campo-formulario_&:focus]:[box-shadow:0_0_5px_rgba(37,99,235,0.3)]"}
                   type="text"
                   id="primerNombre"
                   name="primerNombre"
@@ -79,9 +32,9 @@ const EditarPerfil = () => {
                 />
               </div>
 
-              <div className="campo-formulario">
-                <label htmlFor="segundoNombre">Segundo Nombre</label>
-                <input
+              <div className={"campo-formulario [width:100%] [display:flex] [flex-direction:column]"}>
+                <label className={"[.campo-formulario_&]:[margin-bottom:8px] [.campo-formulario_&]:[font-weight:600] [.campo-formulario_&]:[color:#334155]"} htmlFor="segundoNombre">Segundo Nombre</label>
+                <input className={"[.campo-formulario_&]:[width:100%] [.campo-formulario_&]:[padding:14px] [.campo-formulario_&]:[border:1px_solid_#cbd5e1] [.campo-formulario_&]:[border-radius:12px] [.campo-formulario_&]:[outline:none] [.campo-formulario_&]:[font-size:15px] [.campo-formulario_&]:[transition:0.3s] [.campo-formulario_&:focus]:[border-color:#2563eb] [.campo-formulario_&:focus]:[box-shadow:0_0_5px_rgba(37,99,235,0.3)]"}
                   type="text"
                   id="segundoNombre"
                   name="segundoNombre"
@@ -91,11 +44,11 @@ const EditarPerfil = () => {
 
             </div>
 
-            <div className="contenedor-fila">
+            <div className={"contenedor-fila [display:flex] [gap:20px] [margin-bottom:20px] max-[768px]:[flex-direction:column]"}>
 
-              <div className="campo-formulario">
-                <label htmlFor="primerApellido">Primer Apellido</label>
-                <input
+              <div className={"campo-formulario [width:100%] [display:flex] [flex-direction:column]"}>
+                <label className={"[.campo-formulario_&]:[margin-bottom:8px] [.campo-formulario_&]:[font-weight:600] [.campo-formulario_&]:[color:#334155]"} htmlFor="primerApellido">Primer Apellido</label>
+                <input className={"[.campo-formulario_&]:[width:100%] [.campo-formulario_&]:[padding:14px] [.campo-formulario_&]:[border:1px_solid_#cbd5e1] [.campo-formulario_&]:[border-radius:12px] [.campo-formulario_&]:[outline:none] [.campo-formulario_&]:[font-size:15px] [.campo-formulario_&]:[transition:0.3s] [.campo-formulario_&:focus]:[border-color:#2563eb] [.campo-formulario_&:focus]:[box-shadow:0_0_5px_rgba(37,99,235,0.3)]"}
                   type="text"
                   id="primerApellido"
                   name="primerApellido"
@@ -103,9 +56,9 @@ const EditarPerfil = () => {
                 />
               </div>
 
-              <div className="campo-formulario">
-                <label htmlFor="segundoApellido">Segundo Apellido</label>
-                <input
+              <div className={"campo-formulario [width:100%] [display:flex] [flex-direction:column]"}>
+                <label className={"[.campo-formulario_&]:[margin-bottom:8px] [.campo-formulario_&]:[font-weight:600] [.campo-formulario_&]:[color:#334155]"} htmlFor="segundoApellido">Segundo Apellido</label>
+                <input className={"[.campo-formulario_&]:[width:100%] [.campo-formulario_&]:[padding:14px] [.campo-formulario_&]:[border:1px_solid_#cbd5e1] [.campo-formulario_&]:[border-radius:12px] [.campo-formulario_&]:[outline:none] [.campo-formulario_&]:[font-size:15px] [.campo-formulario_&]:[transition:0.3s] [.campo-formulario_&:focus]:[border-color:#2563eb] [.campo-formulario_&:focus]:[box-shadow:0_0_5px_rgba(37,99,235,0.3)]"}
                   type="text"
                   id="segundoApellido"
                   name="segundoApellido"
@@ -115,14 +68,14 @@ const EditarPerfil = () => {
 
             </div>
 
-            <div className="contenedor-fila">
+            <div className={"contenedor-fila [display:flex] [gap:20px] [margin-bottom:20px] max-[768px]:[flex-direction:column]"}>
 
-              <div className="campo-formulario">
-                <label htmlFor="tipoDocumento">
+              <div className={"campo-formulario [width:100%] [display:flex] [flex-direction:column]"}>
+                <label className={"[.campo-formulario_&]:[margin-bottom:8px] [.campo-formulario_&]:[font-weight:600] [.campo-formulario_&]:[color:#334155]"} htmlFor="tipoDocumento">
                   Tipo de Documento
                 </label>
 
-                <select id="tipoDocumento" name="tipoDocumento">
+                <select className={"[.campo-formulario_&]:[width:100%] [.campo-formulario_&]:[padding:14px] [.campo-formulario_&]:[border:1px_solid_#cbd5e1] [.campo-formulario_&]:[border-radius:12px] [.campo-formulario_&]:[outline:none] [.campo-formulario_&]:[font-size:15px] [.campo-formulario_&]:[transition:0.3s] [.campo-formulario_&:focus]:[border-color:#2563eb] [.campo-formulario_&:focus]:[box-shadow:0_0_5px_rgba(37,99,235,0.3)]"} id="tipoDocumento" name="tipoDocumento">
                   <option value="C.C.">
                     C.C. (Cédula de Ciudadanía)
                   </option>
@@ -135,12 +88,12 @@ const EditarPerfil = () => {
                 </select>
               </div>
 
-              <div className="campo-formulario">
-                <label htmlFor="numeroDocumento">
+              <div className={"campo-formulario [width:100%] [display:flex] [flex-direction:column]"}>
+                <label className={"[.campo-formulario_&]:[margin-bottom:8px] [.campo-formulario_&]:[font-weight:600] [.campo-formulario_&]:[color:#334155]"} htmlFor="numeroDocumento">
                   Número de Identificación
                 </label>
 
-                <input
+                <input className={"[.campo-formulario_&]:[width:100%] [.campo-formulario_&]:[padding:14px] [.campo-formulario_&]:[border:1px_solid_#cbd5e1] [.campo-formulario_&]:[border-radius:12px] [.campo-formulario_&]:[outline:none] [.campo-formulario_&]:[font-size:15px] [.campo-formulario_&]:[transition:0.3s] [.campo-formulario_&:focus]:[border-color:#2563eb] [.campo-formulario_&:focus]:[box-shadow:0_0_5px_rgba(37,99,235,0.3)]"}
                   type="text"
                   id="numeroDocumento"
                   name="numeroDocumento"
@@ -150,23 +103,23 @@ const EditarPerfil = () => {
 
             </div>
 
-            <div className="separador-formulario"></div>
+            <div className={"separador-formulario [width:100%] [height:1px] [background:#e2e8f0] [margin:30px_0]"}></div>
 
-            <div className="encabezado-formulario">
-              <h3>
-                <i className="bi bi-telephone"></i>
+            <div className={"encabezado-formulario [margin-bottom:25px]"}>
+              <h3 className={"[.encabezado-formulario_&]:[color:#1e293b] [.encabezado-formulario_&]:[font-size:24px] [.encabezado-formulario_&]:[display:flex] [.encabezado-formulario_&]:[align-items:center] [.encabezado-formulario_&]:[gap:10px]"}>
+                <i className={"bi bi-telephone [.menu-lista_li_a_&]:[font-size:1.2rem]"}></i>
                 Datos de Contacto
               </h3>
             </div>
 
-            <div className="contenedor-fila">
+            <div className={"contenedor-fila [display:flex] [gap:20px] [margin-bottom:20px] max-[768px]:[flex-direction:column]"}>
 
-              <div className="campo-formulario">
-                <label htmlFor="telefono">
+              <div className={"campo-formulario [width:100%] [display:flex] [flex-direction:column]"}>
+                <label className={"[.campo-formulario_&]:[margin-bottom:8px] [.campo-formulario_&]:[font-weight:600] [.campo-formulario_&]:[color:#334155]"} htmlFor="telefono">
                   Teléfono
                 </label>
 
-                <input
+                <input className={"[.campo-formulario_&]:[width:100%] [.campo-formulario_&]:[padding:14px] [.campo-formulario_&]:[border:1px_solid_#cbd5e1] [.campo-formulario_&]:[border-radius:12px] [.campo-formulario_&]:[outline:none] [.campo-formulario_&]:[font-size:15px] [.campo-formulario_&]:[transition:0.3s] [.campo-formulario_&:focus]:[border-color:#2563eb] [.campo-formulario_&:focus]:[box-shadow:0_0_5px_rgba(37,99,235,0.3)]"}
                   type="tel"
                   id="telefono"
                   name="telefono"
@@ -174,12 +127,12 @@ const EditarPerfil = () => {
                 />
               </div>
 
-              <div className="campo-formulario">
-                <label htmlFor="correo">
+              <div className={"campo-formulario [width:100%] [display:flex] [flex-direction:column]"}>
+                <label className={"[.campo-formulario_&]:[margin-bottom:8px] [.campo-formulario_&]:[font-weight:600] [.campo-formulario_&]:[color:#334155]"} htmlFor="correo">
                   Correo Electrónico
                 </label>
 
-                <input
+                <input className={"[.campo-formulario_&]:[width:100%] [.campo-formulario_&]:[padding:14px] [.campo-formulario_&]:[border:1px_solid_#cbd5e1] [.campo-formulario_&]:[border-radius:12px] [.campo-formulario_&]:[outline:none] [.campo-formulario_&]:[font-size:15px] [.campo-formulario_&]:[transition:0.3s] [.campo-formulario_&:focus]:[border-color:#2563eb] [.campo-formulario_&:focus]:[box-shadow:0_0_5px_rgba(37,99,235,0.3)]"}
                   type="email"
                   id="correo"
                   name="correo"
@@ -189,14 +142,14 @@ const EditarPerfil = () => {
 
             </div>
 
-            <div className="fila-completa">
+            <div className={"fila-completa [margin-bottom:25px]"}>
 
-              <div className="campo-formulario">
-                <label htmlFor="institucion">
+              <div className={"campo-formulario [width:100%] [display:flex] [flex-direction:column]"}>
+                <label className={"[.campo-formulario_&]:[margin-bottom:8px] [.campo-formulario_&]:[font-weight:600] [.campo-formulario_&]:[color:#334155]"} htmlFor="institucion">
                   Institución
                 </label>
 
-                <select id="institucion" name="institucion">
+                <select className={"[.campo-formulario_&]:[width:100%] [.campo-formulario_&]:[padding:14px] [.campo-formulario_&]:[border:1px_solid_#cbd5e1] [.campo-formulario_&]:[border-radius:12px] [.campo-formulario_&]:[outline:none] [.campo-formulario_&]:[font-size:15px] [.campo-formulario_&]:[transition:0.3s] [.campo-formulario_&:focus]:[border-color:#2563eb] [.campo-formulario_&:focus]:[box-shadow:0_0_5px_rgba(37,99,235,0.3)]"} id="institucion" name="institucion">
                   <option value="San Vicente">
                     Institución San Vicente
                   </option>
@@ -210,16 +163,16 @@ const EditarPerfil = () => {
 
             </div>
 
-            <div className="acciones-formulario">
+            <div className={"acciones-formulario [display:flex] [justify-content:flex-end] [gap:15px] [margin-top:20px] max-[768px]:[flex-direction:column]"}>
 
-              <button type="button"className="boton-cancelar">
+              <button type="button"className={"boton-cancelar [background:#e2e8f0] [color:#1e293b] [border:none] [padding:12px_25px] [border-radius:10px] [cursor:pointer] [font-size:15px] [transition:0.3s] [&:hover]:[background:#cbd5e1] max-[768px]:[width:100%]"}>
                 Cancelar
               </button>
-              
 
-              <button type="submit" className="boton-guardar" >
-    
-                <i className="bi bi-check-circle" ></i>
+
+              <button type="submit" className={"boton-guardar [background:#2563eb] [color:white] [border:none] [padding:12px_25px] [border-radius:10px] [cursor:pointer] [font-size:15px] [transition:0.3s] [&:hover]:[background:#1d4ed8] max-[768px]:[width:100%]"} >
+
+                <i className={"bi bi-check-circle [.menu-lista_li_a_&]:[font-size:1.2rem]"} ></i>
                 Guardar Cambios
               </button>
 
@@ -227,7 +180,7 @@ const EditarPerfil = () => {
 
           </form>
         </section>
-      </main>
+      </div>
     </div>
   )
 }

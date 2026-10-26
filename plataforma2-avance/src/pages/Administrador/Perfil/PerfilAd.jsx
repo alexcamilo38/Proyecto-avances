@@ -1,90 +1,69 @@
 //import React from 'react'
 // Importación de React Router
-import { Link } from 'react-router-dom'
-import "./PerfilAd.css"
+
+
 // Importación de imágenes
 import admin from '../../../assets/iconLE.png';
-import logoblanco from '../../../assets/LogoBlanco.png'
+
 const PerfilAd = () => {
     return (
         <div>
             {/* Menú lateral de navegación */}
-            <nav className="menu-lateral">
-                <div className="menu-logo">
-                    <img src={logoblanco} alt="EasyMatric" className="logo-img" />
-                </div>
-                  {/* Lista de enlaces del menú */}
-                <ul className="menu-lista">
-                    <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
-                    <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
-                    <li><Link to="/RevicionD"><i className="bi bi-journal-bookmark"></i> <span>Matrículas</span></Link></li>
-                    <li><Link to="/Matriculados"><i className="bi bi-people"></i> <span>Estudiantes</span></Link></li>
-                    <li><Link to="/Roles" ><i className="bi bi-shield-lock"></i> <span>Roles</span></Link></li>
-                    <li><Link to="/NotasCa"><i className="bi bi-folder2-open"></i> <span>Catálogos</span></Link></li>
-                    <li><Link to="/PerfilAd" ><i className="bi bi-person-badge"></i><span>Mi Perfil</span></Link></li>
-                </ul>
-                <div className="menu-pie">
-                    <Link to="/" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</Link>
-                    <div className="perfil-usuario-info">
-                        <i className="bi bi-person-circle"></i>
-                        <span>ADMINISTRADOR</span>
-                    </div>
-                </div>
-            </nav>
-            <main className="contenido-perfilad02">
-                <div className="perfil-contenedorad02">
 
-                    <header className="perfil-headerad02">
-                        <div className="perfil-info-basica-ad02">
-                            <div className="avatar-zona-ad02">
-                                <img src={admin} alt="Foto de Perfil" className="avatarad02-img" />
-                                <button className="btn-cambiar-foto"><i className="bi bi-camera"></i></button>
+            <div className={"contenido-perfilad02 [margin-left:260px] [padding:40px] [width:80vw]"}>
+                <div className={"perfil-contenedorad02 [max-width:1100px] [margin:0_auto]"}>
+
+                    <header className={"perfil-headerad02 [background:var(--blanco)] [padding:30px] [border-radius:25px] [display:flex] [justify-content:space-between] [align-items:center] [box-shadow:var(--sombra)] [margin-bottom:30px]"}>
+                        <div className={"perfil-info-basica-ad02 [display:flex] [align-items:center] [gap:25px]"}>
+                            <div className={"avatar-zona-ad02 [position:relative]"}>
+                                <img src={admin} alt="Foto de Perfil" className={"avatarad02-img [width:100px] [height:100px] [border-radius:50%] [object-fit:cover] [border:3px_solid_var(--cyan-em)]"} />
+                                <button className={"btn-cambiar-foto [position:absolute] [bottom:0] [right:0] [background:var(--azul-navy)] [color:white] [border:none] [width:35px] [height:35px] [border-radius:50%] [cursor:pointer]"}><i className={"bi bi-camera [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i></button>
                             </div>
                             {/* Información básica */}
                             <div className="texto-usuario-ad02">
-                                <h1>Gustavo Adolfo Mejía</h1>
+                                <h1 className={"[.texto-usuario-ad02_&]:[margin:0] [.texto-usuario-ad02_&]:[font-size:1.8rem] [.texto-usuario-ad02_&]:[color:var(--azul-navy)]"}>Gustavo Adolfo Mejía</h1>
                                 <span className="badge-rol-admin">Rector Institucional</span>
                             </div>
                         </div>
-                        <button className="boton-accion-principal-ad02"><i className="bi bi-pencil-square"></i> Editar Perfil</button>
-                    </header>              
-                    <div className="perfil-grid-contenido-ad02">
+                        <button className={"boton-accion-principal-ad02 [background:var(--cyan-em)] [color:white] [border:none] [padding:12px_25px] [border-radius:12px] [font-weight:600] [cursor:pointer] [transition:0.3s] [&:hover]:[background:var(--azul-navy)]"}><i className={"bi bi-pencil-square [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i> Editar Perfil</button>
+                    </header>
+                    <div className={"perfil-grid-contenido-ad02 [display:grid] [grid-template-columns:2fr_1fr] [gap:30px]"}>
                          {/* Sección de datos */}
                         <section className="seccion-datos">
-                            <div className="tarjeta-blanca-ad02">
-                                <h3><i className="bi bi-person-vcard"></i> Datos de Identificación</h3>
+                            <div className={"tarjeta-blanca-ad02 [background:var(--blanco)] [padding:25px] [border-radius:20px] [box-shadow:var(--sombra)] [margin-bottom:20px]"}>
+                                <h3 className={"[.tarjeta-blanca-ad02_&]:[margin-top:0] [.tarjeta-blanca-ad02_&]:[font-size:1.1rem] [.tarjeta-blanca-ad02_&]:[display:flex] [.tarjeta-blanca-ad02_&]:[align-items:center] [.tarjeta-blanca-ad02_&]:[gap:10px] [.tarjeta-blanca-ad02_&]:[color:var(--azul-navy)]"}><i className={"bi bi-person-vcard [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i> Datos de Identificación</h3>
                                 <br />
-                                <div className="los-datos-grid-ad02">
+                                <div className={"los-datos-grid-ad02 [display:grid] [grid-template-columns:1fr_1fr] [gap:20px]"}>
                                     <div className="dato-item">
-                                        <label>Número de Cédula</label>
-                                        <div className="caja-dato">10058191</div>
+                                        <label className={"[.dato-item_&]:[display:block] [.dato-item_&]:[font-size:0.8rem] [.dato-item_&]:[color:var(--gris-texto)] [.dato-item_&]:[margin-bottom:5px]"}>Número de Cédula</label>
+                                        <div className={"caja-dato [background:var(--gris-fondo)] [padding:12px] [border-radius:10px] [font-weight:600] [color:var(--azul-navy)]"}>10058191</div>
                                     </div>
                                     <div className="dato-item">
-                                        <label>Cargo Oficial</label>
-                                        <div className="caja-dato">Rector Académico</div>
+                                        <label className={"[.dato-item_&]:[display:block] [.dato-item_&]:[font-size:0.8rem] [.dato-item_&]:[color:var(--gris-texto)] [.dato-item_&]:[margin-bottom:5px]"}>Cargo Oficial</label>
+                                        <div className={"caja-dato [background:var(--gris-fondo)] [padding:12px] [border-radius:10px] [font-weight:600] [color:var(--azul-navy)]"}>Rector Académico</div>
                                     </div>
-                                    <div className="dato-item-ancho">
-                                        <label>Correo Institucional</label>
-                                        <div className="caja-dato">gustavo.mejia@easymatric.edu.co</div>
+                                    <div className={"dato-item-ancho [grid-column:span_2]"}>
+                                        <label className={"[.dato-item_&]:[display:block] [.dato-item_&]:[font-size:0.8rem] [.dato-item_&]:[color:var(--gris-texto)] [.dato-item_&]:[margin-bottom:5px]"}>Correo Institucional</label>
+                                        <div className={"caja-dato [background:var(--gris-fondo)] [padding:12px] [border-radius:10px] [font-weight:600] [color:var(--azul-navy)]"}>gustavo.mejia@easymatric.edu.co</div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="tarjeta-blanca-ad02">
-                                <h3><i className="bi bi-building-check"></i> Entidad Vinculada</h3>
+                            <div className={"tarjeta-blanca-ad02 [background:var(--blanco)] [padding:25px] [border-radius:20px] [box-shadow:var(--sombra)] [margin-bottom:20px]"}>
+                                <h3 className={"[.tarjeta-blanca-ad02_&]:[margin-top:0] [.tarjeta-blanca-ad02_&]:[font-size:1.1rem] [.tarjeta-blanca-ad02_&]:[display:flex] [.tarjeta-blanca-ad02_&]:[align-items:center] [.tarjeta-blanca-ad02_&]:[gap:10px] [.tarjeta-blanca-ad02_&]:[color:var(--azul-navy)]"}><i className={"bi bi-building-check [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i> Entidad Vinculada</h3>
                                 <br />
                                 <div className="los-datos-grid">
-                                    <div className="dato-item-ancho">
-                                        <label>Institución Educativa</label>
-                                        <div className="caja-dato">Institución Educación San Vicente</div>
+                                    <div className={"dato-item-ancho [grid-column:span_2]"}>
+                                        <label className={"[.dato-item_&]:[display:block] [.dato-item_&]:[font-size:0.8rem] [.dato-item_&]:[color:var(--gris-texto)] [.dato-item_&]:[margin-bottom:5px]"}>Institución Educativa</label>
+                                        <div className={"caja-dato [background:var(--gris-fondo)] [padding:12px] [border-radius:10px] [font-weight:600] [color:var(--azul-navy)]"}>Institución Educación San Vicente</div>
                                     </div>
                                     <div className="dato-item">
-                                        <label>NIT Institucional</label>
-                                        <div className="caja-dato">800.123.456-1</div>
+                                        <label className={"[.dato-item_&]:[display:block] [.dato-item_&]:[font-size:0.8rem] [.dato-item_&]:[color:var(--gris-texto)] [.dato-item_&]:[margin-bottom:5px]"}>NIT Institucional</label>
+                                        <div className={"caja-dato [background:var(--gris-fondo)] [padding:12px] [border-radius:10px] [font-weight:600] [color:var(--azul-navy)]"}>800.123.456-1</div>
                                     </div>
                                     <div className="dato-item">
-                                        <label>Teléfono Oficina</label>
-                                        <div className="caja-dato">602 823 4567</div>
+                                        <label className={"[.dato-item_&]:[display:block] [.dato-item_&]:[font-size:0.8rem] [.dato-item_&]:[color:var(--gris-texto)] [.dato-item_&]:[margin-bottom:5px]"}>Teléfono Oficina</label>
+                                        <div className={"caja-dato [background:var(--gris-fondo)] [padding:12px] [border-radius:10px] [font-weight:600] [color:var(--azul-navy)]"}>602 823 4567</div>
                                     </div>
                                 </div>
                             </div>
@@ -92,8 +71,8 @@ const PerfilAd = () => {
                         {/* Barra lateral */}
                         <aside className="columna-lateral">
                             {/* Estadísticas */}
-                            <div className="tarjeta-blanca-ad02 estadisticas-admin">
-                                <h3><i className="bi bi-graph-up"></i> Mi Actividad</h3>
+                            <div className={"tarjeta-blanca-ad02 estadisticas-admin [background:var(--blanco)] [padding:25px] [border-radius:20px] [box-shadow:var(--sombra)] [margin-bottom:20px]"}>
+                                <h3 className={"[.tarjeta-blanca-ad02_&]:[margin-top:0] [.tarjeta-blanca-ad02_&]:[font-size:1.1rem] [.tarjeta-blanca-ad02_&]:[display:flex] [.tarjeta-blanca-ad02_&]:[align-items:center] [.tarjeta-blanca-ad02_&]:[gap:10px] [.tarjeta-blanca-ad02_&]:[color:var(--azul-navy)]"}><i className={"bi bi-graph-up [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i> Mi Actividad</h3>
                                 <br />
                                 <div className="mini-stat">
                                     <span>Matrículas revisadas</span>
@@ -105,29 +84,29 @@ const PerfilAd = () => {
                                 </div>
                             </div>
 
-                            <div className="tarjeta-blanca-ad02">
-                                <h3><i className="bi bi-shield-check"></i> Seguridad</h3>
+                            <div className={"tarjeta-blanca-ad02 [background:var(--blanco)] [padding:25px] [border-radius:20px] [box-shadow:var(--sombra)] [margin-bottom:20px]"}>
+                                <h3 className={"[.tarjeta-blanca-ad02_&]:[margin-top:0] [.tarjeta-blanca-ad02_&]:[font-size:1.1rem] [.tarjeta-blanca-ad02_&]:[display:flex] [.tarjeta-blanca-ad02_&]:[align-items:center] [.tarjeta-blanca-ad02_&]:[gap:10px] [.tarjeta-blanca-ad02_&]:[color:var(--azul-navy)]"}><i className={"bi bi-shield-check [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i> Seguridad</h3>
                                 <br />
                                 <p>Control de acceso y credenciales.</p>
                                 <br />
-                                <button className="btn-seguridad"><a href="ReperaContra.html">Cambiar mi clave</a></button>
+                                <button className={"btn-seguridad [width:100%] [background:var(--gris-fondo)] [color:var(--azul-navy)] [border:1px_solid_var(--borde)] [padding:10px] [border-radius:10px] [cursor:pointer] [font-weight:600]"}><a href="ReperaContra.html">Cambiar mi clave</a></button>
                             </div>
 
-                            <div className="tarjeta-blanca-ad02">
-                                <h3><i className="bi bi-gear"></i> Sistema</h3>
-                                <div className="control-switch-ad02">
+                            <div className={"tarjeta-blanca-ad02 [background:var(--blanco)] [padding:25px] [border-radius:20px] [box-shadow:var(--sombra)] [margin-bottom:20px]"}>
+                                <h3 className={"[.tarjeta-blanca-ad02_&]:[margin-top:0] [.tarjeta-blanca-ad02_&]:[font-size:1.1rem] [.tarjeta-blanca-ad02_&]:[display:flex] [.tarjeta-blanca-ad02_&]:[align-items:center] [.tarjeta-blanca-ad02_&]:[gap:10px] [.tarjeta-blanca-ad02_&]:[color:var(--azul-navy)]"}><i className={"bi bi-gear [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i> Sistema</h3>
+                                <div className={"control-switch-ad02 [display:flex] [justify-content:space-between] [align-items:center] [margin-top:15px] [font-size:0.9rem]"}>
                                     <span>Alertas de Cupos</span>
-                                    <i className="bi bi-toggle-on"></i>
+                                    <i className={"bi bi-toggle-on [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i>
                                 </div>
-                                <div className="control-switch-ad02">
+                                <div className={"control-switch-ad02 [display:flex] [justify-content:space-between] [align-items:center] [margin-top:15px] [font-size:0.9rem]"}>
                                     <span>Modo Reporte Semanal</span>
-                                    <i className="bi bi-toggle-off"></i>
+                                    <i className={"bi bi-toggle-off [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i>
                                 </div>
                             </div>
                         </aside>
                     </div>
                 </div>
-            </main>
+            </div>
 
         </div>
     )

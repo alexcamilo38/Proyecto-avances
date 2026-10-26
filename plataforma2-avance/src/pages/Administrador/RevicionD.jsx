@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Link } from "react-router-dom";
-import "./RevicionD.css";
-import logoblanco from '../../assets/LogoBlanco.png';
+
+
+
 
 const RevicionD = () => {
     // ----------------------------------------------------
@@ -40,89 +40,69 @@ const RevicionD = () => {
     return (
         <div>
             {/* Menú lateral de navegación */}
-            <nav className="menu-lateral">
-                <div className="menu-logo">
-                    <img src={logoblanco} alt="EasyMatric" className="logo-img" />
-                </div>
-                <ul className="menu-lista">
-                    <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
-                    <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
-                    <li><Link to="/RevicionD"><i className="bi bi-journal-bookmark"></i> <span>Matrículas</span></Link></li>
-                    <li><Link to="/Matriculados"><i className="bi bi-people"></i> <span>Estudiantes</span></Link></li>
-                    <li><Link to="/Roles"><i className="bi bi-shield-lock"></i> <span>Roles</span></Link></li>
-                    <li><Link to="/NotasCa"><i className="bi bi-folder2-open"></i> <span>Catálogos</span></Link></li>
-                    <li><Link to="/PerfilAd"><i className="bi bi-person-badge"></i><span>Mi Perfil</span></Link></li>
-                </ul>
-                <div className="menu-pie">
-                    <Link to="/" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</Link>
-                    <div className="perfil-usuario-info">
-                        <i className="bi bi-person-circle"></i>
-                        <span>ADMINISTRADOR</span>
-                    </div>
-                </div>
-            </nav>
 
-            <div className="contenido-revicion">
+
+            <div className={"contenido-revicion [margin-left:260px] [width:calc(100%_-_260px)] [padding:40px] [min-height:100vh] [width:80vw]"}>
                 <div className="header02">
-                    <h2>Revisión de Documentación</h2>
+                    <h2 className={"[.header02_&]:[font-size:2.1rem] [.header02_&]:[font-weight:bold] [.header02_&]:[color:#000] [.header02_&]:[margin-bottom:25px]"}>Revisión de Documentación</h2>
                 </div>
 
-                <div className="tabla-box02">
+                <div className={"tabla-box02 [background:#ffffff] [border-radius:10px] [padding:25px] [box-shadow:0_2px_10px_rgba(0,_0,_0,_0.05)]"}>
                     {/* Filtro por grado */}
-                    <div className="acciones-header02">
+                    <div className={"acciones-header02 [display:flex] [align-items:center] [margin-bottom:25px]"}>
                         <select
-                            className="btn-primario08"
+                            className={"btn-primario08 [background:#4da3ff] [border:none] [padding:12px_18px] [border-radius:12px] [font-weight:600] [cursor:pointer] [box-shadow:0_6px_18px_rgba(79,_172,_254,_0.4)] [transition:0.2s] [&:hover]:[background:#3391f5]"}
                             value={filtroGrado}
                             onChange={(e) => setFiltroGrado(e.target.value)}
                         >
-                            <option value="Todos">Todos los grados</option>
-                            <option value="Preescolar">Preescolar</option>
-                            <option value="Primaria">Primaria</option>
-                            <option value="Secundaria">Secundaria</option>
+                            <option className={"[.btn-primario08_&]:[background:#5aa7f0] [.btn-primario08_&]:[color:white]"} value="Todos">Todos los grados</option>
+                            <option className={"[.btn-primario08_&]:[background:#5aa7f0] [.btn-primario08_&]:[color:white]"} value="Preescolar">Preescolar</option>
+                            <option className={"[.btn-primario08_&]:[background:#5aa7f0] [.btn-primario08_&]:[color:white]"} value="Primaria">Primaria</option>
+                            <option className={"[.btn-primario08_&]:[background:#5aa7f0] [.btn-primario08_&]:[color:white]"} value="Secundaria">Secundaria</option>
                         </select>
                     </div>
 
                     {/* Tabla de revisiones */}
-                    <section className="contenedor-tabla-revisar">
-                        <div className="barra-herramientas">
-                            <table className="tabla-revision">
+                    <section className={"contenedor-tabla-revisar [width:100%]"}>
+                        <div className={"barra-herramientas [width:100%]"}>
+                            <table className={"tabla-revision [width:100%] [border-collapse:collapse]"}>
                                 <thead>
-                                    <tr>
-                                        <th>Usuario</th>
-                                        <th>Grado / Nivel</th>
-                                        <th>Documento</th>
-                                        <th>Fecha Envío</th>
-                                        <th>Estado Actual</th>
-                                        <th>Acciones</th>
+                                    <tr className={"[.tabla-revision_thead_&]:[border-bottom:2px_solid_#dbe3ea] [.tabla-revision_tbody_&]:[border-bottom:1px_solid_#e5e7eb]"}>
+                                        <th className={"[.tabla-revision_thead_&]:[text-align:left] [.tabla-revision_thead_&]:[padding:18px_20px] [.tabla-revision_thead_&]:[font-size:16px] [.tabla-revision_thead_&]:[font-weight:bold] [.tabla-revision_thead_&]:[color:#0f172a]"}>Usuario</th>
+                                        <th className={"[.tabla-revision_thead_&]:[text-align:left] [.tabla-revision_thead_&]:[padding:18px_20px] [.tabla-revision_thead_&]:[font-size:16px] [.tabla-revision_thead_&]:[font-weight:bold] [.tabla-revision_thead_&]:[color:#0f172a]"}>Grado / Nivel</th>
+                                        <th className={"[.tabla-revision_thead_&]:[text-align:left] [.tabla-revision_thead_&]:[padding:18px_20px] [.tabla-revision_thead_&]:[font-size:16px] [.tabla-revision_thead_&]:[font-weight:bold] [.tabla-revision_thead_&]:[color:#0f172a]"}>Documento</th>
+                                        <th className={"[.tabla-revision_thead_&]:[text-align:left] [.tabla-revision_thead_&]:[padding:18px_20px] [.tabla-revision_thead_&]:[font-size:16px] [.tabla-revision_thead_&]:[font-weight:bold] [.tabla-revision_thead_&]:[color:#0f172a]"}>Fecha Envío</th>
+                                        <th className={"[.tabla-revision_thead_&]:[text-align:left] [.tabla-revision_thead_&]:[padding:18px_20px] [.tabla-revision_thead_&]:[font-size:16px] [.tabla-revision_thead_&]:[font-weight:bold] [.tabla-revision_thead_&]:[color:#0f172a]"}>Estado Actual</th>
+                                        <th className={"[.tabla-revision_thead_&]:[text-align:left] [.tabla-revision_thead_&]:[padding:18px_20px] [.tabla-revision_thead_&]:[font-size:16px] [.tabla-revision_thead_&]:[font-weight:bold] [.tabla-revision_thead_&]:[color:#0f172a]"}>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {solicitudesFiltradas.length > 0 ? (
                                         solicitudesFiltradas.map((item) => (
-                                            <tr key={item.id}>
-                                                <td>{item.usuario}</td>
-                                                <td>{item.grado}</td>
-                                                <td>
-                                                    <a href={`#${item.documento}`} className="btn-link">
+                                            <tr className={"[.tabla-revision_thead_&]:[border-bottom:2px_solid_#dbe3ea] [.tabla-revision_tbody_&]:[border-bottom:1px_solid_#e5e7eb]"} key={item.id}>
+                                                <td className={"[.tabla-revision_tbody_&]:[padding:20px] [.tabla-revision_tbody_&]:[font-size:16px] [.tabla-revision_tbody_&]:[color:#111827]"}>{item.usuario}</td>
+                                                <td className={"[.tabla-revision_tbody_&]:[padding:20px] [.tabla-revision_tbody_&]:[font-size:16px] [.tabla-revision_tbody_&]:[color:#111827]"}>{item.grado}</td>
+                                                <td className={"[.tabla-revision_tbody_&]:[padding:20px] [.tabla-revision_tbody_&]:[font-size:16px] [.tabla-revision_tbody_&]:[color:#111827]"}>
+                                                    <a href={`#${item.documento}`} className={"btn-link [color:#2563eb] [text-decoration:underline] [font-weight:500]"}>
                                                         {item.documento}
                                                     </a>
                                                 </td>
-                                                <td>{item.fecha}</td>
-                                                <td>
-                                                    <span className={`badge-estado ${item.estado.toLowerCase()}`}>
+                                                <td className={"[.tabla-revision_tbody_&]:[padding:20px] [.tabla-revision_tbody_&]:[font-size:16px] [.tabla-revision_tbody_&]:[color:#111827]"}>{item.fecha}</td>
+                                                <td className={"[.tabla-revision_tbody_&]:[padding:20px] [.tabla-revision_tbody_&]:[font-size:16px] [.tabla-revision_tbody_&]:[color:#111827]"}>
+                                                    <span className={`badge-estado ${item.estado.toLowerCase()} ${item.estado === "Aprobado" ? "[background-color:#dcfce7] [color:#15803d]" : item.estado === "Rechazado" ? "[background-color:#fee2e2] [color:#b91c1c]" : "[background-color:#fef3c7] [color:#b45309]"} [padding:6px_12px] [border-radius:20px] [font-size:0.82rem] [font-weight:600] [display:inline-block] [text-align:center]`}>
                                                         {item.estado}
                                                     </span>
                                                 </td>
-                                                <td className="acciones-validacion">
+                                                <td className={"acciones-validacion [.tabla-revision_tbody_&]:[padding:20px] [.tabla-revision_tbody_&]:[font-size:16px] [.tabla-revision_tbody_&]:[color:#111827] [display:flex] [gap:12px] [gap:8px] [align-items:center]"}>
                                                     <button
-                                                        className={`btn-accion btn-aprobar ${item.estado === "Aprobado" ? "seleccionado" : ""}`}
+                                                        className={`btn-accion btn-aprobar ${item.estado === "Aprobado" ? "seleccionado [background-color:#22c55e] [color:#ffffff] [border-color:#16a34a] [box-shadow:0_2px_4px_rgba(34,_197,_94,_0.2)]" : ""} [background:#22c55e] [color:white] [border:none] [border-radius:8px] [padding:10px_18px] [font-size:15px] [cursor:pointer] [transition:0.2s] [&:hover]:[background:#16a34a] [display:inline-flex] [align-items:center] [gap:5px] [padding:6px_12px] [border-radius:6px] [font-size:0.85rem] [font-weight:500] [background-color:#f8fafc] [border:1px_solid_#cbd5e1] [color:#475569] [transition:all_0.2s_ease-in-out] [&:hover]:[background-color:#f1f5f9]`}
                                                         onClick={() => cambiarEstado(item.id, "Aprobado")}
                                                         title="Aprobar solicitud"
                                                     >
                                                         <i className="bi bi-check-circle"></i> Aprobar
                                                     </button>
                                                     <button
-                                                        className={`btn-accion btn-rechazar ${item.estado === "Rechazado" ? "seleccionado" : ""}`}
+                                                        className={`btn-accion btn-rechazar ${item.estado === "Rechazado" ? "seleccionado [background-color:#ef4444] [color:#ffffff] [border-color:#dc2626] [box-shadow:0_2px_4px_rgba(239,_68,_68,_0.2)]" : ""} [background:#ef4444] [color:white] [border:none] [border-radius:8px] [padding:10px_18px] [font-size:15px] [cursor:pointer] [transition:0.2s] [&:hover]:[background:#dc2626] [display:inline-flex] [align-items:center] [gap:5px] [padding:6px_12px] [border-radius:6px] [font-size:0.85rem] [font-weight:500] [background-color:#f8fafc] [border:1px_solid_#cbd5e1] [color:#475569] [transition:all_0.2s_ease-in-out] [&:hover]:[background-color:#f1f5f9]`}
                                                         onClick={() => cambiarEstado(item.id, "Rechazado")}
                                                         title="Rechazar solicitud"
                                                     >
@@ -132,8 +112,8 @@ const RevicionD = () => {
                                             </tr>
                                         ))
                                     ) : (
-                                        <tr>
-                                            <td colSpan="6" style={{ textAlign: "center", padding: "20px" }}>
+                                        <tr className={"[.tabla-revision_thead_&]:[border-bottom:2px_solid_#dbe3ea] [.tabla-revision_tbody_&]:[border-bottom:1px_solid_#e5e7eb]"}>
+                                            <td className={"[.tabla-revision_tbody_&]:[padding:20px] [.tabla-revision_tbody_&]:[font-size:16px] [.tabla-revision_tbody_&]:[color:#111827]"} colSpan="6" style={{ textAlign: "center", padding: "20px" }}>
                                                 No hay solicitudes registradas para este nivel.
                                             </td>
                                         </tr>

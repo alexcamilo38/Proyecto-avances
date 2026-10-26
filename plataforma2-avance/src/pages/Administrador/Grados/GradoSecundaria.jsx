@@ -1,172 +1,152 @@
 //import React from 'react'
-import { Link } from "react-router-dom"
-import "./GradoSecundaria.css"
-import logoblanco from '../../../assets/LogoBlanco.png'
+
+
+
 const GradoSecundaria = () => {
     return (
         <div>
             {/* Menú lateral de navegación */}
-            <nav className="menu-lateral">
-                <div className="menu-logo">
-                    <img src={logoblanco} alt="EasyMatric" className="logo-img" />
-                </div>
-                 {/* Lista de enlaces del menú */}
-                <ul className="menu-lista">
-                    <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
-                    <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
-                    <li><Link to="/RevicionD"><i className="bi bi-journal-bookmark"></i> <span>Matrículas</span></Link></li>
-                    <li><Link to="/Matriculados"><i className="bi bi-people"></i> <span>Estudiantes</span></Link></li>
-                    <li><Link to="/Roles" ><i className="bi bi-shield-lock"></i> <span>Roles</span></Link></li>
-                    <li><Link to="/NotasCa"><i className="bi bi-folder2-open"></i> <span>Catálogos</span></Link></li>
-                </ul>
-                <div className="menu-pie">
-                    <Link to="/" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</Link>
-                    <div className="perfil-usuario-info">
-                        <i className="bi bi-person-circle"></i>
-                        <span>ADMINISTRADOR</span>
-                    </div>
-                </div>
-            </nav>
-            <main className="panel-estudiantes-secundaria ">
-                <header className="encabezado-panel-secundaria ">
+
+            <div className={"panel-estudiantes-secundaria  [margin-left:260px] [flex:1] [padding:25px_30px] [background:var(--gris-fondo)] [display:flex] [flex-direction:column] [width:80vw]"}>
+                <header className={"encabezado-panel-secundaria  [display:flex] [justify-content:space-between] [align-items:center] [margin-bottom:25px]"}>
                     <div className="bloque-titulo-secundaria ">
-                        <h1>Lista de Estudiantes de Secundaria</h1>
-                        <p>Visualiza y gestiona la información de todos los alumnos matriculados.</p>
+                        <h1 className={"[.bloque-titulo-secundaria_&]:[font-size:2rem] [.bloque-titulo-secundaria_&]:[color:var(--azul-navy)] [.bloque-titulo-secundaria_&]:[margin:0]"}>Lista de Estudiantes de Secundaria</h1>
+                        <p className={"[.bloque-titulo-secundaria_&]:[color:var(--texto-gris)] [.bloque-titulo-secundaria_&]:[margin-top:5px]"}>Visualiza y gestiona la información de todos los alumnos matriculados.</p>
                     </div>
                 </header>
                 {/* Tarjeta principal de estudiantes */}
-                <section className="tarjeta-tabla-matriculados-secundaria ">
+                <section className={"tarjeta-tabla-matriculados-secundaria  [background:white] [border-radius:18px] [padding:20px] [box-shadow:0_10px_30px_rgba(0,0,0,0.05)] [width:100%] [box-sizing:border-box] [flex-grow:1]"}>
                      {/* Barra superior con buscador */}
-                    <div className="barra-superior-secundaria ">
+                    <div className={"barra-superior-secundaria  [display:flex] [justify-content:space-between] [margin-bottom:20px]"}>
 
-                        <div className="buscador-secundaria ">
-                            <i className="bi bi-search"></i>
-                            <input type="text" placeholder="Buscar por nombre, ID o grado..." />
+                        <div className={"buscador-secundaria  [position:relative] [width:320px]"}>
+                            <i className={"bi bi-search [.buscador-secundaria_&]:[position:absolute] [.buscador-secundaria_&]:[left:12px] [.buscador-secundaria_&]:[top:50%] [.buscador-secundaria_&]:[transform:translateY(-50%)] [.buscador-secundaria_&]:[color:#94a3b8]"}></i>
+                            <input className={"[.buscador-secundaria_&]:[width:100%] [.buscador-secundaria_&]:[padding:12px_12px_12px_40px] [.buscador-secundaria_&]:[border-radius:12px] [.buscador-secundaria_&]:[border:1px_solid_var(--gris-borde)] [.buscador-secundaria_&]:[background:#f8fafc] [.buscador-secundaria_&]:[outline:none] [.buscador-secundaria_&:focus]:[border-color:var(--cyan)] [.buscador-secundaria_&:focus]:[background:white]"} type="text" placeholder="Buscar por nombre, ID o grado..." />
                         </div>
 
                     </div>
 
                     <div className="contenedor-scroll">
                         {/* Tabla de estudiantes */}
-                        <table className="tabla-estudiantes-matriculados-secundaria ">
+                        <table className={"tabla-estudiantes-matriculados-secundaria  [width:100%] [border-collapse:collapse]"}>
                             {/* Encabezados de la tabla */}
-                            <thead>
-                                <tr>
-                                    <th>N°</th>
-                                    <th>Nombre Completo</th>
-                                    <th>ID Matrícula</th>
-                                    <th>Grado</th>
-                                    <th>Edad</th>
-                                    <th>Género</th>
-                                    <th>Acciones</th>
+                            <thead className={"[.tabla-estudiantes-matriculados-secundaria_&]:[background:#f8fafc]"}>
+                                <tr className={"[.tabla-estudiantes-matriculados-secundaria_&:hover]:[background:#f0f9ff]"}>
+                                    <th className={"[.tabla-estudiantes-matriculados-secundaria_&]:[text-align:left] [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-secundaria_&]:[color:#64748b] [.tabla-estudiantes-matriculados-secundaria_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>N°</th>
+                                    <th className={"[.tabla-estudiantes-matriculados-secundaria_&]:[text-align:left] [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-secundaria_&]:[color:#64748b] [.tabla-estudiantes-matriculados-secundaria_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Nombre Completo</th>
+                                    <th className={"[.tabla-estudiantes-matriculados-secundaria_&]:[text-align:left] [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-secundaria_&]:[color:#64748b] [.tabla-estudiantes-matriculados-secundaria_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>ID Matrícula</th>
+                                    <th className={"[.tabla-estudiantes-matriculados-secundaria_&]:[text-align:left] [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-secundaria_&]:[color:#64748b] [.tabla-estudiantes-matriculados-secundaria_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Grado</th>
+                                    <th className={"[.tabla-estudiantes-matriculados-secundaria_&]:[text-align:left] [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-secundaria_&]:[color:#64748b] [.tabla-estudiantes-matriculados-secundaria_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Edad</th>
+                                    <th className={"[.tabla-estudiantes-matriculados-secundaria_&]:[text-align:left] [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-secundaria_&]:[color:#64748b] [.tabla-estudiantes-matriculados-secundaria_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Género</th>
+                                    <th className={"[.tabla-estudiantes-matriculados-secundaria_&]:[text-align:left] [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-secundaria_&]:[color:#64748b] [.tabla-estudiantes-matriculados-secundaria_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Acciones</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                <tr>
-                                    <td>01</td>
-                                    <td className="col-nombre">Kevin Andrés Pardo</td>
-                                    <td><span className="tag-id">SEC01</span></td>
-                                    <td><span className="tag-grado">6° Secundaria</span></td>
-                                    <td>12</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-secundaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>01</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Kevin Andrés Pardo</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>SEC01</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>6° Secundaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>12</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-secundaria_&]:[position:absolute] [.buscador-secundaria_&]:[left:12px] [.buscador-secundaria_&]:[top:50%] [.buscador-secundaria_&]:[transform:translateY(-50%)] [.buscador-secundaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>02</td>
-                                    <td className="col-nombre">Isabella Luna Castro</td>
-                                    <td><span className="tag-id">SEC02</span></td>
-                                    <td><span className="tag-grado">6° Secundaria</span></td>
-                                    <td>12</td>
-                                    <td>Femenino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-secundaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>02</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Isabella Luna Castro</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>SEC02</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>6° Secundaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>12</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>Femenino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-secundaria_&]:[position:absolute] [.buscador-secundaria_&]:[left:12px] [.buscador-secundaria_&]:[top:50%] [.buscador-secundaria_&]:[transform:translateY(-50%)] [.buscador-secundaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>03</td>
-                                    <td className="col-nombre">Santiago Reyes Ruiz</td>
-                                    <td><span className="tag-id">SEC03</span></td>
-                                    <td><span className="tag-grado">7° Secundaria</span></td>
-                                    <td>13</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-secundaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>03</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Santiago Reyes Ruiz</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>SEC03</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>7° Secundaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>13</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-secundaria_&]:[position:absolute] [.buscador-secundaria_&]:[left:12px] [.buscador-secundaria_&]:[top:50%] [.buscador-secundaria_&]:[transform:translateY(-50%)] [.buscador-secundaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>04</td>
-                                    <td className="col-nombre">Camila Andrea Torres</td>
-                                    <td><span className="tag-id">SEC04</span></td>
-                                    <td><span className="tag-grado">8° Secundaria</span></td>
-                                    <td>14</td>
-                                    <td>Femenino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-secundaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>04</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Camila Andrea Torres</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>SEC04</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>8° Secundaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>14</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>Femenino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-secundaria_&]:[position:absolute] [.buscador-secundaria_&]:[left:12px] [.buscador-secundaria_&]:[top:50%] [.buscador-secundaria_&]:[transform:translateY(-50%)] [.buscador-secundaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>05</td>
-                                    <td className="col-nombre">Mateo Alexander Ortiz</td>
-                                    <td><span className="tag-id">SEC05</span></td>
-                                    <td><span className="tag-grado">8° Secundaria</span></td>
-                                    <td>14</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-secundaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>05</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Mateo Alexander Ortiz</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>SEC05</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>8° Secundaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>14</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-secundaria_&]:[position:absolute] [.buscador-secundaria_&]:[left:12px] [.buscador-secundaria_&]:[top:50%] [.buscador-secundaria_&]:[transform:translateY(-50%)] [.buscador-secundaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>06</td>
-                                    <td className="col-nombre">Valeria Sofía Herrera</td>
-                                    <td><span className="tag-id">SEC06</span></td>
-                                    <td><span className="tag-grado">9° Secundaria</span></td>
-                                    <td>15</td>
-                                    <td>Femenino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-secundaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>06</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Valeria Sofía Herrera</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>SEC06</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>9° Secundaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>15</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>Femenino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-secundaria_&]:[position:absolute] [.buscador-secundaria_&]:[left:12px] [.buscador-secundaria_&]:[top:50%] [.buscador-secundaria_&]:[transform:translateY(-50%)] [.buscador-secundaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>07</td>
-                                    <td className="col-nombre">Juan David Espitia</td>
-                                    <td><span className="tag-id">SEC07</span></td>
-                                    <td><span className="tag-grado">9° Secundaria</span></td>
-                                    <td>15</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-secundaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>07</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Juan David Espitia</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>SEC07</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>9° Secundaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>15</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-secundaria_&]:[position:absolute] [.buscador-secundaria_&]:[left:12px] [.buscador-secundaria_&]:[top:50%] [.buscador-secundaria_&]:[transform:translateY(-50%)] [.buscador-secundaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>08</td>
-                                    <td className="col-nombre">Mariana Lucía Gómez</td>
-                                    <td><span className="tag-id">SEC08</span></td>
-                                    <td><span className="tag-grado">10° Secundaria</span></td>
-                                    <td>16</td>
-                                    <td>Femenino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-secundaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>08</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Mariana Lucía Gómez</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>SEC08</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>10° Secundaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>16</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>Femenino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-secundaria_&]:[position:absolute] [.buscador-secundaria_&]:[left:12px] [.buscador-secundaria_&]:[top:50%] [.buscador-secundaria_&]:[transform:translateY(-50%)] [.buscador-secundaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>09</td>
-                                    <td className="col-nombre">Daniel Felipe Vargas</td>
-                                    <td><span className="tag-id">SEC09</span></td>
-                                    <td><span className="tag-grado">11° Secundaria</span></td>
-                                    <td>17</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-secundaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>09</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Daniel Felipe Vargas</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>SEC09</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>11° Secundaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>17</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-secundaria_&]:[position:absolute] [.buscador-secundaria_&]:[left:12px] [.buscador-secundaria_&]:[top:50%] [.buscador-secundaria_&]:[transform:translateY(-50%)] [.buscador-secundaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>10</td>
-                                    <td className="col-nombre">Natalia Andrea Ríos</td>
-                                    <td><span className="tag-id">SEC10</span></td>
-                                    <td><span className="tag-grado">11° Secundaria</span></td>
-                                    <td>18</td>
-                                    <td>Femenino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-secundaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>10</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Natalia Andrea Ríos</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>SEC10</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>11° Secundaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>18</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}>Femenino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-secundaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-secundaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-secundaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-secundaria_&]:[position:absolute] [.buscador-secundaria_&]:[left:12px] [.buscador-secundaria_&]:[top:50%] [.buscador-secundaria_&]:[transform:translateY(-50%)] [.buscador-secundaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </section>
-            </main>
+            </div>
         </div>
     )
 }

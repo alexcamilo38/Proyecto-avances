@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+@import "tailwindcss";
+
+:root {
+  --color-primario: #2563eb;
+  --color-secundario: #1e40af;
+  --color-acento: #60a5fa;
+  --blanco: #fff;
+  --gris-fondo: #f1f5f9;
+  --texto-principal: #1e293b;
+  --texto-secundario: #64748b;
+  --borde-suave: #e2e8f0;
+  --sombra: 0 20px 50px #0000001a;
+  --radio: 20px;
+  --fuente: "Plus Jakarta Sans", sans-serif;
+  --azul-navy: #1a1c2d;
+  --cyan: #4facfe;
+  --gris-borde: #e2e8f0;
+  --texto-gris: #64748b;
+  --cyan-em: #4facfe;
+  --rojo-alerta: #ef4444;
+  --verde-exito: #22c55e;
+  --cyan-glow: #00f2fe;
+  --gris-texto: #64748b;
+  --borde: #e2e8f0;
+  --sombra-suave: 0 10px 25px #0000000d;
+  --azul-admin: #1e293b;
+  --border-color: #eef2f6;
+  --azul-dark: #1a1c2d;
+  --texto: #334155;
+}
+
+@layer base {
+  body {
+    @apply [display:block] [min-height:100vh] [margin:0] [padding:0] [font-family:var(--fuente)] [background-color:var(--gris-fondo)] [color:var(--texto-principal)];
+  }
+  * {
+    @apply [box-sizing:border-box] [font-family:var(--fuente)];
+  }
+  a {
+    @apply [text-decoration:none] [color:inherit];
+  }
+  img {
+    @apply [max-width:100%] [display:block];
+  }
+  button {
+    @apply [font-family:var(--fuente)];
+  }
+}

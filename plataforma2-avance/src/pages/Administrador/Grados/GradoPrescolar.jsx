@@ -1,174 +1,154 @@
 //import React from 'react'
 // Importación de React Router
-import { Link } from "react-router-dom"
-import "./GradoPrescolar.css"
+
+
 // Importación del logo institucional
-import logoblanco from '../../../assets/LogoBlanco.png'
+
 const GradoPrescolar = () => {
   return (
     <div>
       {/* Menú lateral de navegación */}
-      <nav className="menu-lateral">
-        <div className="menu-logo">
-          <img src={logoblanco} alt="EasyMatric" className="logo-img" />
-        </div>
-        {/* Lista de enlaces del menú */}
-        <ul className="menu-lista">
-          <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
-          <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
-          <li><Link to="/RevicionD"><i className="bi bi-journal-bookmark"></i> <span>Matrículas</span></Link></li>
-          <li><Link to="/Matriculados"><i className="bi bi-people"></i> <span>Estudiantes</span></Link></li>
-          <li><Link to="/Roles" ><i className="bi bi-shield-lock"></i> <span>Roles</span></Link></li>
-          <li><Link to="/NotasCa"><i className="bi bi-folder2-open"></i> <span>Catálogos</span></Link></li>
-        </ul>
-        <div className="menu-pie">
-          <Link to="/" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</Link>
-          <div className="perfil-usuario-info">
-            <i className="bi bi-person-circle"></i>
-            <span>ADMINISTRADOR</span>
-          </div>
-        </div>
-      </nav>
-      <main className="panel-estudiantes-prescolar">
-        <header className="encabezado-panel-prescolar">
+
+      <div className={"panel-estudiantes-prescolar [margin-left:260px] [flex:1] [padding:25px_30px] [background:var(--gris-fondo)] [display:flex] [flex-direction:column] [width:80vw]"}>
+        <header className={"encabezado-panel-prescolar [display:flex] [justify-content:space-between] [align-items:center] [margin-bottom:25px]"}>
           <div className="bloque-titulo-prescolar">
-            <h1>Lista de Estudiantes de Preescolar</h1>
-            <p>Visualiza y gestiona la información de todos los alumnos matriculados.</p>
+            <h1 className={"[.bloque-titulo-prescolar_&]:[font-size:2rem] [.bloque-titulo-prescolar_&]:[color:var(--azul-navy)] [.bloque-titulo-prescolar_&]:[margin:0]"}>Lista de Estudiantes de Preescolar</h1>
+            <p className={"[.bloque-titulo-prescolar_&]:[color:var(--texto-gris)] [.bloque-titulo-prescolar_&]:[margin-top:5px]"}>Visualiza y gestiona la información de todos los alumnos matriculados.</p>
           </div>
         </header>
         {/* Contenedor de tabla */}
-        <section className="tarjeta-tabla-matriculados-prescolar">
+        <section className={"tarjeta-tabla-matriculados-prescolar [background:white] [border-radius:18px] [padding:20px] [box-shadow:0_10px_30px_rgba(0,0,0,0.05)] [width:100%] [box-sizing:border-box] [flex-grow:1]"}>
           {/* Barra superior */}
-          <div className="barra-superior-prescolar">
+          <div className={"barra-superior-prescolar [display:flex] [justify-content:space-between] [margin-bottom:20px]"}>
 
-            <div className="buscador-prescolar">
-              <i className="bi bi-search"></i>
-              <input type="text" placeholder="Buscar por nombre, ID o grado..." />
+            <div className={"buscador-prescolar [position:relative] [width:320px]"}>
+              <i className={"bi bi-search [.buscador-prescolar_&]:[position:absolute] [.buscador-prescolar_&]:[left:12px] [.buscador-prescolar_&]:[top:50%] [.buscador-prescolar_&]:[transform:translateY(-50%)] [.buscador-prescolar_&]:[color:#94a3b8]"}></i>
+              <input className={"[.buscador-prescolar_&]:[width:100%] [.buscador-prescolar_&]:[padding:12px_12px_12px_40px] [.buscador-prescolar_&]:[border-radius:12px] [.buscador-prescolar_&]:[border:1px_solid_var(--gris-borde)] [.buscador-prescolar_&]:[background:#f8fafc] [.buscador-prescolar_&]:[outline:none] [.buscador-prescolar_&:focus]:[border-color:var(--cyan)] [.buscador-prescolar_&:focus]:[background:white]"} type="text" placeholder="Buscar por nombre, ID o grado..." />
             </div>
 
           </div>
 
           <div className="contenedor-scroll">
             {/* Tabla principal */}
-            <table className="tabla-estudiantes-matriculados-prescolar">
+            <table className={"tabla-estudiantes-matriculados-prescolar [width:100%] [border-collapse:collapse]"}>
               {/* Encabezados */}
-              <thead>
-                <tr>
-                  <th>N°</th>
-                  <th>Nombre Completo</th>
-                  <th>ID Matrícula</th>
-                  <th>Grado</th>
-                  <th>Edad</th>
-                  <th>Género</th>
-                  <th>Acciones</th>
+              <thead className={"[.tabla-estudiantes-matriculados-prescolar_&]:[background:#f8fafc]"}>
+                <tr className={"[.tabla-estudiantes-matriculados-prescolar_&:hover]:[background:#f0f9ff]"}>
+                  <th className={"[.tabla-estudiantes-matriculados-prescolar_&]:[text-align:left] [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-prescolar_&]:[color:#64748b] [.tabla-estudiantes-matriculados-prescolar_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>N°</th>
+                  <th className={"[.tabla-estudiantes-matriculados-prescolar_&]:[text-align:left] [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-prescolar_&]:[color:#64748b] [.tabla-estudiantes-matriculados-prescolar_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Nombre Completo</th>
+                  <th className={"[.tabla-estudiantes-matriculados-prescolar_&]:[text-align:left] [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-prescolar_&]:[color:#64748b] [.tabla-estudiantes-matriculados-prescolar_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>ID Matrícula</th>
+                  <th className={"[.tabla-estudiantes-matriculados-prescolar_&]:[text-align:left] [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-prescolar_&]:[color:#64748b] [.tabla-estudiantes-matriculados-prescolar_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Grado</th>
+                  <th className={"[.tabla-estudiantes-matriculados-prescolar_&]:[text-align:left] [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-prescolar_&]:[color:#64748b] [.tabla-estudiantes-matriculados-prescolar_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Edad</th>
+                  <th className={"[.tabla-estudiantes-matriculados-prescolar_&]:[text-align:left] [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-prescolar_&]:[color:#64748b] [.tabla-estudiantes-matriculados-prescolar_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Género</th>
+                  <th className={"[.tabla-estudiantes-matriculados-prescolar_&]:[text-align:left] [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-prescolar_&]:[color:#64748b] [.tabla-estudiantes-matriculados-prescolar_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Acciones</th>
                 </tr>
               </thead>
 
               <tbody>
-                <tr>
-                  <td>01</td>
-                  <td className="col-nombre">Liam Sebastián Castro</td>
-                  <td><span className="tag-id">PRE01</span></td>
-                  <td><span className="tag-grado">Preescolar</span></td>
-                  <td>5</td>
-                  <td>Masculino</td>
-                  <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                <tr className={"[.tabla-estudiantes-matriculados-prescolar_&:hover]:[background:#f0f9ff]"}>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>01</td>
+                  <td className={"col-nombre [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Liam Sebastián Castro</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRE01</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>Preescolar</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>5</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>Masculino</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-prescolar_&]:[position:absolute] [.buscador-prescolar_&]:[left:12px] [.buscador-prescolar_&]:[top:50%] [.buscador-prescolar_&]:[transform:translateY(-50%)] [.buscador-prescolar_&]:[color:#94a3b8]"}></i></button></td>
                 </tr>
 
-                <tr>
-                  <td>02</td>
-                  <td className="col-nombre">Emma Valentina Duarte</td>
-                  <td><span className="tag-id">PRE02</span></td>
-                  <td><span className="tag-grado">Preescolar</span></td>
-                  <td>4</td>
-                  <td>Femenino</td>
-                  <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                <tr className={"[.tabla-estudiantes-matriculados-prescolar_&:hover]:[background:#f0f9ff]"}>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>02</td>
+                  <td className={"col-nombre [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Emma Valentina Duarte</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRE02</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>Preescolar</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>4</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>Femenino</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-prescolar_&]:[position:absolute] [.buscador-prescolar_&]:[left:12px] [.buscador-prescolar_&]:[top:50%] [.buscador-prescolar_&]:[transform:translateY(-50%)] [.buscador-prescolar_&]:[color:#94a3b8]"}></i></button></td>
                 </tr>
 
-                <tr>
-                  <td>03</td>
-                  <td className="col-nombre">Thiago José Montiel</td>
-                  <td><span className="tag-id">PRE03</span></td>
-                  <td><span className="tag-grado">Preescolar</span></td>
-                  <td>5</td>
-                  <td>Masculino</td>
-                  <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                <tr className={"[.tabla-estudiantes-matriculados-prescolar_&:hover]:[background:#f0f9ff]"}>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>03</td>
+                  <td className={"col-nombre [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Thiago José Montiel</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRE03</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>Preescolar</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>5</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>Masculino</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-prescolar_&]:[position:absolute] [.buscador-prescolar_&]:[left:12px] [.buscador-prescolar_&]:[top:50%] [.buscador-prescolar_&]:[transform:translateY(-50%)] [.buscador-prescolar_&]:[color:#94a3b8]"}></i></button></td>
                 </tr>
 
-                <tr>
-                  <td>04</td>
-                  <td className="col-nombre">Luciana Sofía Méndez</td>
-                  <td><span className="tag-id">PRE04</span></td>
-                  <td><span className="tag-grado">Preescolar</span></td>
-                  <td>5</td>
-                  <td>Femenino</td>
-                  <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                <tr className={"[.tabla-estudiantes-matriculados-prescolar_&:hover]:[background:#f0f9ff]"}>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>04</td>
+                  <td className={"col-nombre [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Luciana Sofía Méndez</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRE04</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>Preescolar</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>5</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>Femenino</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-prescolar_&]:[position:absolute] [.buscador-prescolar_&]:[left:12px] [.buscador-prescolar_&]:[top:50%] [.buscador-prescolar_&]:[transform:translateY(-50%)] [.buscador-prescolar_&]:[color:#94a3b8]"}></i></button></td>
                 </tr>
 
-                <tr>
-                  <td>05</td>
-                  <td className="col-nombre">Matías Alejandro Rivas</td>
-                  <td><span className="tag-id">PRE05</span></td>
-                  <td><span className="tag-grado">Preescolar</span></td>
-                  <td>4</td>
-                  <td>Masculino</td>
-                  <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                <tr className={"[.tabla-estudiantes-matriculados-prescolar_&:hover]:[background:#f0f9ff]"}>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>05</td>
+                  <td className={"col-nombre [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Matías Alejandro Rivas</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRE05</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>Preescolar</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>4</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>Masculino</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-prescolar_&]:[position:absolute] [.buscador-prescolar_&]:[left:12px] [.buscador-prescolar_&]:[top:50%] [.buscador-prescolar_&]:[transform:translateY(-50%)] [.buscador-prescolar_&]:[color:#94a3b8]"}></i></button></td>
                 </tr>
 
-                <tr>
-                  <td>06</td>
-                  <td className="col-nombre">Antonella Victoria Gil</td>
-                  <td><span className="tag-id">PRE06</span></td>
-                  <td><span className="tag-grado">Preescolar</span></td>
-                  <td>5</td>
-                  <td>Femenino</td>
-                  <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                <tr className={"[.tabla-estudiantes-matriculados-prescolar_&:hover]:[background:#f0f9ff]"}>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>06</td>
+                  <td className={"col-nombre [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Antonella Victoria Gil</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRE06</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>Preescolar</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>5</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>Femenino</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-prescolar_&]:[position:absolute] [.buscador-prescolar_&]:[left:12px] [.buscador-prescolar_&]:[top:50%] [.buscador-prescolar_&]:[transform:translateY(-50%)] [.buscador-prescolar_&]:[color:#94a3b8]"}></i></button></td>
                 </tr>
 
-                <tr>
-                  <td>07</td>
-                  <td className="col-nombre">Samuel David Guevara</td>
-                  <td><span className="tag-id">PRE07</span></td>
-                  <td><span className="tag-grado">Preescolar</span></td>
-                  <td>5</td>
-                  <td>Masculino</td>
-                  <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                <tr className={"[.tabla-estudiantes-matriculados-prescolar_&:hover]:[background:#f0f9ff]"}>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>07</td>
+                  <td className={"col-nombre [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Samuel David Guevara</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRE07</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>Preescolar</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>5</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>Masculino</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-prescolar_&]:[position:absolute] [.buscador-prescolar_&]:[left:12px] [.buscador-prescolar_&]:[top:50%] [.buscador-prescolar_&]:[transform:translateY(-50%)] [.buscador-prescolar_&]:[color:#94a3b8]"}></i></button></td>
                 </tr>
 
-                <tr>
-                  <td>08</td>
-                  <td className="col-nombre">Isabella del Mar Ortiz</td>
-                  <td><span className="tag-id">PRE08</span></td>
-                  <td><span className="tag-grado">Preescolar</span></td>
-                  <td>4</td>
-                  <td>Femenino</td>
-                  <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                <tr className={"[.tabla-estudiantes-matriculados-prescolar_&:hover]:[background:#f0f9ff]"}>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>08</td>
+                  <td className={"col-nombre [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Isabella del Mar Ortiz</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRE08</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>Preescolar</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>4</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>Femenino</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-prescolar_&]:[position:absolute] [.buscador-prescolar_&]:[left:12px] [.buscador-prescolar_&]:[top:50%] [.buscador-prescolar_&]:[transform:translateY(-50%)] [.buscador-prescolar_&]:[color:#94a3b8]"}></i></button></td>
                 </tr>
 
-                <tr>
-                  <td>09</td>
-                  <td className="col-nombre">Iker Andrés Peña</td>
-                  <td><span className="tag-id">PRE09</span></td>
-                  <td><span className="tag-grado">Preescolar</span></td>
-                  <td>5</td>
-                  <td>Masculino</td>
-                  <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                <tr className={"[.tabla-estudiantes-matriculados-prescolar_&:hover]:[background:#f0f9ff]"}>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>09</td>
+                  <td className={"col-nombre [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Iker Andrés Peña</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRE09</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>Preescolar</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>5</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>Masculino</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-prescolar_&]:[position:absolute] [.buscador-prescolar_&]:[left:12px] [.buscador-prescolar_&]:[top:50%] [.buscador-prescolar_&]:[transform:translateY(-50%)] [.buscador-prescolar_&]:[color:#94a3b8]"}></i></button></td>
                 </tr>
 
-                <tr>
-                  <td>10</td>
-                  <td className="col-nombre">Mariana Isabel Ruiz</td>
-                  <td><span className="tag-id">PRE10</span></td>
-                  <td><span className="tag-grado">Preescolar</span></td>
-                  <td>5</td>
-                  <td>Femenino</td>
-                  <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                <tr className={"[.tabla-estudiantes-matriculados-prescolar_&:hover]:[background:#f0f9ff]"}>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>10</td>
+                  <td className={"col-nombre [.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Mariana Isabel Ruiz</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRE10</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>Preescolar</span></td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>5</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}>Femenino</td>
+                  <td className={"[.tabla-estudiantes-matriculados-prescolar_&]:[padding:14px] [.tabla-estudiantes-matriculados-prescolar_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-prescolar_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-prescolar_&]:[position:absolute] [.buscador-prescolar_&]:[left:12px] [.buscador-prescolar_&]:[top:50%] [.buscador-prescolar_&]:[transform:translateY(-50%)] [.buscador-prescolar_&]:[color:#94a3b8]"}></i></button></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </section>
-      </main>
+      </div>
     </div>
   )
 }

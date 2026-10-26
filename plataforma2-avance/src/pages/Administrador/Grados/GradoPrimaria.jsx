@@ -1,173 +1,153 @@
 //import React from 'react'
 // Importación de React Router
-import { Link } from "react-router-dom"
-import "./GradoPrimaria.css"
+
+
 // Importación del logo institucional
-import logoblanco from '../../../assets/LogoBlanco.png'
+
 const GradoPrimaria = () => {
     return (
         <div>
             {/* Menú lateral de navegación */}
-            <nav className="menu-lateral">
-                <div className="menu-logo">
-                    <img src={logoblanco} alt="EasyMatric" className="logo-img" />
-                </div>
-                {/* Lista de enlaces del menú */}
-                <ul className="menu-lista">
-                    <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
-                    <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
-                    <li><Link to="/RevicionD"><i className="bi bi-journal-bookmark"></i> <span>Matrículas</span></Link></li>
-                    <li><Link to="/Matriculados"><i className="bi bi-people"></i> <span>Estudiantes</span></Link></li>
-                    <li><Link to="/Roles" ><i className="bi bi-shield-lock"></i> <span>Roles</span></Link></li>
-                    <li><Link to="/NotasCa"><i className="bi bi-folder2-open"></i> <span>Catálogos</span></Link></li>
-                </ul>
-                <div className="menu-pie">
-                    <Link to="/" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</Link>
-                    <div className="perfil-usuario-info">
-                        <i className="bi bi-person-circle"></i>
-                        <span>ADMINISTRADOR</span>
-                    </div>
-                </div>
-            </nav>
-            <main className="panel-estudiantes-primaria">
+
+            <div className={"panel-estudiantes-primaria [margin-left:260px] [flex:1] [padding:25px_30px] [background:var(--gris-fondo)] [display:flex] [flex-direction:column] [width:80vw]"}>
                 {/* Encabezado */}
-                <header className="encabezado-panel-primaria">
+                <header className={"encabezado-panel-primaria [display:flex] [justify-content:space-between] [align-items:center] [margin-bottom:25px]"}>
                     <div className="bloque-titulo-primaria">
-                        <h1>Lista de Estudiantes de Primaria</h1>
-                        <p>Visualiza y gestiona la información de todos los alumnos matriculados.</p>
+                        <h1 className={"[.bloque-titulo-primaria_&]:[font-size:2rem] [.bloque-titulo-primaria_&]:[color:var(--azul-navy)] [.bloque-titulo-primaria_&]:[margin:0]"}>Lista de Estudiantes de Primaria</h1>
+                        <p className={"[.bloque-titulo-primaria_&]:[color:var(--texto-gris)] [.bloque-titulo-primaria_&]:[margin-top:5px]"}>Visualiza y gestiona la información de todos los alumnos matriculados.</p>
                     </div>
                 </header>
                 {/* Contenedor tabla */}
-                <section className="tarjeta-tabla-matriculados-primaria">
-                    <div className="barra-superior-primaria">
+                <section className={"tarjeta-tabla-matriculados-primaria [background:white] [border-radius:18px] [padding:20px] [box-shadow:0_10px_30px_rgba(0,0,0,0.05)] [width:100%] [box-sizing:border-box] [flex-grow:1]"}>
+                    <div className={"barra-superior-primaria [display:flex] [justify-content:space-between] [margin-bottom:20px]"}>
 
-                        <div className="buscador-primaria">
-                            <i className="bi bi-search"></i>
-                            <input type="text" placeholder="Buscar por nombre, ID o grado..." />
+                        <div className={"buscador-primaria [position:relative] [width:320px]"}>
+                            <i className={"bi bi-search [.buscador-primaria_&]:[position:absolute] [.buscador-primaria_&]:[left:12px] [.buscador-primaria_&]:[top:50%] [.buscador-primaria_&]:[transform:translateY(-50%)] [.buscador-primaria_&]:[color:#94a3b8]"}></i>
+                            <input className={"[.buscador-primaria_&]:[width:100%] [.buscador-primaria_&]:[padding:12px_12px_12px_40px] [.buscador-primaria_&]:[border-radius:12px] [.buscador-primaria_&]:[border:1px_solid_var(--gris-borde)] [.buscador-primaria_&]:[background:#f8fafc] [.buscador-primaria_&]:[outline:none] [.buscador-primaria_&:focus]:[border-color:var(--cyan)] [.buscador-primaria_&:focus]:[background:white]"} type="text" placeholder="Buscar por nombre, ID o grado..." />
                         </div>
 
                     </div>
 
                     <div className="contenedor-scroll">
                         {/* Tabla principal */}
-                        <table className="tabla-estudiantes-matriculados-primaria">
-                            <thead>
-                                <tr>
-                                    <th>N°</th>
-                                    <th>Nombre Completo</th>
-                                    <th>ID Matrícula</th>
-                                    <th>Grado</th>
-                                    <th>Edad</th>
-                                    <th>Género</th>
-                                    <th>Acciones</th>
+                        <table className={"tabla-estudiantes-matriculados-primaria [width:100%] [border-collapse:collapse]"}>
+                            <thead className={"[.tabla-estudiantes-matriculados-primaria_&]:[background:#f8fafc]"}>
+                                <tr className={"[.tabla-estudiantes-matriculados-primaria_&:hover]:[background:#f0f9ff]"}>
+                                    <th className={"[.tabla-estudiantes-matriculados-primaria_&]:[text-align:left] [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-primaria_&]:[color:#64748b] [.tabla-estudiantes-matriculados-primaria_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>N°</th>
+                                    <th className={"[.tabla-estudiantes-matriculados-primaria_&]:[text-align:left] [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-primaria_&]:[color:#64748b] [.tabla-estudiantes-matriculados-primaria_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Nombre Completo</th>
+                                    <th className={"[.tabla-estudiantes-matriculados-primaria_&]:[text-align:left] [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-primaria_&]:[color:#64748b] [.tabla-estudiantes-matriculados-primaria_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>ID Matrícula</th>
+                                    <th className={"[.tabla-estudiantes-matriculados-primaria_&]:[text-align:left] [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-primaria_&]:[color:#64748b] [.tabla-estudiantes-matriculados-primaria_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Grado</th>
+                                    <th className={"[.tabla-estudiantes-matriculados-primaria_&]:[text-align:left] [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-primaria_&]:[color:#64748b] [.tabla-estudiantes-matriculados-primaria_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Edad</th>
+                                    <th className={"[.tabla-estudiantes-matriculados-primaria_&]:[text-align:left] [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-primaria_&]:[color:#64748b] [.tabla-estudiantes-matriculados-primaria_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Género</th>
+                                    <th className={"[.tabla-estudiantes-matriculados-primaria_&]:[text-align:left] [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.8rem] [.tabla-estudiantes-matriculados-primaria_&]:[color:#64748b] [.tabla-estudiantes-matriculados-primaria_&]:[text-transform:uppercase] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:2px_solid_var(--gris-borde)]"}>Acciones</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                <tr>
-                                    <td>01</td>
-                                    <td className="col-nombre">Nicolás Mateo Salazar</td>
-                                    <td><span className="tag-id">PRI01</span></td>
-                                    <td><span className="tag-grado">1° Primaria</span></td>
-                                    <td>6</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-primaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>01</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Nicolás Mateo Salazar</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRI01</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>1° Primaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>6</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-primaria_&]:[position:absolute] [.buscador-primaria_&]:[left:12px] [.buscador-primaria_&]:[top:50%] [.buscador-primaria_&]:[transform:translateY(-50%)] [.buscador-primaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>02</td>
-                                    <td className="col-nombre">Salomé Cristina Vargas</td>
-                                    <td><span className="tag-id">PRI02</span></td>
-                                    <td><span className="tag-grado">1° Primaria</span></td>
-                                    <td>7</td>
-                                    <td>Femenino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-primaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>02</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Salomé Cristina Vargas</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRI02</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>1° Primaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>7</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>Femenino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-primaria_&]:[position:absolute] [.buscador-primaria_&]:[left:12px] [.buscador-primaria_&]:[top:50%] [.buscador-primaria_&]:[transform:translateY(-50%)] [.buscador-primaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>03</td>
-                                    <td className="col-nombre">Jerónimo Andrés Holguín</td>
-                                    <td><span className="tag-id">PRI03</span></td>
-                                    <td><span className="tag-grado">2° Primaria</span></td>
-                                    <td>7</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-primaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>03</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Jerónimo Andrés Holguín</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRI03</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>2° Primaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>7</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-primaria_&]:[position:absolute] [.buscador-primaria_&]:[left:12px] [.buscador-primaria_&]:[top:50%] [.buscador-primaria_&]:[transform:translateY(-50%)] [.buscador-primaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>04</td>
-                                    <td className="col-nombre">Valery Estefanía Rojas</td>
-                                    <td><span className="tag-id">PRI04</span></td>
-                                    <td><span className="tag-grado">2° Primaria</span></td>
-                                    <td>8</td>
-                                    <td>Femenino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-primaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>04</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Valery Estefanía Rojas</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRI04</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>2° Primaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>8</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>Femenino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-primaria_&]:[position:absolute] [.buscador-primaria_&]:[left:12px] [.buscador-primaria_&]:[top:50%] [.buscador-primaria_&]:[transform:translateY(-50%)] [.buscador-primaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>05</td>
-                                    <td className="col-nombre">Emanuel Santiago López</td>
-                                    <td><span className="tag-id">PRI05</span></td>
-                                    <td><span className="tag-grado">3° Primaria</span></td>
-                                    <td>8</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-primaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>05</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Emanuel Santiago López</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRI05</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>3° Primaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>8</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-primaria_&]:[position:absolute] [.buscador-primaria_&]:[left:12px] [.buscador-primaria_&]:[top:50%] [.buscador-primaria_&]:[transform:translateY(-50%)] [.buscador-primaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>06</td>
-                                    <td className="col-nombre">Danna Michell Cardona</td>
-                                    <td><span className="tag-id">PRI06</span></td>
-                                    <td><span className="tag-grado">3° Primaria</span></td>
-                                    <td>9</td>
-                                    <td>Femenino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-primaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>06</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Danna Michell Cardona</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRI06</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>3° Primaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>9</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>Femenino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-primaria_&]:[position:absolute] [.buscador-primaria_&]:[left:12px] [.buscador-primaria_&]:[top:50%] [.buscador-primaria_&]:[transform:translateY(-50%)] [.buscador-primaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>07</td>
-                                    <td className="col-nombre">Miguel Ángel Quintero</td>
-                                    <td><span className="tag-id">PRI07</span></td>
-                                    <td><span className="tag-grado">4° Primaria</span></td>
-                                    <td>9</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-primaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>07</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Miguel Ángel Quintero</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRI07</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>4° Primaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>9</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-primaria_&]:[position:absolute] [.buscador-primaria_&]:[left:12px] [.buscador-primaria_&]:[top:50%] [.buscador-primaria_&]:[transform:translateY(-50%)] [.buscador-primaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>08</td>
-                                    <td className="col-nombre">Sara Sofía Bermúdez</td>
-                                    <td><span className="tag-id">PRI08</span></td>
-                                    <td><span className="tag-grado">4° Primaria</span></td>
-                                    <td>10</td>
-                                    <td>Femenino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-primaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>08</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Sara Sofía Bermúdez</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRI08</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>4° Primaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>10</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>Femenino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-primaria_&]:[position:absolute] [.buscador-primaria_&]:[left:12px] [.buscador-primaria_&]:[top:50%] [.buscador-primaria_&]:[transform:translateY(-50%)] [.buscador-primaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>09</td>
-                                    <td className="col-nombre">Juan Esteban Restrepo</td>
-                                    <td><span className="tag-id">PRI09</span></td>
-                                    <td><span className="tag-grado">5° Primaria</span></td>
-                                    <td>10</td>
-                                    <td>Masculino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-primaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>09</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Juan Esteban Restrepo</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRI09</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>5° Primaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>10</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>Masculino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-primaria_&]:[position:absolute] [.buscador-primaria_&]:[left:12px] [.buscador-primaria_&]:[top:50%] [.buscador-primaria_&]:[transform:translateY(-50%)] [.buscador-primaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
 
-                                <tr>
-                                    <td>10</td>
-                                    <td className="col-nombre">Victoria Eugenia Blanco</td>
-                                    <td><span className="tag-id">PRI10</span></td>
-                                    <td><span className="tag-grado">5° Primaria</span></td>
-                                    <td>11</td>
-                                    <td>Femenino</td>
-                                    <td><button className="btn-opciones"><i className="bi bi-three-dots"></i></button></td>
+                                <tr className={"[.tabla-estudiantes-matriculados-primaria_&:hover]:[background:#f0f9ff]"}>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>10</td>
+                                    <td className={"col-nombre [.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem] [font-weight:600] [color:var(--azul-navy)]"}>Victoria Eugenia Blanco</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-id [background:#eff6ff] [color:#2563eb] [padding:4px_10px] [border-radius:8px] [font-weight:600] [font-family:monospace]"}>PRI10</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><span className={"tag-grado [background:#f1f5f9] [padding:4px_10px] [border-radius:20px] [font-weight:bold]"}>5° Primaria</span></td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>11</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}>Femenino</td>
+                                    <td className={"[.tabla-estudiantes-matriculados-primaria_&]:[padding:14px] [.tabla-estudiantes-matriculados-primaria_&]:[border-bottom:1px_solid_var(--gris-borde)] [.tabla-estudiantes-matriculados-primaria_&]:[font-size:0.95rem]"}><button className={"btn-opciones [background:none] [border:none] [cursor:pointer] [color:#94a3b8] [font-size:1.2rem] [&:hover]:[color:var(--azul-navy)]"}><i className={"bi bi-three-dots [.buscador-primaria_&]:[position:absolute] [.buscador-primaria_&]:[left:12px] [.buscador-primaria_&]:[top:50%] [.buscador-primaria_&]:[transform:translateY(-50%)] [.buscador-primaria_&]:[color:#94a3b8]"}></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </section>
-            </main>
+            </div>
         </div>
     )
 }

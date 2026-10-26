@@ -7,11 +7,14 @@ import Navbar from "./Components/Navbar";
 {/* Pages de inicio */}
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import "./App.css";
+
 import Nosotros from './pages/Nosotros';
 import Servicios from './pages/Servicios';
 import Preguntas from './pages/Preguntas';
 import Contacto from './pages/Contacto';
+import AdminLayout from './layouts/AdminLayout';
+import TeacherLayout from './layouts/TeacherLayout';
+import StudentLayout from './layouts/StudentLayout';
 
 {/* Pages de Autenticación y Estudiantes */}
 import SelecionRol from './pages/Registro/SelecionRol';
@@ -36,6 +39,7 @@ import GradoPrescolar from './pages/Administrador/Grados/GradoPrescolar';
 import GradoPrimaria from './pages/Administrador/Grados/GradoPrimaria';
 import GradoSecundaria from './pages/Administrador/Grados/GradoSecundaria';
 import PerfilAd from './pages/Administrador/Perfil/PerfilAd';
+import Dashboard from './pages/Dashboard';
 
 {/* Pages de Docente */}
 import RegistroDo from './pages/Docente/RegistroDo';
@@ -107,32 +111,41 @@ const App = () => {
 
         {/* Rutas de Estudiante */}
         <Route path="/RegistroU" element={<RegistroU />} />
-        <Route path="/PerfilUsuario" element={<PerfilUsuario />} />
-        <Route path="/Colegios" element={<Colegios />} />
-        <Route path="/InfoSede" element={<InfoSede />} />
-        <Route path="/MatriculasE" element={<MatriculasE />} />
-        <Route path="/Formulario" element={<Formulario />} />
-        <Route path="/ModulosAcademicos" element={<ModulosAcademicos />} />
-        <Route path="/EditarPerfil" element={<EditarPerfil />} />
+        <Route element={<StudentLayout />}>
+          <Route path="/student" element={<Dashboard role="student" />} />
+          <Route path="/PerfilUsuario" element={<PerfilUsuario />} />
+          <Route path="/Colegios" element={<Colegios />} />
+          <Route path="/InfoSede" element={<InfoSede />} />
+          <Route path="/MatriculasE" element={<MatriculasE />} />
+          <Route path="/Formulario" element={<Formulario />} />
+          <Route path="/ModulosAcademicos" element={<ModulosAcademicos />} />
+          <Route path="/EditarPerfil" element={<EditarPerfil />} />
+        </Route>
 
         {/* Rutas de Administrador */}
         <Route path="/RegistroAd" element={<RegistroAd />} />
-        <Route path="/RegistrarSede" element={<RegistrarSede />} />
-        <Route path="/Roles" element={<Roles />} />
-        <Route path="/Matriculados" element={<Matriculados />} />
-        <Route path="/NotasCa" element={<NotasCa />} />
-        <Route path="/RevicionD" element={<RevicionD />} />
-        <Route path="/PerfilAd" element={<PerfilAd />} />
-        <Route path="/Matriculados/GradoPrescolar" element={<GradoPrescolar />} />
-        <Route path="/Matriculados/GradoPrimaria" element={<GradoPrimaria />} />
-        <Route path="/Matriculados/GradoSecundaria" element={<GradoSecundaria />} />
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<Dashboard role="admin" />} />
+          <Route path="/RegistrarSede" element={<RegistrarSede />} />
+          <Route path="/Roles" element={<Roles />} />
+          <Route path="/Matriculados" element={<Matriculados />} />
+          <Route path="/NotasCa" element={<NotasCa />} />
+          <Route path="/RevicionD" element={<RevicionD />} />
+          <Route path="/PerfilAd" element={<PerfilAd />} />
+          <Route path="/Matriculados/GradoPrescolar" element={<GradoPrescolar />} />
+          <Route path="/Matriculados/GradoPrimaria" element={<GradoPrimaria />} />
+          <Route path="/Matriculados/GradoSecundaria" element={<GradoSecundaria />} />
+        </Route>
 
         {/* Rutas de Docente */}
         <Route path="/RegistroDo" element={<RegistroDo />} />
-        <Route path="/PerfilDocente" element={<PerfilDocente />} />
-        <Route path="/SubirModulo" element={<SubirModulo />} />
-        <Route path="/DocenteMo" element={<DocenteMo />} />
-        <Route path="/GrupoModulo" element={<GrupoModulo />} />
+        <Route element={<TeacherLayout />}>
+          <Route path="/teacher" element={<Dashboard role="teacher" />} />
+          <Route path="/PerfilDocente" element={<PerfilDocente />} />
+          <Route path="/SubirModulo" element={<SubirModulo />} />
+          <Route path="/DocenteMo" element={<DocenteMo />} />
+          <Route path="/GrupoModulo" element={<GrupoModulo />} />
+        </Route>
 
         {/* Control de Ruta no encontrada (Evita pantalla en blanco) */}
         <Route path="*" element={<h2 style={{ textAlign: "center", marginTop: "50px" }}>404 - Página no encontrada</h2>} />

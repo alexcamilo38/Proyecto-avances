@@ -1,126 +1,105 @@
 //import React from 'react'
-import { Link } from "react-router-dom"
-import "./NotasCa.css"
+
+
 import catalogo from '../../assets/Catalo_perfil.png';
-import logoblanco from '../../assets/LogoBlanco.png'
+
 const NotasCa = () => {
   return (
-    <div> 
+    <div>
         {/* Menú lateral de navegación */}
-        <nav className="menu-lateral">
-                <div className="menu-logo">
-                    <img src={logoblanco} alt="EasyMatric" className="logo-img" />
-                </div>
-                {/* Lista de enlaces del menú */}
-                <ul className="menu-lista">
-                    <li><Link to="/"><i className="bi bi-house-door"></i> <span>Inicio</span></Link></li>
-                    <li><Link to="/RegistrarSede"><i className="bi bi-bank"></i> <span>Instituciones</span></Link></li>
-                    <li><Link href="/RevicionD"><i className="bi bi-journal-bookmark"></i> <span>Matrículas</span></Link></li>
-                    <li><Link to="/Matriculados"><i className="bi bi-people"></i> <span>Estudiantes</span></Link></li>
-                    <li><Link to="/Roles" ><i className="bi bi-shield-lock"></i> <span>Roles</span></Link></li>
-                    <li><Link to="/NotasCa"><i className="bi bi-folder2-open"></i> <span>Catálogos</span></Link></li>
-                     <li><Link to="/PerfilAd" ><i className="bi bi-person-badge"></i><span>Mi Perfil</span></Link></li>
-                </ul>
-                <div className="menu-pie">
-                    <Link to="/" className="enlace-salir"><i className="bi bi-box-arrow-left"></i> Cerrar Sesión</Link>
-                    <div className="perfil-usuario-info">
-                        <i className="bi bi-person-circle"></i>
-                        <span>ADMINISTRADOR</span>
-                    </div>
-                </div>
-            </nav>
-            <main className="contenido-principal-notas">
+
+            <div className={"contenido-principal-notas [margin-left:260px] [padding:40px]"}>
         <header className="header-seccion-notas">
             <h1>Panel de Catálogos y Notas</h1>
             <p>Gestiona los documentos institucionales y el rendimiento académico de los estudiantes.</p>
         </header>
          {/* Sección de catálogos */}
         <section className="seccion-catalogos-notas">
-            <div className="grid-catalogos02">
-                <div className="card-catalogo02">
-                    <div className="icono-doc"><i className="bi bi-file-pdf"></i></div>
-                    <img src="imagenes/Catalogo.png" alt="Documento" className="img-doc"/>
-                    <h3>Manual de Convivencia</h3>
-                    <button className="btn-ver"><i className="bi bi-eye"></i> Ver Documento</button>
+            <div className={"grid-catalogos02 [display:grid] [grid-template-columns:repeat(3,_1fr)] [gap:25px] [margin-bottom:50px]"}>
+                <div className={"card-catalogo02 [background:var(--blanco)] [padding:25px_80px] [border-radius:20px] [text-align:center] [box-shadow:0_10px_25px_rgba(0,0,0,0.05)] [border:1px_solid_#f1f5f9] [transition:transform_0.3s_ease] [&:hover]:[transform:translateY(-5px)]"}>
+                    <div className={"icono-doc [font-size:1.5rem] [color:var(--cyan-em)] [text-align:right]"}><i className="bi bi-file-pdf"></i></div>
+                    <img src="imagenes/Catalogo.png" alt="Documento" className={"img-doc [margin:15px_0] [opacity:0.8] [.perfil-estudiante_&]:[width:60px] [.perfil-estudiante_&]:[height:60px] [.perfil-estudiante_&]:[border-radius:50%] [.perfil-estudiante_&]:[object-fit:cover]"}/>
+                    <h3 className={"[.estudiante-info_&]:[font-size:1.1rem] [.estudiante-info_&]:[color:var(--azul-navy)] [.estudiante-info_&]:[margin:0]"}>Manual de Convivencia</h3>
+                    <button className={"btn-ver [width:100%] [padding:10px] [border-radius:12px] [border:none] [background:#f1f5f9] [color:var(--azul-navy)] [font-weight:700] [cursor:pointer] [&:hover]:[background:var(--azul-navy)] [&:hover]:[color:white]"}><i className="bi bi-eye"></i> Ver Documento</button>
                 </div>
-                <div className="card-catalogo02">
-                    <div className="icono-doc"><i className="bi bi-file-earmark-text"></i></div>
-                    <img src="imagenes/Catalogo.png" alt="Documento" className="img-doc"/>
-                    <h3>Oferta Académica 2026</h3>
-                    <button className="btn-ver"><i className="bi bi-eye"></i> Ver Documento</button>
+                <div className={"card-catalogo02 [background:var(--blanco)] [padding:25px_80px] [border-radius:20px] [text-align:center] [box-shadow:0_10px_25px_rgba(0,0,0,0.05)] [border:1px_solid_#f1f5f9] [transition:transform_0.3s_ease] [&:hover]:[transform:translateY(-5px)]"}>
+                    <div className={"icono-doc [font-size:1.5rem] [color:var(--cyan-em)] [text-align:right]"}><i className="bi bi-file-earmark-text"></i></div>
+                    <img src="imagenes/Catalogo.png" alt="Documento" className={"img-doc [margin:15px_0] [opacity:0.8] [.perfil-estudiante_&]:[width:60px] [.perfil-estudiante_&]:[height:60px] [.perfil-estudiante_&]:[border-radius:50%] [.perfil-estudiante_&]:[object-fit:cover]"}/>
+                    <h3 className={"[.estudiante-info_&]:[font-size:1.1rem] [.estudiante-info_&]:[color:var(--azul-navy)] [.estudiante-info_&]:[margin:0]"}>Oferta Académica 2026</h3>
+                    <button className={"btn-ver [width:100%] [padding:10px] [border-radius:12px] [border:none] [background:#f1f5f9] [color:var(--azul-navy)] [font-weight:700] [cursor:pointer] [&:hover]:[background:var(--azul-navy)] [&:hover]:[color:white]"}><i className="bi bi-eye"></i> Ver Documento</button>
                 </div>
-                <div className="card-catalogo02">
-                    <div className="icono-doc"><i className="bi bi-file-ppt"></i></div>
-                    <img src="imagenes/Catalogo.png" alt="Documento" className="img-doc"/>
-                    <h3>Proyectos Transversales</h3>
-                    <button className="btn-ver"><i className="bi bi-eye"></i> Ver Documento</button>
+                <div className={"card-catalogo02 [background:var(--blanco)] [padding:25px_80px] [border-radius:20px] [text-align:center] [box-shadow:0_10px_25px_rgba(0,0,0,0.05)] [border:1px_solid_#f1f5f9] [transition:transform_0.3s_ease] [&:hover]:[transform:translateY(-5px)]"}>
+                    <div className={"icono-doc [font-size:1.5rem] [color:var(--cyan-em)] [text-align:right]"}><i className="bi bi-file-ppt"></i></div>
+                    <img src="imagenes/Catalogo.png" alt="Documento" className={"img-doc [margin:15px_0] [opacity:0.8] [.perfil-estudiante_&]:[width:60px] [.perfil-estudiante_&]:[height:60px] [.perfil-estudiante_&]:[border-radius:50%] [.perfil-estudiante_&]:[object-fit:cover]"}/>
+                    <h3 className={"[.estudiante-info_&]:[font-size:1.1rem] [.estudiante-info_&]:[color:var(--azul-navy)] [.estudiante-info_&]:[margin:0]"}>Proyectos Transversales</h3>
+                    <button className={"btn-ver [width:100%] [padding:10px] [border-radius:12px] [border:none] [background:#f1f5f9] [color:var(--azul-navy)] [font-weight:700] [cursor:pointer] [&:hover]:[background:var(--azul-navy)] [&:hover]:[color:white]"}><i className="bi bi-eye"></i> Ver Documento</button>
                 </div>
             </div>
         </section>
          {/* Sección de notas académicas */}
         <section className="seccion-notas">
-            <div className="grid-notas02">
-                
-                <div className="tarjeta-nota02">
-                    <div className="perfil-estudiante">
-                        <img src="https://img.freepik.com/vector-gratis/mujer-sonriente-cabello-largo_1308-174705.jpg" alt="Ana"/>
+            <div className={"grid-notas02 [display:grid] [grid-template-columns:1fr_1fr] [gap:30px]"}>
+
+                <div className={"tarjeta-nota02 [background:var(--blanco)] [border-radius:25px] [padding:25px] [box-shadow:0_10px_30px_rgba(0,0,0,0.05)]"}>
+                    <div className={"perfil-estudiante [display:flex] [align-items:center] [gap:15px] [margin-bottom:20px]"}>
+                        <img className={"[.perfil-estudiante_&]:[width:60px] [.perfil-estudiante_&]:[height:60px] [.perfil-estudiante_&]:[border-radius:50%] [.perfil-estudiante_&]:[object-fit:cover]"} src="https://img.freepik.com/vector-gratis/mujer-sonriente-cabello-largo_1308-174705.jpg" alt="Ana"/>
                         <div className="estudiante-info">
-                            <h3>Ana Rodriguez Sandoval</h3>
-                            <span>Grado 11° - Jornada Mañana</span>
+                            <h3 className={"[.estudiante-info_&]:[font-size:1.1rem] [.estudiante-info_&]:[color:var(--azul-navy)] [.estudiante-info_&]:[margin:0]"}>Ana Rodriguez Sandoval</h3>
+                            <span className={"[.estudiante-info_&]:[font-size:0.8rem] [.estudiante-info_&]:[color:#94a3b8]"}>Grado 11° - Jornada Mañana</span>
                         </div>
-                        <button className="btn-plus"><i className="bi bi-plus-circle-fill"></i></button>
+                        <button className={"btn-plus [margin-left:auto] [background:none] [border:none] [color:var(--cyan-em)] [font-size:1.5rem] [cursor:pointer]"}><i className="bi bi-plus-circle-fill"></i></button>
                     </div>
                      {/* Tabla de notas */}
-                    <table className="tabla-notas-em">
+                    <table className={"tabla-notas-em [width:100%] [border-collapse:collapse] [font-size:0.9rem]"}>
                         <thead>
                             <tr>
-                                <th>Módulo</th>
-                                <th>Evaluación</th>
-                                <th>Recuperación</th>
+                                <th className={"[.tabla-notas-em_&]:[text-align:left] [.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[color:#94a3b8] [.tabla-notas-em_&]:[font-weight:600] [.tabla-notas-em_&]:[border-bottom:2px_solid_var(--gris-fondo)]"}>Módulo</th>
+                                <th className={"[.tabla-notas-em_&]:[text-align:left] [.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[color:#94a3b8] [.tabla-notas-em_&]:[font-weight:600] [.tabla-notas-em_&]:[border-bottom:2px_solid_var(--gris-fondo)]"}>Evaluación</th>
+                                <th className={"[.tabla-notas-em_&]:[text-align:left] [.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[color:#94a3b8] [.tabla-notas-em_&]:[font-weight:600] [.tabla-notas-em_&]:[border-bottom:2px_solid_var(--gris-fondo)]"}>Recuperación</th>
                             </tr>
                         </thead>
                         <tbody>
                              {/* Datos académicos */}
-                            <tr><td>Artes</td><td>9.0</td><td className="nota-alta">10</td></tr>
-                            <tr><td>Inglés</td><td>10</td><td>8.0</td></tr>
-                            <tr><td>Historia</td><td>10</td><td>10</td></tr>
-                            <tr><td>Ciencias Naturales</td><td>7.0</td><td>9.0</td></tr>
+                            <tr><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>Artes</td><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>9.0</td><td className={"nota-alta [.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] ![color:var(--verde-exito)] ![font-weight:700] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>10</td></tr>
+                            <tr><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>Inglés</td><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>10</td><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>8.0</td></tr>
+                            <tr><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>Historia</td><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>10</td><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>10</td></tr>
+                            <tr><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>Ciencias Naturales</td><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>7.0</td><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>9.0</td></tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div className="tarjeta-nota02">
-                    <div className="perfil-estudiante">
-                        <img src={catalogo} alt="Andres"/>
+                <div className={"tarjeta-nota02 [background:var(--blanco)] [border-radius:25px] [padding:25px] [box-shadow:0_10px_30px_rgba(0,0,0,0.05)]"}>
+                    <div className={"perfil-estudiante [display:flex] [align-items:center] [gap:15px] [margin-bottom:20px]"}>
+                        <img className={"[.perfil-estudiante_&]:[width:60px] [.perfil-estudiante_&]:[height:60px] [.perfil-estudiante_&]:[border-radius:50%] [.perfil-estudiante_&]:[object-fit:cover]"} src={catalogo} alt="Andres"/>
                         <div className="estudiante-info">
-                            <h3>Andres Camilo Dominguez</h3>
-                            <span>Grado 11° - Jornada Mañana</span>
+                            <h3 className={"[.estudiante-info_&]:[font-size:1.1rem] [.estudiante-info_&]:[color:var(--azul-navy)] [.estudiante-info_&]:[margin:0]"}>Andres Camilo Dominguez</h3>
+                            <span className={"[.estudiante-info_&]:[font-size:0.8rem] [.estudiante-info_&]:[color:#94a3b8]"}>Grado 11° - Jornada Mañana</span>
                         </div>
-                        <button className="btn-plus"><i className="bi bi-plus-circle-fill"></i></button>
+                        <button className={"btn-plus [margin-left:auto] [background:none] [border:none] [color:var(--cyan-em)] [font-size:1.5rem] [cursor:pointer]"}><i className="bi bi-plus-circle-fill"></i></button>
                     </div>
                     {/* Tabla de notas */}
-                    <table className="tabla-notas-em">
+                    <table className={"tabla-notas-em [width:100%] [border-collapse:collapse] [font-size:0.9rem]"}>
                         <thead>
                             <tr>
-                                <th>Módulo</th>
-                                <th>Evaluación</th>
-                                <th>Recuperación</th>
+                                <th className={"[.tabla-notas-em_&]:[text-align:left] [.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[color:#94a3b8] [.tabla-notas-em_&]:[font-weight:600] [.tabla-notas-em_&]:[border-bottom:2px_solid_var(--gris-fondo)]"}>Módulo</th>
+                                <th className={"[.tabla-notas-em_&]:[text-align:left] [.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[color:#94a3b8] [.tabla-notas-em_&]:[font-weight:600] [.tabla-notas-em_&]:[border-bottom:2px_solid_var(--gris-fondo)]"}>Evaluación</th>
+                                <th className={"[.tabla-notas-em_&]:[text-align:left] [.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[color:#94a3b8] [.tabla-notas-em_&]:[font-weight:600] [.tabla-notas-em_&]:[border-bottom:2px_solid_var(--gris-fondo)]"}>Recuperación</th>
                             </tr>
                         </thead>
                         <tbody>
                              {/* Datos académicos */}
-                            <tr><td>Artes</td><td>9.0</td><td>10</td></tr>
-                            <tr><td>Inglés</td><td>10</td><td>8.0</td></tr>
-                            <tr><td>Ciencias Sociales</td><td className="nota-baja">5.0</td><td>10</td></tr>
-                            <tr><td>Física</td><td>7.0</td><td>8.0</td></tr>
+                            <tr><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>Artes</td><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>9.0</td><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>10</td></tr>
+                            <tr><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>Inglés</td><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>10</td><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>8.0</td></tr>
+                            <tr><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>Ciencias Sociales</td><td className={"nota-baja [.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] ![color:var(--rojo-alerta)] ![font-weight:700] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>5.0</td><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>10</td></tr>
+                            <tr><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>Física</td><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>7.0</td><td className={"[.tabla-notas-em_&]:[padding:12px] [.tabla-notas-em_&]:[border-bottom:1px_solid_#f1f5f9] [.tabla-notas-em_&]:[color:var(--azul-navy)] [.tabla-notas-em_&]:[font-weight:500] [.tabla-notas-em_tr:last-child_&]:[border-bottom:none]"}>8.0</td></tr>
                         </tbody>
                     </table>
                 </div>
 
             </div>
         </section>
-    </main>
-      
+    </div>
+
     </div>
   )
 }
