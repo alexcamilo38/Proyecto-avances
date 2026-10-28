@@ -15,6 +15,7 @@ import Contacto from './pages/Contacto';
 import AdminLayout from './layouts/AdminLayout';
 import TeacherLayout from './layouts/TeacherLayout';
 import StudentLayout from './layouts/StudentLayout';
+import RectorLayout from './layouts/RectorLayout';
 
 {/* Pages de Autenticación y Estudiantes */}
 import SelecionRol from './pages/Registro/SelecionRol';
@@ -39,6 +40,15 @@ import GradoPrescolar from './pages/Administrador/Grados/GradoPrescolar';
 import GradoPrimaria from './pages/Administrador/Grados/GradoPrimaria';
 import GradoSecundaria from './pages/Administrador/Grados/GradoSecundaria';
 import PerfilAd from './pages/Administrador/Perfil/PerfilAd';
+
+{/* Pages de Rector */}
+import RegistrarIns from './pages/Rector/RegistrarIns';
+import RevisarMa from './pages/Rector/RevisarMa';
+import EstudiantesAp from './pages/Rector/EstudiantesAp';
+import CatalogoMa from './pages/Rector/CatalogoMa';
+import RectorDashboard from './pages/Rector/RectorDashboard';
+import RegistroRector from './pages/Rector/RegistroRector';
+import PerfilRec from './pages/Rector/PerfilRec';
 import Dashboard from './pages/Dashboard';
 
 {/* Pages de Docente */}
@@ -124,6 +134,7 @@ const App = () => {
 
         {/* Rutas de Administrador */}
         <Route path="/RegistroAd" element={<RegistroAd />} />
+        <Route path="/RegistroRector" element={<RegistroRector />} />
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<Dashboard role="admin" />} />
           <Route path="/RegistrarSede" element={<RegistrarSede />} />
@@ -145,6 +156,16 @@ const App = () => {
           <Route path="/SubirModulo" element={<SubirModulo />} />
           <Route path="/DocenteMo" element={<DocenteMo />} />
           <Route path="/GrupoModulo" element={<GrupoModulo />} />
+        </Route>
+
+        {/* Rutas de Rector */}
+        <Route element={<RectorLayout />}>
+          <Route path="/rector" element={<RectorDashboard />} />
+          <Route path="/PerfilRec" element={<PerfilRec />} />
+          <Route path="/RegistrarIns" element={<RegistrarIns />} />
+          <Route path="/RevisarMa" element={<RevisarMa />} />
+          <Route path="/EstudiantesAp" element={<EstudiantesAp />} />
+          <Route path="/CatalogoMa" element={<CatalogoMa />} />
         </Route>
 
         {/* Control de Ruta no encontrada (Evita pantalla en blanco) */}

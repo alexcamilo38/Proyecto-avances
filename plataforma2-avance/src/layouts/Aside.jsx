@@ -21,18 +21,27 @@ const navigation = {
     { to: "/ModulosAcademicos", label: "Catálogos", icon: "bi-folder2-open" },
     { to: "/PerfilUsuario", label: "Mi perfil", icon: "bi-person-badge" },
   ],
+  rector: [
+    { to: "/RegistrarIns", label: "Institución", icon: "bi-building-add" },
+    { to: "/RevisarMa", label: "Revisar matrículas", icon: "bi-clipboard-check" },
+    { to: "/EstudiantesAp", label: "Estudiantes", icon: "bi-people" },
+    { to: "/CatalogoMa", label: "Catálogo académico", icon: "bi-journal-bookmark" },
+    { to: "/PerfilRec", label: "Mi perfil", icon: "bi-person-badge" },
+  ],
 };
 
 const dashboardPaths = {
   admin: "/admin",
   teacher: "/teacher",
   student: "/student",
+  rector: "/rector",
 };
 
 const roleLabels = {
   admin: "ADMINISTRADOR",
   teacher: "DOCENTE",
   student: "ESTUDIANTE",
+  rector: "RECTOR",
 };
 
 const roleStyles = {
@@ -54,6 +63,12 @@ const roleStyles = {
     icon: "bg-orange-400",
     text: "text-orange-300",
   },
+  rector: {
+    link: "hover:border-violet-400 hover:bg-violet-400/10",
+    active: "border-violet-400 bg-violet-400/10",
+    icon: "bg-violet-500",
+    text: "text-violet-300",
+  },
 };
 
 const Aside = ({ role }) => {
@@ -64,7 +79,7 @@ const Aside = ({ role }) => {
     <Link to={dashboardPaths[role]} className="mb-8 flex justify-center px-6 max-sm:px-2" aria-label="EasyMatric, inicio">
       <img src={logoblanco} alt="EasyMatric" className="h-[42px] w-auto max-sm:hidden" />
       <span className={`hidden h-10 w-10 items-center justify-center rounded-xl text-lg max-sm:flex ${styles.icon}`} aria-hidden="true">
-        <i className="bi bi-mortarboard-fill" />
+        <i className={`bi ${role === "rector" ? "bi-building-fill-check" : "bi-mortarboard-fill"}`} />
       </span>
     </Link>
 

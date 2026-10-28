@@ -1,20 +1,16 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logoazul from "../assets/LogoAzul.png";
-
-
+import ilustracion from "../assets/ilustracion estudiando.jpg";
 
 const Login = () => {
   const navigate = useNavigate();
-
-  // Estados para capturar los inputs
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Manejador del inicio de sesión
-  const handleLogin = (e) => {
-    e.preventDefault();
+  const handleLogin = (event) => {
+    event.preventDefault();
     setError("");
 
     if (email === "admin@easymatric.com" && password === "123456") {
@@ -23,94 +19,148 @@ const Login = () => {
       navigate("/student");
     } else if (email === "docente@easymatric.com" && password === "123456") {
       navigate("/teacher");
+    } else if (email === "rector@easymatric.com" && password === "123456") {
+      navigate("/rector");
     } else {
       setError("Credenciales incorrectas. Inténtalo de nuevo.");
     }
   };
+
   return (
-    <div className="flex min-h-screen items-center justify-center p-5 max-[900px]:items-start max-[900px]:p-3">
-      <div className={"login-container [display:flex] [width:100%] [max-width:1100px] [height:700px] [background-color:var(--color-secundario)] [border-radius:40px] [overflow:hidden] [box-shadow:0_25px_50px_rgba(0,_0,_0,_0.15)] [position:relative] max-[900px]:[flex-direction:column] max-[900px]:[height:auto]"}>
-        <div className={"login-left [flex:1.2] [background-color:var(--blanco)] [padding:40px] [display:flex] [flex-direction:column] [justify-content:space-between] [border-radius:0_100px_350px_0] [z-index:2] max-[900px]:[border-radius:0_0_50px_50px] max-[900px]:[padding:50px_20px]"}>
-          {/* Botón para regresar al inicio */}
-          <Link to="/" className={"volver [color:var(--texto-secundario)] [font-weight:600] [font-size:0.9rem] [display:flex] [align-items:center] [gap:5px] [transition:0.3s] [&:hover]:[color:var(--color-primario)] [.extra_&]:[color:var(--color-acento)] [.extra_&]:[font-weight:700] [.extra_&]:[margin-left:5px]"}>
-            <i className="bi bi-arrow-left-short"></i> Volver al inicio
+    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-slate-50 to-indigo-100 p-4 sm:p-8">
+      <div className="grid w-full max-w-5xl overflow-hidden rounded-[2rem] bg-white shadow-2xl shadow-blue-950/10 lg:grid-cols-[1.05fr_0.95fr]">
+        <section className="relative flex flex-col justify-between overflow-hidden bg-gradient-to-br from-blue-700 via-blue-800 to-indigo-950 p-7 text-white sm:p-10 lg:p-12">
+          <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full border-[36px] border-white/5" />
+          <Link
+            to="/"
+            className="relative inline-flex w-fit items-center gap-2 text-sm font-semibold text-blue-100 transition hover:text-white focus:outline-none focus:ring-4 focus:ring-white/30"
+          >
+            <i className="bi bi-arrow-left" aria-hidden="true" />
+            Volver al inicio
           </Link>
 
-          <div className={"brand-container [display:flex] [flex-direction:column] [align-items:center] [justify-content:center] [gap:12px] [width:100%] [margin-bottom:20px]"}>
-            <img src={logoazul} alt="EasyMatric" className={"logo-img1 [width:200px] [height:auto] [display:block] [margin:0_auto]"} />
-          </div>
-
-          <div className={"welcome-content [text-align:center]"}>
-            <h1 className={"[.welcome-content_&]:[font-size:2rem] [.welcome-content_&]:[color:var(--texto-principal)] [.welcome-content_&]:[margin-bottom:10px]"}>Bienvenido a EasyMatric</h1>
-            <p>
-              Accede a tu cuenta para gestionar tu proceso de matrícula de forma
-              rápida y segura.
-            </p>
-            {/* SVG remoto funcional y confiable */}
+          <div className="relative my-10 text-center lg:my-8">
             <img
-              src="../src/assets/ilustracion estudiando.jpg"
-              alt="Ilustración Estudiando"
-              className={"main-illustration [max-width:250px] [margin-top:20px]"}
+              src={logoazul}
+              alt="EasyMatric"
+              className="mx-auto mb-8 w-48 rounded-2xl bg-white p-3"
+            />
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-blue-200">
+              Educación, más sencilla
+            </p>
+            <h1 className="text-3xl font-bold leading-tight sm:text-4xl">
+              Tu comunidad educativa, en un solo lugar
+            </h1>
+            <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-blue-100 sm:text-base">
+              Gestiona tu proceso de matrícula de forma rápida y segura.
+            </p>
+            <img
+              src={ilustracion}
+              alt="Estudiantes aprendiendo juntos"
+              className="mx-auto mt-7 max-h-48 w-full max-w-xs rounded-2xl object-contain"
             />
           </div>
 
-          <div className={"footer-copy [font-size:0.7rem] [color:var(--texto-secundario)]"}>
-            <p>&copy; 2026 EasyMatric - Gestión Educativa Eficiente</p>
-          </div>
-        </div>
+          <p className="relative text-center text-xs text-blue-200">
+            &copy; 2026 EasyMatric · Gestión Educativa Eficiente
+          </p>
+        </section>
 
-        <div className={"login-right [flex:0.8] [display:flex] [align-items:center] [justify-content:center] [padding:40px]"}>
-          {/* Formulario de inicio de sesión */}
-          <form className={"login-form [width:100%] [max-width:320px] [color:var(--blanco)]"} onSubmit={handleLogin}>
-            <h2 className={"[.login-form_&]:[font-size:2.2rem] [.login-form_&]:[margin-bottom:5px]"}>Iniciar Sesión</h2>
-            <p className={"form-subtitle [font-size:0.9rem] [opacity:0.7] [margin-bottom:30px]"}>
-              Ingresa tus credenciales para continuar
-            </p>
-
-            {/* Mensaje de error dinámico */}
-            {error && <div className="alert-error" style={{ color: "red", marginBottom: "10px" }}>{error}</div>}
-
-            <div className={"input-group [margin-bottom:20px]"}>
-              <label className={"[.input-group_&]:[display:block] [.input-group_&]:[margin-bottom:8px] [.input-group_&]:[font-size:0.85rem] [.input-group_&]:[color:rgba(255,_255,_255,_0.9)]"}>
-                <i className="bi bi-envelope"></i> Correo electrónico
-              </label>
-              <input className={"[.input-group_&]:[width:100%] [.input-group_&]:[padding:14px_20px] [.input-group_&]:[border-radius:50px] [.input-group_&]:[border:1px_solid_rgba(255,_255,_255,_0.2)] [.input-group_&]:[background:rgba(0,_0,_0,_0.1)] [.input-group_&]:[color:var(--blanco)] [.input-group_&]:[outline:none]"}
-                type="email"
-                placeholder="ejemplo@correo.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+        <section className="flex items-center justify-center px-6 py-10 sm:px-12 lg:px-14">
+          <form className="w-full max-w-md" onSubmit={handleLogin}>
+            <div className="mb-8">
+              <span className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-xl text-blue-700">
+                <i className="bi bi-person-lock" aria-hidden="true" />
+              </span>
+              <h2 className="text-3xl font-bold tracking-tight text-slate-900">
+                Iniciar sesión
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-slate-500">
+                Ingresa tus credenciales para continuar.
+              </p>
             </div>
 
-            <div className={"input-group [margin-bottom:20px]"}>
-              <label className={"[.input-group_&]:[display:block] [.input-group_&]:[margin-bottom:8px] [.input-group_&]:[font-size:0.85rem] [.input-group_&]:[color:rgba(255,_255,_255,_0.9)]"}>
-                <i className="bi bi-lock"></i> Contraseña
+            {error && (
+              <div
+                className="mb-5 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+                role="alert"
+              >
+                <i className="bi bi-exclamation-circle mt-0.5" aria-hidden="true" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            <div className="mb-5">
+              <label
+                htmlFor="login-email"
+                className="mb-2 block text-sm font-semibold text-slate-700"
+              >
+                Correo electrónico
               </label>
-              <input className={"[.input-group_&]:[width:100%] [.input-group_&]:[padding:14px_20px] [.input-group_&]:[border-radius:50px] [.input-group_&]:[border:1px_solid_rgba(255,_255,_255,_0.2)] [.input-group_&]:[background:rgba(0,_0,_0,_0.1)] [.input-group_&]:[color:var(--blanco)] [.input-group_&]:[outline:none]"}
-                type="password"
-                placeholder="Tu contraseña"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <Link to="/ReperaContra" className={"forgot-link [display:block] [text-align:right] [font-size:0.75rem] [margin-top:8px] [color:var(--color-acento)] [.extra_&]:[color:var(--color-acento)] [.extra_&]:[font-weight:700] [.extra_&]:[margin-left:5px]"}>
+              <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 transition focus-within:border-blue-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-500/10">
+                <i className="bi bi-envelope text-blue-600" aria-hidden="true" />
+                <input
+                  id="login-email"
+                  className="min-w-0 flex-1 bg-transparent py-3.5 text-sm text-slate-800 outline-none placeholder:text-slate-400"
+                  type="email"
+                  placeholder="ejemplo@correo.com"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <label
+                htmlFor="login-password"
+                className="mb-2 block text-sm font-semibold text-slate-700"
+              >
+                Contraseña
+              </label>
+              <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 transition focus-within:border-blue-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-500/10">
+                <i className="bi bi-lock text-blue-600" aria-hidden="true" />
+                <input
+                  id="login-password"
+                  className="min-w-0 flex-1 bg-transparent py-3.5 text-sm text-slate-800 outline-none placeholder:text-slate-400"
+                  type="password"
+                  placeholder="Tu contraseña"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  required
+                />
+              </div>
+              <Link
+                to="/ReperaContra"
+                className="mt-2 block text-right text-sm font-semibold text-blue-700 transition hover:text-blue-900 focus:outline-none focus:underline"
+              >
                 ¿Olvidaste tu contraseña?
               </Link>
             </div>
 
-            <button type="submit" className={"btn-submit [width:100%] [padding:15px] [border-radius:50px] [border:none] [background-color:#2b67c6] [color:var(--blanco)] [font-weight:700] [font-size:1rem] [cursor:pointer] [transition:0.3s] [margin-top:10px] [&:hover]:[background-color:#556994] [&:hover]:[transform:translateY(-2px)]"}>
+            <button
+              type="submit"
+              className="mt-5 w-full rounded-xl bg-blue-700 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-700/20 transition hover:-translate-y-0.5 hover:bg-blue-800 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-500/30"
+            >
               Ingresar
+              <i className="bi bi-arrow-right ml-2" aria-hidden="true" />
             </button>
 
-            <div className={"extra [text-align:center] [margin-top:25px] [font-size:0.9rem]"}>
-              <span>¿No tienes cuenta?</span>
-              <Link className={"[.extra_&]:[color:var(--color-acento)] [.extra_&]:[font-weight:700] [.extra_&]:[margin-left:5px]"} to="/SelecionRol">Regístrate aquí</Link>
-            </div>
+            <p className="mt-7 text-center text-sm text-slate-500">
+              ¿No tienes cuenta?{" "}
+              <Link
+                className="font-bold text-blue-700 transition hover:text-blue-900 focus:outline-none focus:underline"
+                to="/SelecionRol"
+              >
+                Regístrate aquí
+              </Link>
+            </p>
           </form>
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 };
 

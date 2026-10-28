@@ -6,21 +6,24 @@ import logoazul from '../../assets/LogoAzul.png';
 
 const RegistroAd = () => {
     return (
-        <div className={"pantalla-fondo [min-height:100vh] [display:flex] [justify-content:center] [align-items:center] [padding:20px]"}>
+        <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-sky-50 via-slate-50 to-blue-100 px-4 py-8 sm:px-6 [--cyan-em:#0ea5e9] [--azul-admin:#0c4a6e]">
              {/* Contenedor principal del formulario */}
-            <div className={"cuadro-registro-admin [background:var(--blanco)] [width:100%] [max-width:650px] [padding:60px] [margin-top:220px] [border-radius:30px] [box-shadow:var(--sombra)] [border:1px_solid_var(--gris-borde)]"}>
+            <div className="w-full max-w-3xl rounded-[2rem] border border-white/80 bg-white p-5 shadow-2xl shadow-sky-950/10 sm:p-9 lg:p-11">
 
-                <div className={"registro-header2 [text-align:center] [margin-bottom:25px]"}>
-                    <img src={logoazul} alt="EasyMatric" className={"logo-easymatric [height:45px] [display:block] [margin:0_auto_10px]"} />
-                    <div className={"badge-admin [background:#e0f2fe] [color:var(--cyan-em)] [font-size:0.7rem] [font-weight:800] [padding:5px_12px] [border-radius:20px] [display:inline-block] [letter-spacing:1px] [margin-bottom:10px] [text-align:center]"}>PERFIL ADMINISTRATIVO</div>
-                    <h1 className={"[.registro-header2_&]:[color:var(--azul-admin)] [.registro-header2_&]:[font-size:1.8rem] [.registro-header2_&]:[margin:5px_0]"}>Crear Cuenta Admin</h1>
-                    <p className={"[.registro-header2_&]:[color:#64748b] [.registro-header2_&]:[font-size:0.9rem]"}>Ingresa los datos para gestionar tu institución</p>
+                <div className="mb-8 text-center">
+                    <img src={logoazul} alt="EasyMatric" className="mx-auto mb-5 h-11 w-auto" />
+                    <span className="mb-3 inline-flex items-center gap-2 rounded-full bg-sky-50 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-sky-700">
+                        <i className="bi bi-shield-lock" aria-hidden="true" />
+                        Perfil administrativo
+                    </span>
+                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Crear cuenta de administrador</h1>
+                    <p className="mt-2 text-sm text-slate-500 sm:text-base">Ingresa los datos para gestionar tu institución.</p>
                 </div>
                 {/* Formulario principal */}
-                <form className={"form2 [display:flex] [flex-direction:column] [gap:15px]"} action="procesar_admin.php" method="POST">
+                <form className="flex flex-col gap-4" onSubmit={(event) => event.preventDefault()}>
 
                     {/* Nombre */}
-                    <div className={"fila-input [display:flex] [gap:15px]"}>
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                         <div className={"grupo-input [background:#f8fafc] [border:1.5px_solid_var(--gris-borde)] [border-radius:12px] [padding:12px_15px] [display:flex] [align-items:center] [gap:10px] [flex:1] [transition:0.3s] [&:focus-within]:[border-color:var(--cyan-em)] [&:focus-within]:[background:white] [&:focus-within]:[box-shadow:0_0_10px_rgba(79,_172,_254,_0.1)]"}>
                             <i className={"bi bi-person-gear [.grupo-input_&]:[color:var(--azul-admin)] [.grupo-input_&]:[font-size:1.1rem]"}></i>
 
@@ -34,7 +37,7 @@ const RegistroAd = () => {
                     </div>
 
                     {/* Institución y NIT */}
-                    <div className={"fila-input [display:flex] [gap:15px]"}>
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 
                         <div className={"grupo-input grupo-institucion [background:#f8fafc] [border:1.5px_solid_var(--gris-borde)] [border-radius:12px] [padding:12px_15px] [display:flex] [align-items:center] [gap:10px] [flex:1] [transition:0.3s] [&:focus-within]:[border-color:var(--cyan-em)] [&:focus-within]:[background:white] [&:focus-within]:[box-shadow:0_0_10px_rgba(79,_172,_254,_0.1)]"}>
                             <i className={"bi bi-building [.grupo-input_&]:[color:var(--azul-admin)] [.grupo-input_&]:[font-size:1.1rem]"}></i>
@@ -61,7 +64,7 @@ const RegistroAd = () => {
                     </div>
 
                     {/* Documento y Cargo */}
-                    <div className={"fila-input [display:flex] [gap:15px]"}>
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 
                         <div className={"grupo-input [background:#f8fafc] [border:1.5px_solid_var(--gris-borde)] [border-radius:12px] [padding:12px_15px] [display:flex] [align-items:center] [gap:10px] [flex:1] [transition:0.3s] [&:focus-within]:[border-color:var(--cyan-em)] [&:focus-within]:[background:white] [&:focus-within]:[box-shadow:0_0_10px_rgba(79,_172,_254,_0.1)]"}>
                             <i className={"bi bi-card-checklist [.grupo-input_&]:[color:var(--azul-admin)] [.grupo-input_&]:[font-size:1.1rem]"}></i>
@@ -81,7 +84,7 @@ const RegistroAd = () => {
                                 name="cargo"
                                 required
                             >
-                                <option value="" disabled selected>
+                                <option value="" disabled>
                                     Selecciona tu Cargo
                                 </option>
 
@@ -103,7 +106,7 @@ const RegistroAd = () => {
                     </div>
 
                     {/* Teléfono y Correo */}
-                    <div className={"fila-input [display:flex] [gap:15px]"}>
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 
                         <div className={"grupo-input [background:#f8fafc] [border:1.5px_solid_var(--gris-borde)] [border-radius:12px] [padding:12px_15px] [display:flex] [align-items:center] [gap:10px] [flex:1] [transition:0.3s] [&:focus-within]:[border-color:var(--cyan-em)] [&:focus-within]:[background:white] [&:focus-within]:[box-shadow:0_0_10px_rgba(79,_172,_254,_0.1)]"}>
                             <i className={"bi bi-telephone-plus [.grupo-input_&]:[color:var(--azul-admin)] [.grupo-input_&]:[font-size:1.1rem]"}></i>
@@ -130,7 +133,7 @@ const RegistroAd = () => {
                     </div>
 
                     {/* Contraseñas */}
-                    <div className={"fila-input [display:flex] [gap:15px]"}>
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 
                         <div className={"grupo-input [background:#f8fafc] [border:1.5px_solid_var(--gris-borde)] [border-radius:12px] [padding:12px_15px] [display:flex] [align-items:center] [gap:10px] [flex:1] [transition:0.3s] [&:focus-within]:[border-color:var(--cyan-em)] [&:focus-within]:[background:white] [&:focus-within]:[box-shadow:0_0_10px_rgba(79,_172,_254,_0.1)]"}>
                             <i className={"bi bi-shield-lock-fill [.grupo-input_&]:[color:var(--azul-admin)] [.grupo-input_&]:[font-size:1.1rem]"}></i>
@@ -181,31 +184,30 @@ const RegistroAd = () => {
                     </div>
 
                     {/* Botón */}
-                    <div className={"contenedor-boton [display:flex] [justify-content:center] [align-items:center] [padding:20px] [width:100%]"}>
+                    <div className="flex w-full justify-center pt-2">
 
                         <Link
-                            to="/RegistrarSede"
-                            className={"btn-registrar [text-decoration:none] [padding:12px_30px] [background-color:#1a1c2d] [color:#4facfe] [border-radius:12px] [font-weight:bold] [transition:0.3s] [border:1px_solid_rgba(79,_172,_254,_0.3)] [&:hover]:[background-color:#4facfe] [&:hover]:[color:#3641a6] [&:hover]:[transform:translateY(-3px)]"}
+                            to="/admin"
+                            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-sky-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-sky-700/20 transition hover:-translate-y-0.5 hover:bg-sky-700 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-sky-500/30 sm:w-auto sm:min-w-56"
                         >
                             <i className={"bi bi-person-plus [.grupo-input_&]:[color:var(--azul-admin)] [.grupo-input_&]:[font-size:1.1rem]"}></i>
-                            Crear Cuenta
+                            Ir al panel de administración
                         </Link>
 
                     </div>
 
                 </form>
 
-                <div className={"pie-cuadro [margin-top:25px] [text-align:center]"}>
-                    <div className={"botones-inferiores [display:flex] [justify-content:center] [gap:10px]"}>
-                        <Link to="/SelecionRol" className={"btn-mini [background:#f1f5f9] [color:#64748b] [padding:10px_15px] [border-radius:10px] [font-size:0.8rem] [text-decoration:none] [display:center] [align-items:center] [gap:5px] [font-weight:600] [transition:0.3s] [&:hover]:[background:var(--azul-admin)] [&:hover]:[color:white]"}><i className={"bi bi-arrow-left [.grupo-input_&]:[color:var(--azul-admin)] [.grupo-input_&]:[font-size:1.1rem]"}></i> Cambiar Rol</Link>
-                        <Link to="/" className={"btn-mini [background:#f1f5f9] [color:#64748b] [padding:10px_15px] [border-radius:10px] [font-size:0.8rem] [text-decoration:none] [display:center] [align-items:center] [gap:5px] [font-weight:600] [transition:0.3s] [&:hover]:[background:var(--azul-admin)] [&:hover]:[color:white]"}><i className={"bi bi-house [.grupo-input_&]:[color:var(--azul-admin)] [.grupo-input_&]:[font-size:1.1rem]"}></i> Inicio</Link>
+                <div className="mt-6 border-t border-slate-100 pt-5">
+                    <div className="flex flex-wrap justify-center gap-3">
+                        <Link to="/SelecionRol" className="inline-flex items-center gap-2 rounded-xl border border-sky-200 bg-sky-50 px-4 py-2.5 text-sm font-semibold text-sky-800 transition hover:bg-sky-100 focus:outline-none focus:ring-4 focus:ring-sky-500/20"><i className="bi bi-arrow-left" aria-hidden="true" /> Cambiar rol</Link>
+                        <Link to="/" className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:border-sky-200 hover:bg-sky-50 hover:text-sky-800 focus:outline-none focus:ring-4 focus:ring-sky-500/20"><i className="bi bi-house" aria-hidden="true" /> Inicio</Link>
                     </div>
                 </div>
 
             </div>
-        </div>
+        </main>
     )
 }
 
 export default RegistroAd
-

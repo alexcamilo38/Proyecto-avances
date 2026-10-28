@@ -1,115 +1,193 @@
-//import React from 'react'
-// Importación de React Router
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import admin from "../../../assets/iconLE.png";
 
+const identificationDetails = [
+  { label: "Número de cédula", value: "10058191" },
+  { label: "Cargo oficial", value: "Rector Académico" },
+  { label: "Correo institucional", value: "gustavo.mejia@easymatric.edu.co", wide: true },
+];
 
-// Importación de imágenes
-import admin from '../../../assets/iconLE.png';
+const institutionDetails = [
+  { label: "Institución educativa", value: "Institución Educación San Vicente", wide: true },
+  { label: "NIT institucional", value: "800.123.456-1" },
+  { label: "Teléfono oficina", value: "602 823 4567" },
+];
+
+const ProfilePreference = ({ label, enabled, onToggle }) => (
+  <div className="flex items-center justify-between gap-4 border-t border-slate-100 py-4 first:border-0 first:pt-0 last:pb-0">
+    <span className="text-sm leading-5 text-slate-600">{label}</span>
+    <button
+      type="button"
+      role="switch"
+      aria-checked={enabled}
+      aria-label={label}
+      onClick={onToggle}
+      className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 ${enabled ? "bg-blue-600" : "bg-slate-300"}`}
+    >
+      <span className={`h-5 w-5 rounded-full bg-white shadow transition-transform ${enabled ? "translate-x-[22px]" : "translate-x-0.5"}`} />
+    </button>
+  </div>
+);
+
+const DetailSection = ({ title, description, icon, details, id }) => (
+  <section id={id} className="scroll-mt-6 rounded-3xl bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] sm:p-8">
+    <div className="mb-6 flex items-start gap-3">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-lg text-blue-600">
+        <i className={`bi ${icon}`} aria-hidden="true" />
+      </span>
+      <div>
+        <h2 className="m-0 text-lg font-semibold text-slate-900">{title}</h2>
+        <p className="mb-0 mt-1 text-sm text-slate-500">{description}</p>
+      </div>
+    </div>
+    <dl className="m-0 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      {details.map(({ label, value, wide }) => (
+        <div
+          key={label}
+          className={`min-w-0 rounded-2xl border border-slate-100 bg-slate-50/80 p-4 ${wide ? "sm:col-span-2" : ""}`}
+        >
+          <dt className="mb-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">{label}</dt>
+          <dd className="m-0 break-words text-sm font-semibold leading-6 text-slate-700">{value}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+);
 
 const PerfilAd = () => {
-    return (
-        <div>
-            {/* Menú lateral de navegación */}
+  const [seatAlerts, setSeatAlerts] = useState(true);
+  const [weeklyReports, setWeeklyReports] = useState(false);
 
-            <div className={"contenido-perfilad02 [margin-left:260px] [padding:40px] [width:80vw]"}>
-                <div className={"perfil-contenedorad02 [max-width:1100px] [margin:0_auto]"}>
+  return (
+    <div className="ml-64 min-h-[calc(100vh-76px)] w-[calc(100%-16rem)] px-7 py-8 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] max-sm:px-4 max-sm:py-5">
+      <div className="mx-auto max-w-6xl space-y-6">
+        <header className="grid overflow-hidden rounded-3xl bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)] md:grid-cols-[minmax(220px,0.8fr)_1.2fr]">
+          <div className="relative min-h-64 bg-gradient-to-br from-blue-100 via-slate-100 to-indigo-100 md:min-h-72">
+            <img
+              src={admin}
+              alt="Foto de perfil de Gustavo Adolfo Mejía"
+              className="absolute inset-0 h-full w-full object-cover object-center"
+            />
+            <span className="absolute inset-0 bg-gradient-to-t from-slate-950/35 via-transparent to-transparent md:bg-gradient-to-r" />
+            <span className="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/90 px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur">
+              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              Cuenta activa
+            </span>
+          </div>
 
-                    <header className={"perfil-headerad02 [background:var(--blanco)] [padding:30px] [border-radius:25px] [display:flex] [justify-content:space-between] [align-items:center] [box-shadow:var(--sombra)] [margin-bottom:30px]"}>
-                        <div className={"perfil-info-basica-ad02 [display:flex] [align-items:center] [gap:25px]"}>
-                            <div className={"avatar-zona-ad02 [position:relative]"}>
-                                <img src={admin} alt="Foto de Perfil" className={"avatarad02-img [width:100px] [height:100px] [border-radius:50%] [object-fit:cover] [border:3px_solid_var(--cyan-em)]"} />
-                                <button className={"btn-cambiar-foto [position:absolute] [bottom:0] [right:0] [background:var(--azul-navy)] [color:white] [border:none] [width:35px] [height:35px] [border-radius:50%] [cursor:pointer]"}><i className={"bi bi-camera [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i></button>
-                            </div>
-                            {/* Información básica */}
-                            <div className="texto-usuario-ad02">
-                                <h1 className={"[.texto-usuario-ad02_&]:[margin:0] [.texto-usuario-ad02_&]:[font-size:1.8rem] [.texto-usuario-ad02_&]:[color:var(--azul-navy)]"}>Gustavo Adolfo Mejía</h1>
-                                <span className="badge-rol-admin">Rector Institucional</span>
-                            </div>
-                        </div>
-                        <button className={"boton-accion-principal-ad02 [background:var(--cyan-em)] [color:white] [border:none] [padding:12px_25px] [border-radius:12px] [font-weight:600] [cursor:pointer] [transition:0.3s] [&:hover]:[background:var(--azul-navy)]"}><i className={"bi bi-pencil-square [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i> Editar Perfil</button>
-                    </header>
-                    <div className={"perfil-grid-contenido-ad02 [display:grid] [grid-template-columns:2fr_1fr] [gap:30px]"}>
-                         {/* Sección de datos */}
-                        <section className="seccion-datos">
-                            <div className={"tarjeta-blanca-ad02 [background:var(--blanco)] [padding:25px] [border-radius:20px] [box-shadow:var(--sombra)] [margin-bottom:20px]"}>
-                                <h3 className={"[.tarjeta-blanca-ad02_&]:[margin-top:0] [.tarjeta-blanca-ad02_&]:[font-size:1.1rem] [.tarjeta-blanca-ad02_&]:[display:flex] [.tarjeta-blanca-ad02_&]:[align-items:center] [.tarjeta-blanca-ad02_&]:[gap:10px] [.tarjeta-blanca-ad02_&]:[color:var(--azul-navy)]"}><i className={"bi bi-person-vcard [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i> Datos de Identificación</h3>
-                                <br />
-                                <div className={"los-datos-grid-ad02 [display:grid] [grid-template-columns:1fr_1fr] [gap:20px]"}>
-                                    <div className="dato-item">
-                                        <label className={"[.dato-item_&]:[display:block] [.dato-item_&]:[font-size:0.8rem] [.dato-item_&]:[color:var(--gris-texto)] [.dato-item_&]:[margin-bottom:5px]"}>Número de Cédula</label>
-                                        <div className={"caja-dato [background:var(--gris-fondo)] [padding:12px] [border-radius:10px] [font-weight:600] [color:var(--azul-navy)]"}>10058191</div>
-                                    </div>
-                                    <div className="dato-item">
-                                        <label className={"[.dato-item_&]:[display:block] [.dato-item_&]:[font-size:0.8rem] [.dato-item_&]:[color:var(--gris-texto)] [.dato-item_&]:[margin-bottom:5px]"}>Cargo Oficial</label>
-                                        <div className={"caja-dato [background:var(--gris-fondo)] [padding:12px] [border-radius:10px] [font-weight:600] [color:var(--azul-navy)]"}>Rector Académico</div>
-                                    </div>
-                                    <div className={"dato-item-ancho [grid-column:span_2]"}>
-                                        <label className={"[.dato-item_&]:[display:block] [.dato-item_&]:[font-size:0.8rem] [.dato-item_&]:[color:var(--gris-texto)] [.dato-item_&]:[margin-bottom:5px]"}>Correo Institucional</label>
-                                        <div className={"caja-dato [background:var(--gris-fondo)] [padding:12px] [border-radius:10px] [font-weight:600] [color:var(--azul-navy)]"}>gustavo.mejia@easymatric.edu.co</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className={"tarjeta-blanca-ad02 [background:var(--blanco)] [padding:25px] [border-radius:20px] [box-shadow:var(--sombra)] [margin-bottom:20px]"}>
-                                <h3 className={"[.tarjeta-blanca-ad02_&]:[margin-top:0] [.tarjeta-blanca-ad02_&]:[font-size:1.1rem] [.tarjeta-blanca-ad02_&]:[display:flex] [.tarjeta-blanca-ad02_&]:[align-items:center] [.tarjeta-blanca-ad02_&]:[gap:10px] [.tarjeta-blanca-ad02_&]:[color:var(--azul-navy)]"}><i className={"bi bi-building-check [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i> Entidad Vinculada</h3>
-                                <br />
-                                <div className="los-datos-grid">
-                                    <div className={"dato-item-ancho [grid-column:span_2]"}>
-                                        <label className={"[.dato-item_&]:[display:block] [.dato-item_&]:[font-size:0.8rem] [.dato-item_&]:[color:var(--gris-texto)] [.dato-item_&]:[margin-bottom:5px]"}>Institución Educativa</label>
-                                        <div className={"caja-dato [background:var(--gris-fondo)] [padding:12px] [border-radius:10px] [font-weight:600] [color:var(--azul-navy)]"}>Institución Educación San Vicente</div>
-                                    </div>
-                                    <div className="dato-item">
-                                        <label className={"[.dato-item_&]:[display:block] [.dato-item_&]:[font-size:0.8rem] [.dato-item_&]:[color:var(--gris-texto)] [.dato-item_&]:[margin-bottom:5px]"}>NIT Institucional</label>
-                                        <div className={"caja-dato [background:var(--gris-fondo)] [padding:12px] [border-radius:10px] [font-weight:600] [color:var(--azul-navy)]"}>800.123.456-1</div>
-                                    </div>
-                                    <div className="dato-item">
-                                        <label className={"[.dato-item_&]:[display:block] [.dato-item_&]:[font-size:0.8rem] [.dato-item_&]:[color:var(--gris-texto)] [.dato-item_&]:[margin-bottom:5px]"}>Teléfono Oficina</label>
-                                        <div className={"caja-dato [background:var(--gris-fondo)] [padding:12px] [border-radius:10px] [font-weight:600] [color:var(--azul-navy)]"}>602 823 4567</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                        {/* Barra lateral */}
-                        <aside className="columna-lateral">
-                            {/* Estadísticas */}
-                            <div className={"tarjeta-blanca-ad02 estadisticas-admin [background:var(--blanco)] [padding:25px] [border-radius:20px] [box-shadow:var(--sombra)] [margin-bottom:20px]"}>
-                                <h3 className={"[.tarjeta-blanca-ad02_&]:[margin-top:0] [.tarjeta-blanca-ad02_&]:[font-size:1.1rem] [.tarjeta-blanca-ad02_&]:[display:flex] [.tarjeta-blanca-ad02_&]:[align-items:center] [.tarjeta-blanca-ad02_&]:[gap:10px] [.tarjeta-blanca-ad02_&]:[color:var(--azul-navy)]"}><i className={"bi bi-graph-up [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i> Mi Actividad</h3>
-                                <br />
-                                <div className="mini-stat">
-                                    <span>Matrículas revisadas</span>
-                                    <strong>124</strong>
-                                </div>
-                                <div className="mini-stat">
-                                    <span>Sedes a cargo</span>
-                                    <strong>02</strong>
-                                </div>
-                            </div>
-
-                            <div className={"tarjeta-blanca-ad02 [background:var(--blanco)] [padding:25px] [border-radius:20px] [box-shadow:var(--sombra)] [margin-bottom:20px]"}>
-                                <h3 className={"[.tarjeta-blanca-ad02_&]:[margin-top:0] [.tarjeta-blanca-ad02_&]:[font-size:1.1rem] [.tarjeta-blanca-ad02_&]:[display:flex] [.tarjeta-blanca-ad02_&]:[align-items:center] [.tarjeta-blanca-ad02_&]:[gap:10px] [.tarjeta-blanca-ad02_&]:[color:var(--azul-navy)]"}><i className={"bi bi-shield-check [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i> Seguridad</h3>
-                                <br />
-                                <p>Control de acceso y credenciales.</p>
-                                <br />
-                                <button className={"btn-seguridad [width:100%] [background:var(--gris-fondo)] [color:var(--azul-navy)] [border:1px_solid_var(--borde)] [padding:10px] [border-radius:10px] [cursor:pointer] [font-weight:600]"}><a href="ReperaContra.html">Cambiar mi clave</a></button>
-                            </div>
-
-                            <div className={"tarjeta-blanca-ad02 [background:var(--blanco)] [padding:25px] [border-radius:20px] [box-shadow:var(--sombra)] [margin-bottom:20px]"}>
-                                <h3 className={"[.tarjeta-blanca-ad02_&]:[margin-top:0] [.tarjeta-blanca-ad02_&]:[font-size:1.1rem] [.tarjeta-blanca-ad02_&]:[display:flex] [.tarjeta-blanca-ad02_&]:[align-items:center] [.tarjeta-blanca-ad02_&]:[gap:10px] [.tarjeta-blanca-ad02_&]:[color:var(--azul-navy)]"}><i className={"bi bi-gear [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i> Sistema</h3>
-                                <div className={"control-switch-ad02 [display:flex] [justify-content:space-between] [align-items:center] [margin-top:15px] [font-size:0.9rem]"}>
-                                    <span>Alertas de Cupos</span>
-                                    <i className={"bi bi-toggle-on [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i>
-                                </div>
-                                <div className={"control-switch-ad02 [display:flex] [justify-content:space-between] [align-items:center] [margin-top:15px] [font-size:0.9rem]"}>
-                                    <span>Modo Reporte Semanal</span>
-                                    <i className={"bi bi-toggle-off [.tarjeta-blanca-ad02_h3_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[font-size:1.5rem] [.control-switch-ad02_&]:[color:var(--cyan-em)] [.control-switch-ad02_&]:[cursor:pointer]"}></i>
-                                </div>
-                            </div>
-                        </aside>
-                    </div>
-                </div>
+          <div className="flex flex-col justify-center gap-6 p-7 sm:p-9 lg:flex-row lg:items-center lg:justify-between lg:p-12">
+            <div className="min-w-0">
+              <span className="mb-3 inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700">
+                <i className="bi bi-shield-lock-fill" aria-hidden="true" />
+                Perfil administrador
+              </span>
+              <h1 className="m-0 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+                Gustavo Adolfo Mejía
+              </h1>
+              <p className="mb-2 mt-3 font-semibold text-blue-600">
+                Rector Institucional <span className="px-1 text-slate-300">·</span> Administración
+              </p>
+              <p className="m-0 flex items-center gap-2 text-sm text-slate-500">
+                <i className="bi bi-geo-alt-fill text-blue-500" aria-hidden="true" />
+                Popayán, Colombia
+              </p>
             </div>
+            <a
+              href="#datos-administrador"
+              className="inline-flex shrink-0 items-center justify-center gap-2 self-start rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white no-underline shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 lg:self-center"
+            >
+              <i className="bi bi-person-vcard" aria-hidden="true" />
+              Ver mis datos
+            </a>
+          </div>
+        </header>
 
+        <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.7fr)_minmax(280px,0.8fr)]">
+          <div className="space-y-6">
+            <DetailSection
+              id="datos-administrador"
+              title="Datos de identificación"
+              description="Información de tu cuenta y cargo institucional."
+              icon="bi-person-vcard"
+              details={identificationDetails}
+            />
+            <DetailSection
+              title="Entidad vinculada"
+              description="Datos de la institución educativa a tu cargo."
+              icon="bi-building-check"
+              details={institutionDetails}
+            />
+          </div>
+
+          <aside className="space-y-6">
+            <section className="rounded-3xl bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)]">
+              <div className="mb-5 flex items-start gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-lg text-violet-600">
+                  <i className="bi bi-graph-up" aria-hidden="true" />
+                </span>
+                <div>
+                  <h2 className="m-0 text-lg font-semibold text-slate-900">Mi actividad</h2>
+                  <p className="mb-0 mt-1 text-sm text-slate-500">Resumen de tu gestión institucional.</p>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-3 rounded-2xl border border-slate-100 bg-slate-50/80 p-4">
+                  <span className="text-sm text-slate-600">Matrículas revisadas</span>
+                  <strong className="text-lg font-bold text-slate-900">124</strong>
+                </div>
+                <div className="flex items-center justify-between gap-3 rounded-2xl border border-slate-100 bg-slate-50/80 p-4">
+                  <span className="text-sm text-slate-600">Sedes a cargo</span>
+                  <strong className="text-lg font-bold text-slate-900">02</strong>
+                </div>
+              </div>
+            </section>
+
+            <section className="rounded-3xl bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)]">
+              <div className="mb-5 flex items-start gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-lg text-emerald-600">
+                  <i className="bi bi-shield-check" aria-hidden="true" />
+                </span>
+                <div>
+                  <h2 className="m-0 text-lg font-semibold text-slate-900">Seguridad</h2>
+                  <p className="mb-0 mt-1 text-sm text-slate-500">Controla el acceso a tu cuenta.</p>
+                </div>
+              </div>
+              <Link
+                to="/ReperaContra"
+                className="flex w-full items-center justify-between gap-3 rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 no-underline transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+              >
+                Cambiar contraseña
+                <i className="bi bi-arrow-up-right" aria-hidden="true" />
+              </Link>
+            </section>
+
+            <section className="rounded-3xl bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)]">
+              <div className="mb-5 flex items-start gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-lg text-amber-600">
+                  <i className="bi bi-sliders" aria-hidden="true" />
+                </span>
+                <div>
+                  <h2 className="m-0 text-lg font-semibold text-slate-900">Sistema</h2>
+                  <p className="mb-0 mt-1 text-sm text-slate-500">Configura tus avisos administrativos.</p>
+                </div>
+              </div>
+              <ProfilePreference
+                label="Alertas de cupos"
+                enabled={seatAlerts}
+                onToggle={() => setSeatAlerts((enabled) => !enabled)}
+              />
+              <ProfilePreference
+                label="Reporte semanal"
+                enabled={weeklyReports}
+                onToggle={() => setWeeklyReports((enabled) => !enabled)}
+              />
+            </section>
+          </aside>
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
 
-export default PerfilAd
+export default PerfilAd;
