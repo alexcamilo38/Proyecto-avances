@@ -7,6 +7,7 @@ const roleDetails = {
   rector: { title: "Rector", search: "Buscar estudiante o matrícula", initials: "RC", profile: "/PerfilRec" },
 };
 
+// Muestra búsqueda y acceso al perfil con textos e iniciales según el rol.
 const Header = ({ role }) => {
   const { title, search, initials, profile } = roleDetails[role];
 

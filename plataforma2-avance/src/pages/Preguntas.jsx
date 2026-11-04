@@ -1,5 +1,6 @@
 //import React from 'react'
 
+// Responde las preguntas frecuentes sobre el uso de la plataforma.
 const Preguntas = () => {
     return (
         <section  className={"seccion-faq [all:unset] [display:flex] [flex-direction:column] [align-items:center] [justify-content:center] [width:100vw] [min-height:100vh] [background-color:#f8fafc] [padding:60px_20px] [box-sizing:border-box]"}>

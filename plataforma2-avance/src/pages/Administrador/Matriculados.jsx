@@ -2,6 +2,7 @@
 import { Link, Outlet } from "react-router-dom"
 
 
+// Resume los estudiantes matriculados y permite consultar sus grupos por grado.
 const Matriculados = () => {
     return (
         <div className={"dashboard-container-matriculas [display:flex] [min-height:100vh] [width:100%] [margin:0] [padding:0]"}>

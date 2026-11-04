@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 
 
+// Permite revisar solicitudes de matrícula y actualizar su estado.
 const RevicionD = () => {
     // ----------------------------------------------------
     // ESTADO INICIAL DE SOLICITUDES DE REVISIÓN

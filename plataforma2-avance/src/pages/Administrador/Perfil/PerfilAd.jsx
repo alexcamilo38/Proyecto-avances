@@ -14,6 +14,7 @@ const institutionDetails = [
   { label: "Teléfono oficina", value: "602 823 4567" },
 ];
 
+// Representa una preferencia del perfil que puede activarse o desactivarse.
 const ProfilePreference = ({ label, enabled, onToggle }) => (
   <div className="flex items-center justify-between gap-4 border-t border-slate-100 py-4 first:border-0 first:pt-0 last:pb-0">
     <span className="text-sm leading-5 text-slate-600">{label}</span>
@@ -30,6 +31,7 @@ const ProfilePreference = ({ label, enabled, onToggle }) => (
   </div>
 );
 
+// Agrupa datos relacionados del perfil en una sección reutilizable.
 const DetailSection = ({ title, description, icon, details, id }) => (
   <section id={id} className="scroll-mt-6 rounded-3xl bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] sm:p-8">
     <div className="mb-6 flex items-start gap-3">
@@ -55,6 +57,7 @@ const DetailSection = ({ title, description, icon, details, id }) => (
   </section>
 );
 
+// Muestra la información personal, institucional y preferencias del administrador.
 const PerfilAd = () => {
   const [seatAlerts, setSeatAlerts] = useState(true);
   const [weeklyReports, setWeeklyReports] = useState(false);

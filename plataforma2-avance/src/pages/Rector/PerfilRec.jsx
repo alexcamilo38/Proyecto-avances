@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import admin from "../../assets/iconLE.png";
 import { useRectorData } from "./rectorStore";
 
+// Representa una preferencia de notificación configurable por el rector.
 const ProfilePreference = ({ label, enabled, onToggle }) => (
   <div className="flex items-center justify-between gap-4 border-t border-slate-100 py-4 first:border-0 first:pt-0 last:pb-0">
     <span className="text-sm leading-5 text-slate-600">{label}</span>
@@ -19,6 +20,7 @@ const ProfilePreference = ({ label, enabled, onToggle }) => (
   </div>
 );
 
+// Agrupa información institucional o personal en una sección de perfil.
 const DetailSection = ({ title, description, icon, details, id }) => (
   <section id={id} className="scroll-mt-6 rounded-3xl bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] sm:p-8">
     <div className="mb-6 flex items-start gap-3">
@@ -44,6 +46,7 @@ const DetailSection = ({ title, description, icon, details, id }) => (
   </section>
 );
 
+// Resume los datos del rector, su institución y el estado de las matrículas.
 const PerfilRec = () => {
   const { data, error } = useRectorData();
   const [applicationAlerts, setApplicationAlerts] = useState(true);

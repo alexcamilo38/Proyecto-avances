@@ -1,5 +1,6 @@
 //import React from 'react'
 
+// Describe los servicios y funcionalidades que ofrece la plataforma.
 const Servicios = () => {
     return (
         <div>

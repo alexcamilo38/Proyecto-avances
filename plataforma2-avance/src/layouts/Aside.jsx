@@ -71,6 +71,7 @@ const roleStyles = {
   },
 };
 
+// Construye el menú lateral según el rol y resalta la ruta activa.
 const Aside = ({ role }) => {
   const styles = roleStyles[role];
 

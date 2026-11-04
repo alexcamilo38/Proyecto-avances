@@ -14,6 +14,7 @@ const studentDetails = [
   { label: "Institución educativa de interés", value: "Institución Educación San Vicente", wide: true },
 ];
 
+// Representa una opción de notificación configurable desde el perfil.
 const ProfilePreference = ({ label, enabled, onToggle }) => (
   <div className="flex items-center justify-between gap-4 border-t border-slate-100 py-4 first:border-0 first:pt-0 last:pb-0">
     <span className="text-sm leading-5 text-slate-600">{label}</span>
@@ -30,6 +31,7 @@ const ProfilePreference = ({ label, enabled, onToggle }) => (
   </div>
 );
 
+// Muestra los datos personales del estudiante y sus opciones de cuenta.
 function PerfilUsuario() {
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [accessibilityMode, setAccessibilityMode] = useState(false);

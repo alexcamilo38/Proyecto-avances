@@ -10,6 +10,7 @@ const navItems = [
   { to: '/Contacto', label: 'Contacto' },
 ];
 
+// Muestra la navegación principal y los accesos del sitio público.
 const Navbar = () => {
   return (
     <header className="header flex justify-between items-center px-[60px] py-[40px] bg-white shadow-[0_2px_10px_rgba(0,0,0,0.05)] sticky top-0 z-[100]">

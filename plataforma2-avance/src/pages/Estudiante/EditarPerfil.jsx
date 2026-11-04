@@ -3,6 +3,7 @@
 
 
 
+// Permite modificar y guardar la información del perfil del estudiante.
 const EditarPerfil = () => {
   return (
     <div>

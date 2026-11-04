@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../Config/env';
 
+// Lista los roles del sistema y permite crear, editar y eliminar registros.
 const Roles = () => {
     const [roles, setRoles] = useState([]);
     const [loading, setLoading] = useState(true);

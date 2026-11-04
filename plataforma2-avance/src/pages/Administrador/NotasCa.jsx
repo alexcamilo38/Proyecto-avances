@@ -3,6 +3,7 @@
 
 import catalogo from '../../assets/Catalo_perfil.png';
 
+// Gestiona la consulta y organización de notas y catálogos académicos.
 const NotasCa = () => {
   return (
     <div>

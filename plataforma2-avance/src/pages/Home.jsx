@@ -1,6 +1,7 @@
 //import React from 'react'
 
 import matricula from '../assets/img02.png';
+// Presenta la página de inicio pública y sus principales accesos informativos.
 const Home = () => {
   return (
         <section className={"seccion-inicio [padding:70px_8%]"}>

@@ -2,6 +2,7 @@
 
 import logoblanco from '../assets/LogoBlanco.png';
 
+// Presenta el pie de página compartido por las páginas públicas.
 const Footer = () => {
   return (
     <footer className={"footer [background-color:#152e4d] [color:#f3f4f6] [padding-top:50px] [padding-bottom:25px] [font-family:system-ui,_-apple-system,_sans-serif]"}>

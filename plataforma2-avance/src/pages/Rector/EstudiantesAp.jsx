@@ -4,6 +4,7 @@ import { useRectorData } from "./rectorStore";
 const fieldClass = "w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-500/10";
 const grades = ["Preescolar", "1°", "2°", "3°", "4°", "5°", "6°", "7°", "8°", "9°", "10°", "11°"];
 
+// Consulta, filtra y administra los estudiantes vinculados a la institución.
 const EstudiantesAp = () => {
   const { data, error, updateData } = useRectorData();
   const [query, setQuery] = useState("");

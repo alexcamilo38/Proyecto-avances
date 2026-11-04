@@ -4,6 +4,7 @@
 
 // Importación del logo institucional
 
+// Presenta y administra el listado de estudiantes de primaria.
 const GradoPrimaria = () => {
     return (
         <div>

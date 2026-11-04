@@ -3,6 +3,7 @@ import { useState, useRef } from 'react';
 
 
 
+// Permite registrar una institución o sede y adjuntar sus documentos e imágenes.
 const RegistrarSede = () => {
 
     const [logo, setLogo] = useState(null);

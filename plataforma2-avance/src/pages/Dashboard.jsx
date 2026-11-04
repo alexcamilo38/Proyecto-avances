@@ -3,6 +3,7 @@ import colegioSanVicente from "../assets/cole1.jpg";
 import colegioComuner from "../assets/cole2.jpg";
 import colegioTecnico from "../assets/cole3.jpg";
 
+// Muestra una métrica resumida con icono, etiqueta, valor y color contextual.
 const Metric = ({ icon, label, value, tone }) => (
   <div className="flex min-w-0 items-center gap-3 rounded-2xl bg-white p-4 shadow-sm">
     <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-lg ${tone}`}>
@@ -15,6 +16,7 @@ const Metric = ({ icon, label, value, tone }) => (
   </div>
 );
 
+// Estandariza el encabezado y el contenedor de una sección del dashboard.
 const SectionCard = ({ title, action, children, className = "" }) => (
   <section className={`rounded-2xl bg-white p-5 shadow-sm ${className}`}>
     <div className="mb-4 flex items-center justify-between gap-3">
@@ -25,6 +27,7 @@ const SectionCard = ({ title, action, children, className = "" }) => (
   </section>
 );
 
+// Resume para administración las matrículas, instituciones y actividad reciente.
 const AdminDashboard = () => {
   const metrics = [
     { icon: "bi-bank", label: "Instituciones", value: "12", tone: "bg-sky-100 text-sky-600" },
@@ -124,6 +127,7 @@ const AdminDashboard = () => {
   );
 };
 
+// Presenta al docente sus módulos, indicadores y avisos pendientes.
 const TeacherDashboard = () => {
   const modules = [
     { name: "Lengua Castellana I", progress: 80 },
@@ -203,6 +207,7 @@ const TeacherDashboard = () => {
   );
 };
 
+// Ofrece al estudiante accesos a instituciones, matrícula y fechas relevantes.
 const StudentDashboard = () => {
   const schools = [
     { name: "I.E. San Vicente", location: "Popayán · Sede Principal", image: colegioSanVicente, availability: "Cupos abiertos", tone: "bg-emerald-100 text-emerald-700" },
@@ -318,6 +323,7 @@ const dashboards = {
   student: StudentDashboard,
 };
 
+// Selecciona el dashboard que corresponde al rol recibido.
 const Dashboard = ({ role }) => {
   const RoleDashboard = dashboards[role];
   return <RoleDashboard />;

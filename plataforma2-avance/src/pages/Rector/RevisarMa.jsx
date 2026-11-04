@@ -8,6 +8,7 @@ const statusClass = {
   Rechazada: "bg-red-50 text-red-700 ring-red-600/20",
 };
 
+// Permite filtrar solicitudes y aprobarlas o rechazarlas como rector.
 const RevisarMa = () => {
   const { data, error, updateData } = useRectorData();
   const [gradeFilter, setGradeFilter] = useState("Todos");

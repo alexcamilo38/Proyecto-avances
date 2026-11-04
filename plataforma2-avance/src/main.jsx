@@ -1,4 +1,5 @@
 import './index.css'
+// Inicializa React, carga los estilos globales y monta la aplicación en el DOM.
 import React from 'react'
 
 import App from './App.jsx'

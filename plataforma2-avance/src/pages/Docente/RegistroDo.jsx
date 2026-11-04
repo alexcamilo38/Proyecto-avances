@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 // Importación del logo
 
 import logoazul from '../../assets/LogoAzul.png';
+// Recopila información institucional y credenciales para crear una cuenta docente.
 const RegistroDo = () => {
   return (
     <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-emerald-50 via-slate-50 to-teal-100 px-4 py-8 sm:px-6 [--cyan-em:#10b981] [--azul-admin:#065f46]">

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useRectorData } from "./rectorStore";
 
+// Resume la gestión de matrículas, estudiantes e institución para el rector.
 const RectorDashboard = () => {
   const { data, error } = useRectorData();
   const pending = data.applications.filter(({ status }) => status === "Pendiente").length;

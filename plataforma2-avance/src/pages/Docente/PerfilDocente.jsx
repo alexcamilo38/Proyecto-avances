@@ -13,6 +13,7 @@ const professionalDetails = [
   { label: "Correo institucional", value: "carlos.mendoza@easymatric.edu.co" },
 ];
 
+// Representa un aviso configurable en las preferencias del docente.
 const ProfilePreference = ({ label, enabled, onToggle }) => (
   <div className="flex items-center justify-between gap-4 border-t border-slate-100 py-4 first:border-0 first:pt-0 last:pb-0">
     <span className="text-sm leading-5 text-slate-600">{label}</span>
@@ -29,6 +30,7 @@ const ProfilePreference = ({ label, enabled, onToggle }) => (
   </div>
 );
 
+// Presenta los datos profesionales, seguridad y preferencias del docente.
 const PerfilDocente = () => {
   const [newStudentNotifications, setNewStudentNotifications] = useState(true);
   const [closingReminders, setClosingReminders] = useState(true);

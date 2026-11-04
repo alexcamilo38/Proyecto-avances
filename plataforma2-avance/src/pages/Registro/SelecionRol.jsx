@@ -28,6 +28,7 @@ const roles = [
   },
 ];
 
+// Permite elegir el tipo de cuenta antes de continuar con el registro.
 const SelecionRol = () => (
   <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-slate-50 to-indigo-100 p-4 sm:p-8">
     <section className="w-full max-w-2xl rounded-[2rem] border border-white/80 bg-white p-6 shadow-2xl shadow-blue-950/10 sm:p-10">

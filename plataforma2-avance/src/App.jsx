@@ -58,6 +58,7 @@ import SubirModulo from './pages/Docente/SubirModulo';
 import DocenteMo from './pages/Docente/DocenteMo';
 import GrupoModulo from './pages/Docente/GrupoModulo';
 
+// Define las rutas públicas y privadas y asocia cada URL con su vista o layout.
 const App = () => {
   return (
     <>

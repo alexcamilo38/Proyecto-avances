@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom"
 
 
+// Lista los módulos asignados al docente y enlaza a su gestión de grupos.
 const DocenteMo = () => {
     return (
         <div>

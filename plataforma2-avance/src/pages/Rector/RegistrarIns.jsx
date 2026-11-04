@@ -4,6 +4,7 @@ import { useRectorData } from "./rectorStore";
 const fieldClass = "w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-500/10";
 const labelClass = "mb-2 block text-sm font-semibold text-slate-700";
 
+// Permite registrar o actualizar los datos de la institución del rector.
 const RegistrarIns = () => {
   const { data, error, updateData } = useRectorData();
   const [form, setForm] = useState({

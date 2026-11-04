@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { schoolGrades, useRectorData } from "./rectorStore";
 
+// Gestiona los catálogos de asignaturas asociados a los grados de la institución.
 const CatalogoMa = () => {
   const { data, error, updateData } = useRectorData();
   const [grade, setGrade] = useState("");

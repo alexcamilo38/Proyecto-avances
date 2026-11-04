@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 
 
 
+// Presenta la información de una sede seleccionada antes de iniciar la matrícula.
 const InfoSede = () => {
     return (
         <div >

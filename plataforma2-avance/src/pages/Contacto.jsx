@@ -18,6 +18,7 @@ const contactDetails = [
     },
 ];
 
+// Expone los canales y datos de contacto de la plataforma.
 const Contacto = () => {
     return (
         <main className="relative isolate overflow-hidden bg-slate-50 px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24">

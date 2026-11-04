@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import logoazul from "../../assets/LogoAzul.png";
 
+// Recopila los datos de identificación y acceso para registrar un rector.
 const RegistroRector = () => {
   return (
     <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-violet-50 via-slate-50 to-indigo-100 px-4 py-8 sm:px-6">

@@ -2,6 +2,7 @@
 
 
 
+// Presenta y administra el listado de estudiantes de secundaria.
 const GradoSecundaria = () => {
     return (
         <div>

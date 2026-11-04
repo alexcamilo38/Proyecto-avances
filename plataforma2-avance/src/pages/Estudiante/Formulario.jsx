@@ -4,6 +4,7 @@
 
 //importamos la imagen de el logo
 
+// Recopila los datos y documentos requeridos para una solicitud de matrícula.
 const Formulario = () => {
     return (
         <div className={"cuerpo-dashboard5 [display:flex] [margin:0] [background-color:#f8fafc] [font-family:'Segoe_UI',_sans-serif]"}>

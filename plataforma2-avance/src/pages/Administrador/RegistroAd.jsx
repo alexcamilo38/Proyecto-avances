@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 // Importación del logo
 import logoazul from '../../assets/LogoAzul.png';
 
+// Recopila los datos necesarios para crear una cuenta de administrador.
 const RegistroAd = () => {
     return (
         <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-sky-50 via-slate-50 to-blue-100 px-4 py-8 sm:px-6 [--cyan-em:#0ea5e9] [--azul-admin:#0c4a6e]">

@@ -3,6 +3,7 @@
 
 
 
+// Permite al estudiante consultar el estado de sus solicitudes de matrícula.
 const MatriculasE = () => {
     return (
         <div className="dashboard-container4">

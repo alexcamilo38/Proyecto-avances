@@ -10,6 +10,7 @@ import cole5 from '../../assets/cole.5.jpg';
 import cole6 from '../../assets/cole.6.jpg';
 
 
+// Explora instituciones educativas disponibles y permite abrir sus detalles.
 const Colegios = () => {
     return (
         <div >

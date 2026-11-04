@@ -1,5 +1,6 @@
 //import React from 'react'
 
+// Describe el propósito, el equipo y el contexto de la plataforma.
 const Nosotros = () => {
     return (
         <section className={"seccion-nosotros [width:100%] [padding:100px_8%] [background-color:white] [font-family:'Segoe_UI',_sans-serif]"}>

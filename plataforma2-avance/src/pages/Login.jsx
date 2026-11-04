@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logoazul from "../assets/LogoAzul.png";
 import ilustracion from "../assets/ilustracion estudiando.jpg";
 
+// Gestiona la interfaz de inicio de sesión y la navegación posterior.
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");

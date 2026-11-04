@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom"
 import logoazul from '../../assets/LogoAzul.png';
 
+// Presenta el flujo para solicitar la recuperación de una contraseña.
 const ReperaContra = () => {
   return (
      <div className={"pantalla-fondo2 [height:100vh] [display:flex] [justify-content:center] [align-items:center] [padding:20px]"}>

@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom"
 
 
+// Muestra los estudiantes de un módulo y sus controles de calificación.
 const GrupoModulo = () => {
     return (
         <div>

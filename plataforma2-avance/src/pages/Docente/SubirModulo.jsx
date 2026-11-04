@@ -2,6 +2,7 @@
 
 
 
+// Permite configurar un módulo académico y registrar sus fechas y materiales.
 const SubirModulo = () => {
   return (
     <div>

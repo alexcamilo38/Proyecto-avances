@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 
 import logoazul from '../../assets/LogoAzul.png';
+// Recopila los datos personales y credenciales para crear una cuenta estudiantil.
 const RegistroU = () => {
     return (
         <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-orange-50 via-slate-50 to-amber-100 px-4 py-8 sm:px-6 [--cyan-primario:#f97316]">

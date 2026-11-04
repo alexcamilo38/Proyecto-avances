@@ -2,6 +2,7 @@
 
 
 
+// Consulta la oferta de módulos, programas y niveles académicos.
 const ModulosAcademicos = () => {
     return (
         <div>
