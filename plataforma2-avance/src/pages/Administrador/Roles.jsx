@@ -1,352 +1,370 @@
-import { useState, useEffect } from 'react';
-import api from '../../Config/env';
+import { useEffect, useState } from "react";
+import api from "../../Config/env";
 
-// Lista los roles del sistema y permite crear, editar y eliminar registros.
+const emptyRole = { name_role: "", slug: "", description: "" };
+const fieldClass = "w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-sky-500 focus:bg-white focus:ring-4 focus:ring-sky-500/10";
+const labelClass = "mb-2 block text-sm font-semibold text-slate-700";
+
+const getRoles = (responseData) => {
+    if (Array.isArray(responseData)) return responseData;
+    if (Array.isArray(responseData?.data)) return responseData.data;
+    if (Array.isArray(responseData?.roles)) return responseData.roles;
+    if (Array.isArray(responseData?.data?.data)) return responseData.data.data;
+
+    throw new Error("El servidor devolvió una respuesta inesperada al consultar los roles.");
+};
+
+const getErrorMessage = (error, fallback) => {
+    const validationErrors = error.response?.data?.errors;
+    const firstValidationError = validationErrors && Object.values(validationErrors).flat()[0];
+
+    return firstValidationError || error.response?.data?.message || error.message || fallback;
+};
+
+const slugify = (value) => value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
 const Roles = () => {
     const [roles, setRoles] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [menuAbiertoId, setMenuAbiertoId] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [error, setError] = useState("");
+    const [modalOpen, setModalOpen] = useState(false);
+    const [editingRole, setEditingRole] = useState(null);
+    const [form, setForm] = useState(emptyRole);
+    const [slugEdited, setSlugEdited] = useState(false);
+    const [saving, setSaving] = useState(false);
+    const [deletingId, setDeletingId] = useState(null);
 
-    // Estados para el Modal de Edición
-    const [modalEditarOpen, setModalEditarOpen] = useState(false);
-    const [rolEditando, setRolEditando] = useState(null);
-    const [nombreRolEdit, setNombreRolEdit] = useState('');
-    const [guardandoEdit, setGuardandoEdit] = useState(false);
+    const loadRoles = async () => {
+        setLoading(true);
+        setError("");
 
-    // Estados para el Modal de Crear Nuevo Rol
-    const [modalCrearOpen, setModalCrearOpen] = useState(false);
-    const [nombreNuevoRol, setNombreNuevoRol] = useState('');
-    const [guardandoNuevo, setGuardandoNuevo] = useState(false);
+        try {
+            const response = await api.get("/rols/list");
+            setRoles(getRoles(response.data));
+        } catch (loadError) {
+            console.error("Error al cargar los roles:", loadError);
+            setError(getErrorMessage(loadError, "No se pudieron cargar los roles."));
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         let ignore = false;
 
-        const cargarRoles = async () => {
-            try {
-                const response = await api.get('/rols/list');
-                console.log("Respuesta de la API:", response.data);
-
-                if (!ignore) {
-                    const data = response.data;
-                    setRoles(Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : []);
-                }
-            } catch (error) {
-                console.error('Error al cargar los roles:', error);
-            } finally {
-                if (!ignore) {
-                    setLoading(false);
-                }
-            }
-        };
-
-        cargarRoles();
+        api.get("/rols/list")
+            .then((response) => {
+                const loadedRoles = getRoles(response.data);
+                if (!ignore) setRoles(loadedRoles);
+            })
+            .catch((loadError) => {
+                console.error("Error al cargar los roles:", loadError);
+                if (!ignore) setError(getErrorMessage(loadError, "No se pudieron cargar los roles."));
+            })
+            .finally(() => {
+                if (!ignore) setLoading(false);
+            });
 
         return () => {
             ignore = true;
         };
     }, []);
 
-    // 1. Función para Crear un Nuevo Rol (POST)
-    const guardarNuevoRol = async (e) => {
-        e.preventDefault();
-        if (!nombreNuevoRol.trim()) return;
+    const openCreateModal = () => {
+        setEditingRole(null);
+        setForm(emptyRole);
+        setSlugEdited(false);
+        setError("");
+        setModalOpen(true);
+    };
 
-        setGuardandoNuevo(true);
+    const openEditModal = (role) => {
+        setEditingRole(role);
+        setForm({
+            name_role: role.name_role || "",
+            slug: role.slug || "",
+            description: role.description || "",
+        });
+        setSlugEdited(true);
+        setError("");
+        setModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+        setEditingRole(null);
+        setForm(emptyRole);
+        setSlugEdited(false);
+    };
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+
+        if (name === "name_role") {
+            setForm((current) => ({
+                ...current,
+                name_role: value,
+                slug: slugEdited ? current.slug : slugify(value),
+            }));
+            return;
+        }
+
+        if (name === "slug") setSlugEdited(true);
+        setForm((current) => ({ ...current, [name]: value }));
+    };
+
+    const saveRole = async (event) => {
+        event.preventDefault();
+        setSaving(true);
+        setError("");
+
         try {
-            // Cambia la ruta '/rols/store' si tu endpoint de Laravel es diferente (ej. '/rols' o '/rols/create')
-            const response = await api.post('/rols/store', {
-                name_role: nombreNuevoRol
-            });
+            const payload = {
+                name_role: form.name_role.trim(),
+                slug: form.slug.trim(),
+                description: form.description.trim(),
+            };
 
-            console.log("Rol creado:", response.data);
-            
-            // Recargamos la lista completa o agregamos el nuevo rol devuelto por la API
-            const rolCreado = response.data.rol || response.data;
-            setRoles(prevRoles => [...prevRoles, rolCreado]);
+            if (editingRole) {
+                await api.put(`/rols/${editingRole.id}`, payload);
+            } else {
+                await api.post("/rols/store", payload);
+            }
 
-            setNombreNuevoRol('');
-            setModalCrearOpen(false);
-        } catch (error) {
-            console.error('Error al crear el rol:', error);
-            alert('Hubo un error al intentar registrar el nuevo rol.');
+            closeModal();
+            await loadRoles();
+        } catch (saveError) {
+            console.error("Error al guardar el rol:", saveError);
+            setError(getErrorMessage(saveError, "No se pudo guardar el rol."));
         } finally {
-            setGuardandoNuevo(false);
+            setSaving(false);
         }
     };
 
-    // 2. Función para Eliminar un Rol
-    const eliminarRol = async (id) => {
-        if (!window.confirm('¿Estás seguro de que deseas eliminar este rol?')) return;
+    const deleteRole = async (role) => {
+        if (!window.confirm(`¿Eliminar el rol "${role.name_role}"? Esta acción no se puede deshacer.`)) return;
 
+        setDeletingId(role.id);
+        setError("");
         try {
-            await api.delete(`/rols/${id}`);
-            setRoles(roles.filter(rol => rol.id !== id));
-            setMenuAbiertoId(null);
-        } catch (error) {
-            console.error('Error al eliminar el rol:', error);
-            alert('Hubo un error al intentar eliminar el rol.');
-        }
-    };
-
-    // 3. Abrir Modal de Edición
-    const abrirModalEditar = (rol) => {
-        setRolEditando(rol);
-        setNombreRolEdit(rol.name_role || '');
-        setMenuAbiertoId(null);
-        setModalEditarOpen(true);
-    };
-
-    // 4. Guardar Cambios de Edición (PUT)
-    const guardarEdicion = async (e) => {
-        e.preventDefault();
-        if (!nombreRolEdit.trim()) return;
-
-        setGuardandoEdit(true);
-        try {
-            await api.put(`/rols/${rolEditando.id}`, {
-                name_role: nombreRolEdit
-            });
-
-            setRoles(roles.map(r => r.id === rolEditando.id ? { ...r, name_role: nombreRolEdit, updated_at: new Date().toISOString() } : r));
-            
-            setModalEditarOpen(false);
-            setRolEditando(null);
-        } catch (error) {
-            console.error('Error al actualizar el rol:', error);
-            alert('Hubo un error al guardar los cambios.');
+            await api.delete(`/rols/${role.id}`);
+            setRoles((current) => current.filter((item) => item.id !== role.id));
+        } catch (deleteError) {
+            console.error("Error al eliminar el rol:", deleteError);
+            setError(getErrorMessage(deleteError, "No se pudo eliminar el rol."));
         } finally {
-            setGuardandoEdit(false);
+            setDeletingId(null);
         }
     };
 
-    // Función para asignar colores dinámicos según el nombre del rol
-    const obtenerColorRol = (nombreRol) => {
-        const rol = nombreRol?.toLowerCase() || '';
-        
-        if (rol.includes('admin')) {
-            return 'bg-red-100 text-red-600 border border-red-200';
-        } else if (rol.includes('rector') || rol.includes('director')) {
-            return 'bg-amber-100 text-amber-700 border border-amber-200';
-        } else if (rol.includes('coordinador') || rol.includes('docente') || rol.includes('profesor')) {
-            return 'bg-emerald-100 text-emerald-600 border border-emerald-200';
-        } else if (rol.includes('estudiant') || rol.includes('alumno') || rol.includes('estudent')) {
-            return 'bg-sky-100 text-sky-600 border border-sky-200';
-        } else {
-            return 'bg-slate-100 text-slate-600 border border-slate-200';
-        }
-    };
-
-    const rolesFiltrados = roles.filter(rol => 
-        rol.name_role?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredRoles = roles.filter((role) => (
+        [role.name_role, role.slug, role.description]
+            .some((value) => value?.toLowerCase().includes(searchTerm.toLowerCase()))
+    ));
 
     return (
-        <div>
-            <div className={"contenido-principal-roles [margin-left:260px] [width:calc(100%_-_260px)] [padding:40px] [min-height:100vh]"}>
-                <header className={"header-tabla-roles [margin-bottom:30px]"}>
-                    <div className="titulo-area">
-                        <h1 className={"[.header-tabla-roles_&]:[color:var(--azul-navy)] [.header-tabla-roles_&]:[font-size:1.8rem] [.header-tabla-roles_&]:[margin:0]"}>Gestión de Roles y Accesos</h1>
-                        <p className={"[.header-tabla-roles_&]:[color:#64748b] [.header-tabla-roles_&]:[margin-top:5px]"}>Configura los niveles de seguridad y permisos para los usuarios de la plataforma.</p>
+        <div className="ml-64 min-h-[calc(100vh-76px)] w-[calc(100%-16rem)] bg-slate-50 px-7 py-8 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] max-sm:px-4 max-sm:py-5">
+            <div className="mx-auto max-w-7xl">
+                <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <span className="mb-3 inline-flex items-center gap-2 rounded-full bg-sky-100 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-sky-800">
+                            <i className="bi bi-shield-lock" aria-hidden="true" />
+                            Administración
+                        </span>
+                        <h1 className="m-0 text-3xl font-bold tracking-tight text-slate-900">Roles y accesos</h1>
+                        <p className="mb-0 mt-2 text-sm leading-6 text-slate-500">
+                            Administra los perfiles de acceso y sus descripciones en la plataforma.
+                        </p>
                     </div>
+                    <button
+                        type="button"
+                        onClick={openCreateModal}
+                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-sky-700/20 transition hover:bg-sky-700 focus:outline-none focus:ring-4 focus:ring-sky-500/30"
+                    >
+                        <i className="bi bi-plus-lg" aria-hidden="true" />
+                        Crear rol
+                    </button>
                 </header>
-                 
-                <section className="contenedor-roles">
-                    <div className={"card-informativa-soft [background:linear-gradient(90deg,_#1a1c2d,_#2a2d45)] [color:white] [padding:25px] [border-radius:16px] [display:flex] [justify-content:space-between] [align-items:center] [margin-bottom:30px] [box-shadow:0_10px_20px_rgba(0,0,0,0.1)]"}>
-                        <div className={"info-texto-roles [display:flex] [align-items:center] [gap:20px]"}>
-                            <i className="bi bi-shield-check text-cyan-400 text-4xl"></i>
-                            <div>
-                                <strong className="block text-lg mb-1">Seguridad del Sitio</strong>
-                                <p className="m-0 text-sm opacity-80">Visualiza y administra los niveles de seguridad y perfiles de acceso.</p>
-                            </div>
+
+                {error && (
+                    <div role="alert" className="mb-6 flex items-start justify-between gap-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                        <span>{error}</span>
+                        {!modalOpen && (
+                            <button type="button" onClick={loadRoles} className="shrink-0 font-bold underline">
+                                Reintentar
+                            </button>
+                        )}
+                    </div>
+                )}
+
+                <section className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
+                    <div className="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <h2 className="m-0 text-lg font-bold text-slate-900">Listado de roles</h2>
+                            <p className="mb-0 mt-1 text-sm text-slate-500">Consulta los nombres, identificadores y descripciones.</p>
                         </div>
-                        <button className={"btn-secundario [background:rgba(255,255,255,0.1)] [border:1px_solid_rgba(255,255,255,0.2)] [color:white] [padding:10px_20px] [border-radius:10px] [cursor:pointer] [transition:0.3s]"}>
-                            Ver Permisos <i className="bi bi-arrow-right ml-2"></i>
-                        </button>
+                        <label className="flex w-full items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 sm:max-w-sm">
+                            <i className="bi bi-search text-slate-400" aria-hidden="true" />
+                            <input
+                                type="search"
+                                value={searchTerm}
+                                onChange={(event) => setSearchTerm(event.target.value)}
+                                placeholder="Buscar roles..."
+                                aria-label="Buscar roles"
+                                className="w-full bg-transparent py-3 text-sm text-slate-700 outline-none placeholder:text-slate-400"
+                            />
+                        </label>
                     </div>
 
-                    <div className={"contenedor-tabla-soft [background:var(--blanco)] [border-radius:20px] [padding:25px] [box-shadow:0_4px_20px_rgba(0,0,0,0.02)]"}>
-                        <div className={"barra-herramientas [display:flex] [justify-content:space-between] [align-items:center] [margin-bottom:25px]"}>
-                            <div className="titulo-tabla-interna">
-                                <h2>Listado de Roles</h2>
-                            </div>
-                            <div className={"acciones [display:flex] [gap:15px]"}>
-                                <div className="busqueda-contenedor flex items-center bg-[#f8fafc] border border-slate-200 rounded-xl px-3">
-                                    <i className="bi bi-search text-slate-400 mr-2"></i>
-                                    <input 
-                                        type="text" 
-                                        className="bg-transparent outline-none py-2 w-[250px] text-sm" 
-                                        placeholder="Buscar rol..." 
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                    />
-                                </div>
-                                <button 
-                                    onClick={() => setModalCrearOpen(true)}
-                                    className={"btn-primario [background:var(--cyan-em)] [color:white] [border:none] [padding:10px_20px] [border-radius:10px] [font-weight:600] [cursor:pointer]"}
-                                >
-                                    <i className="bi bi-plus-lg mr-1"></i> Nuevo Rol
-                                </button>
-                            </div>
+                    {loading ? (
+                        <div role="status" className="p-8 text-center text-sm text-slate-500">Cargando roles...</div>
+                    ) : filteredRoles.length === 0 ? (
+                        <div className="px-6 py-14 text-center">
+                            <i className="bi bi-shield text-4xl text-slate-300" aria-hidden="true" />
+                            <h3 className="mt-4 text-lg font-semibold text-slate-800">
+                                {roles.length ? "No se encontraron roles" : "Aún no hay roles"}
+                            </h3>
+                            <p className="mt-2 text-sm text-slate-500">
+                                {roles.length ? "Prueba con otro término de búsqueda." : "Crea el primer rol para que aparezca en esta lista."}
+                            </p>
                         </div>
-
-                        {/* Tabla principal */}
-                        <table className={"tabla-matriculados [width:100%] [border-collapse:collapse]"}>
-                            <thead>
-                                <tr>
-                                    <th className={"[.tabla-matriculados_&]:[text-align:left] [.tabla-matriculados_&]:[padding:15px] [.tabla-matriculados_&]:[color:#64748b] [.tabla-matriculados_&]:[font-size:0.85rem] [.tabla-matriculados_&]:[text-transform:uppercase] [.tabla-matriculados_&]:[border-bottom:2px_solid_var(--border-color)]"}>Nombre del Rol</th>
-                                    <th className={"[.tabla-matriculados_&]:[text-align:left] [.tabla-matriculados_&]:[padding:15px] [.tabla-matriculados_&]:[color:#64748b] [.tabla-matriculados_&]:[font-size:0.85rem] [.tabla-matriculados_&]:[text-transform:uppercase] [.tabla-matriculados_&]:[border-bottom:2px_solid_var(--border-color)]"}>Última Edición</th>
-                                    <th className={"[.tabla-matriculados_&]:[text-align:left] [.tabla-matriculados_&]:[padding:15px] [.tabla-matriculados_&]:[color:#64748b] [.tabla-matriculados_&]:[font-size:0.85rem] [.tabla-matriculados_&]:[text-transform:uppercase] [.tabla-matriculados_&]:[border-bottom:2px_solid_var(--border-color)]"}>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {loading ? (
-                                    <tr>
-                                        <td colSpan="3" className="text-center py-6 text-slate-500">Cargando roles desde la API...</td>
-                                    </tr>
-                                ) : rolesFiltrados.length === 0 ? (
-                                    <tr>
-                                        <td colSpan="3" className="text-center py-6 text-slate-500">No hay roles registrados.</td>
-                                    </tr>
-                                ) : (
-                                    rolesFiltrados.map((rol) => (
-                                        <tr key={rol.id}>
-                                            <td className={"[.tabla-matriculados_&]:[padding:18px_15px] [.tabla-matriculados_&]:[border-bottom:1px_solid_var(--border-color)]"}>
-                                                <span className={`rol-tag px-3 py-1.5 rounded-full text-xs font-extrabold tracking-wide ${obtenerColorRol(rol.name_role)}`}>
-                                                    {rol.name_role}
-                                                </span>
-                                            </td>
-                                            <td className={"[.tabla-matriculados_&]:[padding:18px_15px] [.tabla-matriculados_&]:[border-bottom:1px_solid_var(--border-color)]"}>
-                                                {rol.updated_at ? new Date(rol.updated_at).toLocaleDateString() : 'N/A'}
-                                            </td>
-                                            <td className={"[.tabla-matriculados_&]:[padding:18px_15px] [.tabla-matriculados_&]:[border-bottom:1px_solid_var(--border-color)] relative"}>
-                                                <button 
-                                                    onClick={() => setMenuAbiertoId(menuAbiertoId === rol.id ? null : rol.id)}
-                                                    className={"btn-tabla [background:none] [border:none] [color:#94a3b8] [cursor:pointer] [font-size:1.2rem]"}
-                                                >
-                                                    <i className="bi bi-three-dots-vertical"></i>
-                                                </button>
-
-                                                {/* Menú flotante de acciones */}
-                                                {menuAbiertoId === rol.id && (
-                                                    <div className="absolute right-0 mt-2 w-36 bg-white border border-slate-200 rounded-xl shadow-lg z-10 py-1">
-                                                        <button 
-                                                            onClick={() => abrirModalEditar(rol)}
-                                                            className="w-full text-left px-4 py-2 text-xs text-slate-700 hover:bg-slate-100 flex items-center gap-2 cursor-pointer"
+                    ) : (
+                        <>
+                            <div className="overflow-x-auto">
+                                <table className="w-full min-w-[780px] text-left">
+                                    <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+                                        <tr>
+                                            <th className="px-5 py-4 font-semibold">Rol</th>
+                                            <th className="px-5 py-4 font-semibold">Slug</th>
+                                            <th className="px-5 py-4 font-semibold">Descripción</th>
+                                            <th className="px-5 py-4 font-semibold">Última edición</th>
+                                            <th className="px-5 py-4 text-right font-semibold">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-100">
+                                        {filteredRoles.map((role) => (
+                                            <tr key={role.id} className="hover:bg-slate-50/70">
+                                                <td className="px-5 py-4">
+                                                    <span className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-bold text-sky-800">
+                                                        {role.name_role}
+                                                    </span>
+                                                </td>
+                                                <td className="px-5 py-4">
+                                                    <code className="rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-700">{role.slug || "—"}</code>
+                                                </td>
+                                                <td className="max-w-md px-5 py-4 text-sm leading-6 text-slate-600">{role.description || "—"}</td>
+                                                <td className="whitespace-nowrap px-5 py-4 text-sm text-slate-500">
+                                                    {role.updated_at ? new Date(role.updated_at).toLocaleDateString() : "—"}
+                                                </td>
+                                                <td className="px-5 py-4">
+                                                    <div className="flex justify-end gap-2">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => openEditModal(role)}
+                                                            aria-label={`Editar ${role.name_role}`}
+                                                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:border-sky-200 hover:bg-sky-50 hover:text-sky-700"
                                                         >
-                                                            <i className="bi bi-pencil text-blue-500"></i> Editar
+                                                            <i className="bi bi-pencil" aria-hidden="true" />
                                                         </button>
-                                                        <button 
-                                                            onClick={() => eliminarRol(rol.id)}
-                                                            className="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-50 flex items-center gap-2 cursor-pointer"
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => deleteRole(role)}
+                                                            disabled={deletingId === role.id}
+                                                            aria-label={`Eliminar ${role.name_role}`}
+                                                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-red-600 transition hover:border-red-200 hover:bg-red-50 disabled:opacity-50"
                                                         >
-                                                            <i className="bi bi-trash text-red-500"></i> Eliminar
+                                                            <i className={`bi ${deletingId === role.id ? "bi-arrow-repeat animate-spin" : "bi-trash3"}`} aria-hidden="true" />
                                                         </button>
                                                     </div>
-                                                )}
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div className="border-t border-slate-100 px-5 py-3 text-xs text-slate-500">
+                                {filteredRoles.length} {filteredRoles.length === 1 ? "rol" : "roles"}
+                            </div>
+                        </>
+                    )}
                 </section>
             </div>
 
-            {/* Modal para Crear Nuevo Rol */}
-            {modalCrearOpen && (
-                <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl border border-slate-100">
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-lg font-bold text-slate-800">Registrar Nuevo Rol</h3>
-                            <button 
-                                onClick={() => setModalCrearOpen(false)}
-                                className="text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer"
-                            >
-                                &times;
+            {modalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/50 p-4" role="presentation">
+                    <section role="dialog" aria-modal="true" aria-labelledby="role-modal-title" className="my-auto max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-2xl bg-white shadow-2xl">
+                        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-100 bg-white px-6 py-5">
+                            <div>
+                                <h2 id="role-modal-title" className="m-0 text-xl font-bold text-slate-900">
+                                    {editingRole ? "Editar rol" : "Crear rol"}
+                                </h2>
+                                <p className="mb-0 mt-1 text-sm text-slate-500">Define la información del perfil de acceso.</p>
+                            </div>
+                            <button type="button" onClick={closeModal} disabled={saving} aria-label="Cerrar" className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 disabled:opacity-50">
+                                <i className="bi bi-x-lg" aria-hidden="true" />
                             </button>
                         </div>
-                        <form onSubmit={guardarNuevoRol}>
-                            <div className="mb-4">
-                                <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
-                                    Nombre del Rol
-                                </label>
-                                <input 
-                                    type="text" 
-                                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-cyan-500 transition-colors"
-                                    value={nombreNuevoRol}
-                                    onChange={(e) => setNombreNuevoRol(e.target.value)}
-                                    placeholder="Ej. Docente, Coordinador"
-                                    required
-                                />
-                            </div>
-                            <div className="flex justify-end gap-3 mt-6">
-                                <button 
-                                    type="button"
-                                    onClick={() => setModalCrearOpen(false)}
-                                    className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
-                                >
-                                    Cancelar
-                                </button>
-                                <button 
-                                    type="submit"
-                                    disabled={guardandoNuevo}
-                                    className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-700 transition-colors disabled:opacity-50 cursor-pointer"
-                                >
-                                    {guardandoNuevo ? 'Guardando...' : 'Crear Rol'}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
 
-            {/* Modal de Edición */}
-            {modalEditarOpen && (
-                <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl border border-slate-100">
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-lg font-bold text-slate-800">Editar Rol</h3>
-                            <button 
-                                onClick={() => setModalEditarOpen(false)}
-                                className="text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer"
-                            >
-                                &times;
-                            </button>
-                        </div>
-                        <form onSubmit={guardarEdicion}>
-                            <div className="mb-4">
-                                <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
-                                    Nombre del Rol
-                                </label>
-                                <input 
-                                    type="text" 
-                                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-cyan-500 transition-colors"
-                                    value={nombreRolEdit}
-                                    onChange={(e) => setNombreRolEdit(e.target.value)}
+                        <form onSubmit={saveRole} className="space-y-5 p-6">
+                            {error && (
+                                <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>
+                            )}
+                            <div>
+                                <label className={labelClass} htmlFor="role-name">Nombre del rol</label>
+                                <input
+                                    id="role-name"
+                                    className={fieldClass}
+                                    name="name_role"
+                                    value={form.name_role}
+                                    onChange={handleChange}
                                     placeholder="Ej. Administrador"
                                     required
                                 />
                             </div>
-                            <div className="flex justify-end gap-3 mt-6">
-                                <button 
-                                    type="button"
-                                    onClick={() => setModalEditarOpen(false)}
-                                    className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
-                                >
+                            <div>
+                                <label className={labelClass} htmlFor="role-slug">Slug</label>
+                                <input
+                                    id="role-slug"
+                                    className={fieldClass}
+                                    name="slug"
+                                    value={form.slug}
+                                    onChange={handleChange}
+                                    placeholder="ej-administrador"
+                                    pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
+                                    title="Usa letras minúsculas, números y guiones."
+                                    required
+                                />
+                                <p className="mb-0 mt-1.5 text-xs text-slate-500">Se genera desde el nombre y puedes modificarlo.</p>
+                            </div>
+                            <div>
+                                <label className={labelClass} htmlFor="role-description">Descripción</label>
+                                <textarea
+                                    id="role-description"
+                                    className={`${fieldClass} min-h-28 resize-y`}
+                                    name="description"
+                                    value={form.description}
+                                    onChange={handleChange}
+                                    placeholder="Describe las responsabilidades o el alcance del rol."
+                                    required
+                                />
+                            </div>
+                            <div className="flex justify-end gap-3 border-t border-slate-100 pt-5">
+                                <button type="button" onClick={closeModal} disabled={saving} className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50">
                                     Cancelar
                                 </button>
-                                <button 
-                                    type="submit"
-                                    disabled={guardandoEdit}
-                                    className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-700 transition-colors disabled:opacity-50 cursor-pointer"
-                                >
-                                    {guardandoEdit ? 'Guardando...' : 'Guardar Cambios'}
+                                <button type="submit" disabled={saving} className="rounded-xl bg-sky-600 px-5 py-3 text-sm font-bold text-white hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60">
+                                    {saving ? "Guardando..." : editingRole ? "Guardar cambios" : "Crear rol"}
                                 </button>
                             </div>
                         </form>
-                    </div>
+                    </section>
                 </div>
             )}
         </div>
