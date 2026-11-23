@@ -54,10 +54,10 @@ const Servicios = () => {
 
             <section id="Ruta" className="seccion-ruta">
                 <div className="container12">
-                    <div className="cabecera-ruta">
-                        <span className="etiqueta-viva">Tu Camino al Éxito</span>
-                        <h2 className={"[.cabecera-modulos_&]:[font-size:2.8rem] [.cabecera-modulos_&]:[color:#1e293b] [.cabecera-modulos_&]:[font-weight:700] [.cabecera-modulos_&]:[margin:15px_0]"}>Ruta de Gestión Educativa</h2>
-                        <p className={"[.step-content_&]:[font-size:0.95rem] [.step-content_&]:[color:#64748b] [.step-content_&]:[line-height:1.6] [.step-content_&]:[margin:0]"}>Sigue estos pasos para completar tu proceso en tiempo récord.</p>
+                    <div className="mx-auto mt-16 mb-12 flex max-w-6xl flex-col items-center gap-2 px-4 text-center">
+                        <span className="text-xs font-semibold uppercase tracking-wide text-blue-600 sm:text-sm">Tu Camino al Éxito</span>
+                        <h2 className="m-0 text-3xl font-bold text-slate-800 sm:text-4xl">Ruta de Gestión Educativa</h2>
+                        <p className="m-0 max-w-2xl text-sm text-gray-600 sm:text-base">Sigue estos pasos para completar tu proceso en tiempo récord.</p>
                     </div>
 
                     <div className={"timeline-container [position:relative] [width:100%] [max-width:900px] [margin:0_auto] [padding:20px_0] [&::before]:[content:''] [&::before]:[position:absolute] [&::before]:[left:50%] [&::before]:[width:3px] [&::before]:[height:calc(100%_-_60px)] [&::before]:[background:#2563eb] [&::before]:[transform:translateX(-50%)] [&::before]:[border-radius:2px] [&::before]:[top:50px] [&::before]:[z-index:1]"}>

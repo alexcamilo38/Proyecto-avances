@@ -26,7 +26,9 @@ import Colegios from './pages/Estudiante/Colegios';
 import InfoSede from './pages/Estudiante/InfoSede';
 import MatriculasE from './pages/Estudiante/MatriculasE';
 import Formulario from './pages/Estudiante/Formulario';
+import PostularmeM from './pages/Estudiante/PostularmeM';
 import ModulosAcademicos from './pages/Estudiante/ModulosAcademicos';
+import DetalleM from './pages/Estudiante/DetalleM';
 import EditarPerfil from './pages/Estudiante/EditarPerfil';
 
 {/* Pages de Administrador */}
@@ -129,7 +131,9 @@ const App = () => {
           <Route path="/InfoSede" element={<InfoSede />} />
           <Route path="/MatriculasE" element={<MatriculasE />} />
           <Route path="/Formulario" element={<Formulario />} />
+          <Route path="/FormMod" element={<PostularmeM />} />
           <Route path="/ModulosAcademicos" element={<ModulosAcademicos />} />
+          <Route path="/DetalleM" element={<DetalleM />} />
           <Route path="/EditarPerfil" element={<EditarPerfil />} />
         </Route>
 
