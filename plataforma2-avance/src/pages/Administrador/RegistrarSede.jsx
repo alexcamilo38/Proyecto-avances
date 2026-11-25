@@ -52,10 +52,14 @@ const RegistrarSede = () => {
     const [form, setForm] = useState(emptyInstitution);
     const [logo, setLogo] = useState(null);
     const [logoPreview, setLogoPreview] = useState("");
-    const logoPreviewUrl = useRef("");
+    const [institutionImage, setInstitutionImage] = useState(null);
+    const [institutionImagePreview, setInstitutionImagePreview] = useState("");
+    const previewUrls = useRef({ logo: "", institutionImage: "" });
 
     useEffect(() => () => {
-        if (logoPreviewUrl.current) URL.revokeObjectURL(logoPreviewUrl.current);
+        Object.values(previewUrls.current).forEach((url) => {
+            if (url) URL.revokeObjectURL(url);
+        });
     }, []);
 
     const loadInstitutions = async () => {
@@ -94,10 +98,13 @@ const RegistrarSede = () => {
         };
     }, []);
 
-    const clearLogoPreview = () => {
-        if (logoPreviewUrl.current) URL.revokeObjectURL(logoPreviewUrl.current);
-        logoPreviewUrl.current = "";
+    const clearImagePreviews = () => {
+        Object.entries(previewUrls.current).forEach(([key, url]) => {
+            if (url) URL.revokeObjectURL(url);
+            previewUrls.current[key] = "";
+        });
         setLogoPreview("");
+        setInstitutionImagePreview("");
     };
 
     const closeModal = () => {
@@ -105,14 +112,16 @@ const RegistrarSede = () => {
         setEditingInstitution(null);
         setForm(emptyInstitution);
         setLogo(null);
-        clearLogoPreview();
+        setInstitutionImage(null);
+        clearImagePreviews();
     };
 
     const openCreateModal = () => {
         setEditingInstitution(null);
         setForm(emptyInstitution);
         setLogo(null);
-        clearLogoPreview();
+        setInstitutionImage(null);
+        clearImagePreviews();
         setError("");
         setModalOpen(true);
     };
@@ -131,19 +140,26 @@ const RegistrarSede = () => {
             class_end_date: institution.class_end_date || "",
         });
         setLogo(null);
-        clearLogoPreview();
+        setInstitutionImage(null);
+        clearImagePreviews();
         setError("");
         setModalOpen(true);
     };
 
-    const handleLogoChange = (event) => {
-        const selectedLogo = event.target.files?.[0] || null;
-        clearLogoPreview();
-        setLogo(selectedLogo);
+    const handleImageChange = (event, imageType) => {
+        const selectedImage = event.target.files?.[0] || null;
+        const previewUrl = previewUrls.current[imageType];
+        if (previewUrl) URL.revokeObjectURL(previewUrl);
 
-        if (selectedLogo) {
-            logoPreviewUrl.current = URL.createObjectURL(selectedLogo);
-            setLogoPreview(logoPreviewUrl.current);
+        const nextPreviewUrl = selectedImage ? URL.createObjectURL(selectedImage) : "";
+        previewUrls.current[imageType] = nextPreviewUrl;
+
+        if (imageType === "logo") {
+            setLogo(selectedImage);
+            setLogoPreview(nextPreviewUrl);
+        } else {
+            setInstitutionImage(selectedImage);
+            setInstitutionImagePreview(nextPreviewUrl);
         }
     };
 
@@ -152,7 +168,7 @@ const RegistrarSede = () => {
         setForm((current) => ({ ...current, [name]: value }));
     };
 
-    const uploadLogo = async (file) => {
+    const uploadImage = async (file, imageLabel) => {
         if (!cloudinaryCloudName || !cloudinaryUploadPreset) {
             throw new Error("Configura VITE_CLOUDINARY_CLOUD_NAME y VITE_CLOUDINARY_UPLOAD_PRESET.");
         }
@@ -168,12 +184,12 @@ const RegistrarSede = () => {
         const result = await response.json();
 
         if (!response.ok || !result.secure_url || !result.public_id) {
-            throw new Error(result.error?.message || "Cloudinary no pudo subir el logo.");
+            throw new Error(result.error?.message || `Cloudinary no pudo subir ${imageLabel}.`);
         }
 
         return {
-            imagen_url: result.secure_url,
-            imagen_public_id: result.public_id,
+            url: result.secure_url,
+            publicId: result.public_id,
         };
     };
 
@@ -183,18 +199,32 @@ const RegistrarSede = () => {
         setError("");
 
         try {
-            const imageData = logo
-                ? await uploadLogo(logo)
-                : {
-                    imagen_url: editingInstitution?.imagen_url || "",
-                    imagen_public_id: editingInstitution?.imagen_public_id || "",
-                };
-
-            if (!editingInstitution && !logo) {
-                throw new Error("Selecciona el logo de la institución.");
+            if (!editingInstitution && (!logo || !institutionImage)) {
+                throw new Error("Selecciona el logo y la imagen de referencia de la institución.");
             }
 
-            const payload = { ...form, ...imageData };
+            const [logoData, referenceImageData] = await Promise.all([
+                logo
+                    ? uploadImage(logo, "el logo")
+                    : Promise.resolve({
+                        url: editingInstitution?.logo_url || "",
+                        publicId: editingInstitution?.logo_public_id || "",
+                    }),
+                institutionImage
+                    ? uploadImage(institutionImage, "la imagen de referencia")
+                    : Promise.resolve({
+                        url: editingInstitution?.imagen_url || "",
+                        publicId: editingInstitution?.imagen_public_id || "",
+                    }),
+            ]);
+
+            const payload = {
+                ...form,
+                logo_url: logoData.url,
+                logo_public_id: logoData.publicId,
+                imagen_url: referenceImageData.url,
+                imagen_public_id: referenceImageData.publicId,
+            };
 
             if (editingInstitution) {
                 await api.put(`/institutions/${editingInstitution.id}`, payload);
@@ -295,12 +325,15 @@ const RegistrarSede = () => {
                                         <tr key={institution.id} className="align-middle hover:bg-slate-50/70">
                                             <td className="px-5 py-4">
                                                 <div className="flex items-center gap-3">
-                                                    {institution.imagen_url ? (
-                                                        <img src={institution.imagen_url} alt={`Logo de ${institution.name_institution}`} className="h-11 w-11 rounded-xl border border-slate-100 object-cover" />
+                                                    {institution.logo_url ? (
+                                                        <img src={institution.logo_url} alt={`Logo de ${institution.name_institution}`} className="h-11 w-11 rounded-xl border border-slate-100 object-cover" />
                                                     ) : (
                                                         <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-sky-50 text-sky-700">
                                                             <i className="bi bi-building" aria-hidden="true" />
                                                         </span>
+                                                    )}
+                                                    {institution.imagen_url && (
+                                                        <img src={institution.imagen_url} alt={`Imagen de referencia de ${institution.name_institution}`} title="Imagen de referencia" className="h-11 w-16 rounded-lg border border-slate-100 object-cover" />
                                                     )}
                                                     <div className="min-w-0">
                                                         <p className="m-0 truncate font-semibold text-slate-800">{institution.name_institution}</p>
@@ -404,14 +437,45 @@ const RegistrarSede = () => {
                                     <label className={labelClass} htmlFor="institution-description">Descripción</label>
                                     <textarea id="institution-description" className={`${fieldClass} min-h-24 resize-y`} name="description_institution" value={form.description_institution} onChange={handleChange} required />
                                 </div>
-                                <div className="sm:col-span-2">
-                                    <label className={labelClass} htmlFor="institution-logo">{editingInstitution ? "Cambiar logo (opcional)" : "Logo de la institución"}</label>
-                                    <input id="institution-logo" className={fieldClass} type="file" accept="image/*" onChange={handleLogoChange} required={!editingInstitution} />
-                                    {logoPreview ? (
-                                        <img src={logoPreview} alt="Vista previa del logo" className="mt-3 h-20 w-20 rounded-xl border border-slate-200 object-cover" />
-                                    ) : editingInstitution?.imagen_url ? (
-                                        <img src={editingInstitution.imagen_url} alt={`Logo de ${editingInstitution.name_institution}`} className="mt-3 h-20 w-20 rounded-xl border border-slate-200 object-cover" />
-                                    ) : null}
+                                <div>
+                                    <label className={labelClass} htmlFor="institution-logo">
+                                        {editingInstitution ? "Cambiar logo (opcional)" : "Logo de la institución"}
+                                    </label>
+                                    <input
+                                        id="institution-logo"
+                                        className={fieldClass}
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(event) => handleImageChange(event, "logo")}
+                                        required={!editingInstitution}
+                                    />
+                                    {(logoPreview || editingInstitution?.logo_url) && (
+                                        <img
+                                            src={logoPreview || editingInstitution.logo_url}
+                                            alt={`Logo de ${form.name_institution || "la institución"}`}
+                                            className="mt-3 h-20 w-20 rounded-xl border border-slate-200 object-cover"
+                                        />
+                                    )}
+                                </div>
+                                <div>
+                                    <label className={labelClass} htmlFor="institution-reference-image">
+                                        {editingInstitution ? "Cambiar imagen de referencia (opcional)" : "Imagen de referencia"}
+                                    </label>
+                                    <input
+                                        id="institution-reference-image"
+                                        className={fieldClass}
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(event) => handleImageChange(event, "institutionImage")}
+                                        required={!editingInstitution}
+                                    />
+                                    {(institutionImagePreview || editingInstitution?.imagen_url) && (
+                                        <img
+                                            src={institutionImagePreview || editingInstitution.imagen_url}
+                                            alt={`Imagen de referencia de ${form.name_institution || "la institución"}`}
+                                            className="mt-3 h-20 w-full rounded-xl border border-slate-200 object-cover"
+                                        />
+                                    )}
                                 </div>
                             </div>
 

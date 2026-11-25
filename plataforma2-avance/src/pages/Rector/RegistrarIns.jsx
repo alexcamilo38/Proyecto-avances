@@ -27,7 +27,10 @@ const normalizeInstitution = (institution) => ({
   description: institution.description_institution || institution.description || "",
   city: institution.city || "",
   nit: institution.nit || "",
+  logo_url: institution.logo_url || "",
+  logo_public_id: institution.logo_public_id || "",
   imagen_url: institution.imagen_url || "",
+  imagen_public_id: institution.imagen_public_id || "",
   class_start_date: institution.class_start_date || "",
   class_end_date: institution.class_end_date || "",
 });
@@ -55,30 +58,63 @@ const getErrorMessage = (error, fallback) => {
   return firstValidationError || error.response?.data?.message || error.message || fallback;
 };
 
+const uploadInstitutionImage = async (file, label) => {
+  if (!cloudinaryCloudName || !cloudinaryUploadPreset) {
+    throw new Error("Configura VITE_CLOUDINARY_CLOUD_NAME y VITE_CLOUDINARY_UPLOAD_PRESET.");
+  }
+
+  const uploadData = new FormData();
+  uploadData.append("file", file);
+  uploadData.append("upload_preset", cloudinaryUploadPreset);
+
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${encodeURIComponent(cloudinaryCloudName)}/image/upload`,
+    { method: "POST", body: uploadData },
+  );
+  const result = await response.json();
+
+  if (!response.ok || !result.secure_url || !result.public_id) {
+    throw new Error(result.error?.message || `Cloudinary no pudo subir ${label}.`);
+  }
+
+  return { url: result.secure_url, publicId: result.public_id };
+};
+
 const RegistrarIns = () => {
   const [institution, setInstitution] = useState(null);
   const [form, setForm] = useState(emptyForm);
   const [logo, setLogo] = useState(null);
   const [logoPreview, setLogoPreview] = useState("");
-  const logoPreviewUrl = useRef("");
+  const [institutionImage, setInstitutionImage] = useState(null);
+  const [institutionImagePreview, setInstitutionImagePreview] = useState("");
+  const previewUrls = useRef({ logo: "", institutionImage: "" });
   const [loading, setLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
 
   useEffect(() => {
+    const urls = previewUrls.current;
     return () => {
-      if (logoPreviewUrl.current) URL.revokeObjectURL(logoPreviewUrl.current);
+      Object.values(urls).forEach((url) => {
+        if (url) URL.revokeObjectURL(url);
+      });
     };
   }, []);
 
   const loadInstitution = async () => {
     setLoading(true);
+    setLoadFailed(false);
     setError("");
 
     try {
       setInstitution(await requestInstitution());
     } catch (loadError) {
       console.error("Error al consultar las instituciones:", loadError);
+      setLoadFailed(true);
       setError(getErrorMessage(loadError, "No se pudieron cargar las instituciones."));
     } finally {
       setLoading(false);
@@ -90,11 +126,17 @@ const RegistrarIns = () => {
 
     requestInstitution()
       .then((loadedInstitution) => {
-        if (!ignore) setInstitution(loadedInstitution);
+        if (!ignore) {
+          setInstitution(loadedInstitution);
+          setLoadFailed(false);
+        }
       })
       .catch((loadError) => {
         console.error("Error al consultar las instituciones:", loadError);
-        if (!ignore) setError(getErrorMessage(loadError, "No se pudieron cargar las instituciones."));
+        if (!ignore) {
+          setLoadFailed(true);
+          setError(getErrorMessage(loadError, "No se pudieron cargar las instituciones."));
+        }
       })
       .finally(() => {
         if (!ignore) setLoading(false);
@@ -110,57 +152,140 @@ const RegistrarIns = () => {
     setForm((current) => ({ ...current, [name]: value }));
   };
 
-  const handleLogoChange = (event) => {
-    const selectedLogo = event.target.files?.[0] || null;
-    if (logoPreviewUrl.current) URL.revokeObjectURL(logoPreviewUrl.current);
-    logoPreviewUrl.current = selectedLogo ? URL.createObjectURL(selectedLogo) : "";
-    setLogo(selectedLogo);
-    setLogoPreview(logoPreviewUrl.current);
+  const clearImagePreviews = () => {
+    Object.entries(previewUrls.current).forEach(([key, url]) => {
+      if (url) URL.revokeObjectURL(url);
+      previewUrls.current[key] = "";
+    });
+    setLogoPreview("");
+    setInstitutionImagePreview("");
+  };
+
+  const handleImageChange = (event, imageType) => {
+    const selectedImage = event.target.files?.[0] || null;
+    const currentPreviewUrl = previewUrls.current[imageType];
+    if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl);
+
+    const previewUrl = selectedImage ? URL.createObjectURL(selectedImage) : "";
+    previewUrls.current[imageType] = previewUrl;
+    if (imageType === "logo") {
+      setLogo(selectedImage);
+      setLogoPreview(previewUrl);
+    } else {
+      setInstitutionImage(selectedImage);
+      setInstitutionImagePreview(previewUrl);
+    }
+  };
+
+  const resetForm = () => {
+    setForm(emptyForm);
+    setLogo(null);
+    setInstitutionImage(null);
+    clearImagePreviews();
+  };
+
+  const startEditing = () => {
+    setError("");
+    setNotice("");
+    setForm({
+      name_institution: institution.name_institution || "",
+      email_institution: institution.email_institution || "",
+      phone_institution: institution.phone_institution || "",
+      address_institution: institution.address_institution || "",
+      description_institution: institution.description_institution || "",
+      nit: institution.nit || "",
+      city: institution.city || "",
+      class_start_date: institution.class_start_date?.slice(0, 10) || "",
+      class_end_date: institution.class_end_date?.slice(0, 10) || "",
+    });
+    setLogo(null);
+    setInstitutionImage(null);
+    clearImagePreviews();
+    setIsEditing(true);
+  };
+
+  const cancelEditing = () => {
+    resetForm();
+    setIsEditing(false);
+    setError("");
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm(`¿Eliminar la institución "${institution.name}"? Esta acción no se puede deshacer.`)) return;
+
+    setDeleting(true);
+    setError("");
+    setNotice("");
+
+    try {
+      await api.delete(`/institutions/${institution.id}`);
+      setInstitution(null);
+      setIsEditing(false);
+      resetForm();
+      setNotice("La institución se eliminó correctamente.");
+    } catch (deleteError) {
+      console.error("Error al eliminar la institución:", deleteError);
+      setError(getErrorMessage(deleteError, "No se pudo eliminar la institución."));
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
 
-    if (!cloudinaryCloudName || !cloudinaryUploadPreset) {
-      setError("Configura VITE_CLOUDINARY_CLOUD_NAME y VITE_CLOUDINARY_UPLOAD_PRESET para subir el logo.");
-      return;
-    }
-
-    if (!logo) {
-      setError("Selecciona el logo de la institución.");
+    if ((!logo && !institution?.logo_url) || (!institutionImage && !institution?.imagen_url)) {
+      setError("Selecciona el logo y la imagen representativa de la institución.");
       return;
     }
 
     setSubmitting(true);
 
     try {
-      const uploadData = new FormData();
-      uploadData.append("file", logo);
-      uploadData.append("upload_preset", cloudinaryUploadPreset);
-
-      const uploadResponse = await fetch(
-        `https://api.cloudinary.com/v1_1/${encodeURIComponent(cloudinaryCloudName)}/image/upload`,
-        { method: "POST", body: uploadData },
-      );
-      const uploadResult = await uploadResponse.json();
-
-      if (!uploadResponse.ok || !uploadResult.secure_url || !uploadResult.public_id) {
-        throw new Error(uploadResult.error?.message || "Cloudinary no pudo subir el logo.");
-      }
+      const [logoData, imageData] = await Promise.all([
+        logo
+          ? uploadInstitutionImage(logo, "el logo")
+          : Promise.resolve({
+            url: institution?.logo_url || "",
+            publicId: institution?.logo_public_id || "",
+          }),
+        institutionImage
+          ? uploadInstitutionImage(institutionImage, "la imagen representativa")
+          : Promise.resolve({
+            url: institution?.imagen_url || "",
+            publicId: institution?.imagen_public_id || "",
+          }),
+      ]);
 
       const payload = {
         ...form,
-        imagen_url: uploadResult.secure_url,
-        imagen_public_id: uploadResult.public_id,
+        logo_url: logoData.url,
+        logo_public_id: logoData.publicId,
+        imagen_url: imageData.url,
+        imagen_public_id: imageData.publicId,
       };
-      const response = await api.post("/institutions/store", payload);
-      const createdInstitution = response.data?.institution || response.data?.data || payload;
 
-      setInstitution(normalizeInstitution(createdInstitution));
+      if (institution) {
+        const response = await api.put(`/institutions/${institution.id}`, payload);
+        const updatedInstitution = response.data?.institution || response.data?.data || {
+          ...institution,
+          ...payload,
+        };
+        setInstitution(normalizeInstitution(updatedInstitution));
+        setNotice("Los datos de la institución se actualizaron correctamente.");
+      } else {
+        const response = await api.post("/institutions/store", payload);
+        const createdInstitution = response.data?.institution || response.data?.data || payload;
+        setInstitution(normalizeInstitution(createdInstitution));
+        setNotice("La institución se registró correctamente.");
+      }
+
+      resetForm();
+      setIsEditing(false);
     } catch (submitError) {
-      console.error("Error al registrar la institución:", submitError);
-      setError(getErrorMessage(submitError, "No se pudo registrar la institución."));
+      console.error("Error al guardar la institución:", submitError);
+      setError(getErrorMessage(submitError, "No se pudieron guardar los datos de la institución."));
     } finally {
       setSubmitting(false);
     }
@@ -179,10 +304,18 @@ const RegistrarIns = () => {
           </h1>
           <p className="mt-2 text-sm leading-6 text-slate-500">
             {institution
-              ? "La institución asociada a tu cuenta y sus datos registrados."
+              ? isEditing
+                ? "Actualiza la información de tu institución y sus imágenes."
+                : "La institución asociada a tu cuenta y sus datos registrados."
               : "Registra una sola institución para habilitar la gestión de matrículas y estudiantes."}
           </p>
         </header>
+
+        {notice && (
+          <div role="status" className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+            {notice}
+          </div>
+        )}
 
         {error && (
           <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -194,28 +327,60 @@ const RegistrarIns = () => {
           <div role="status" className="rounded-3xl border border-slate-100 bg-white p-8 text-sm text-slate-500 shadow-sm">
             Cargando información de instituciones...
           </div>
-        ) : error && !institution ? (
+        ) : loadFailed && !institution ? (
           <button type="button" onClick={loadInstitution} className="rounded-xl bg-violet-700 px-5 py-3 text-sm font-bold text-white hover:bg-violet-800">
             Reintentar consulta
           </button>
-        ) : institution ? (
+        ) : institution && !isEditing ? (
           <section className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-[0_12px_35px_rgba(15,23,42,0.06)]">
             <div className="bg-gradient-to-r from-violet-700 to-indigo-800 p-6 text-white sm:p-8">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold">
-                <i className="bi bi-patch-check-fill" aria-hidden="true" />
-                Institución registrada
-              </span>
-              <div className="mt-4 flex items-center gap-4">
-                {institution.imagen_url && (
-                  <img src={institution.imagen_url} alt={`Logo de ${institution.name}`} className="h-16 w-16 rounded-full border-2 border-white/50 object-cover" />
-                )}
-                <h2 className="m-0 text-2xl font-bold sm:text-3xl">{institution.name}</h2>
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold">
+                    <i className="bi bi-patch-check-fill" aria-hidden="true" />
+                    Institución registrada
+                  </span>
+                  <div className="mt-4 flex items-center gap-4">
+                    {institution.logo_url && (
+                      <img src={institution.logo_url} alt={`Logo de ${institution.name}`} className="h-16 w-16 rounded-full border-2 border-white/50 bg-white object-cover" />
+                    )}
+                    <h2 className="m-0 text-2xl font-bold sm:text-3xl">{institution.name}</h2>
+                  </div>
+                  <p className="mb-0 mt-3 flex items-center gap-2 text-sm text-violet-100">
+                    <i className="bi bi-geo-alt-fill" aria-hidden="true" />
+                    {institution.address}{institution.city ? `, ${institution.city}` : ""}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    onClick={startEditing}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/20"
+                  >
+                    <i className="bi bi-pencil" aria-hidden="true" />
+                    Editar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleDelete}
+                    disabled={deleting}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-red-200/40 bg-red-500/20 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-500/40 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    <i className={`bi ${deleting ? "bi-arrow-repeat animate-spin" : "bi-trash3"}`} aria-hidden="true" />
+                    {deleting ? "Eliminando..." : "Eliminar"}
+                  </button>
+                </div>
               </div>
-              <p className="mb-0 mt-3 flex items-center gap-2 text-sm text-violet-100">
-                <i className="bi bi-geo-alt-fill" aria-hidden="true" />
-                {institution.address}{institution.city ? `, ${institution.city}` : ""}
-              </p>
             </div>
+            {institution.imagen_url && (
+              <div className="px-6 pt-6 sm:px-8 sm:pt-8">
+                <img
+                  src={institution.imagen_url}
+                  alt={`Imagen representativa de ${institution.name}`}
+                  className="max-h-80 w-full rounded-2xl border border-slate-100 object-cover"
+                />
+              </div>
+            )}
             <dl className="m-0 grid grid-cols-1 gap-4 p-6 sm:grid-cols-2 sm:p-8">
               {[
                 ["NIT", institution.nit],
@@ -239,8 +404,12 @@ const RegistrarIns = () => {
                 <i className="bi bi-building-add" aria-hidden="true" />
               </span>
               <div>
-                <h2 className="m-0 text-lg font-semibold text-slate-900">Datos institucionales</h2>
-                <p className="mb-0 mt-1 text-sm text-slate-500">Completa la información oficial de tu institución.</p>
+                <h2 className="m-0 text-lg font-semibold text-slate-900">
+                  {isEditing ? "Editar institución" : "Datos institucionales"}
+                </h2>
+                <p className="mb-0 mt-1 text-sm text-slate-500">
+                  {isEditing ? "Actualiza los datos oficiales de tu institución." : "Completa la información oficial de tu institución."}
+                </p>
               </div>
             </div>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -280,27 +449,67 @@ const RegistrarIns = () => {
                 <label className={labelClass} htmlFor="institution-description">Descripción institucional</label>
                 <textarea id="institution-description" className={`${fieldClass} min-h-28 resize-y`} name="description_institution" value={form.description_institution} onChange={handleChange} placeholder="Reseña, enfoque educativo y niveles ofrecidos" required />
               </div>
-              <div className="sm:col-span-2">
-                <label className={labelClass} htmlFor="institution-logo">Logo de la institución</label>
+              <div>
+                <label className={labelClass} htmlFor="institution-logo">
+                  {isEditing ? "Cambiar logo (opcional)" : "Logo de la institución"}
+                </label>
                 <input
                   id="institution-logo"
                   className={`${fieldClass} file:mr-4 file:rounded-lg file:border-0 file:bg-violet-100 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-violet-800`}
                   type="file"
                   accept="image/*"
-                  onChange={handleLogoChange}
-                  required
+                  onChange={(event) => handleImageChange(event, "logo")}
+                  required={!institution?.logo_url}
                 />
-                {logoPreview && <img src={logoPreview} alt="Vista previa del logo" className="mt-3 h-24 w-24 rounded-xl border border-slate-200 object-cover" />}
+                {(logoPreview || (isEditing && institution?.logo_url)) && (
+                  <img
+                    src={logoPreview || institution.logo_url}
+                    alt="Vista previa del logo"
+                    className="mt-3 h-24 w-24 rounded-xl border border-slate-200 object-cover"
+                  />
+                )}
+              </div>
+              <div>
+                <label className={labelClass} htmlFor="institution-reference-image">
+                  {isEditing ? "Cambiar imagen representativa (opcional)" : "Imagen representativa"}
+                </label>
+                <input
+                  id="institution-reference-image"
+                  className={`${fieldClass} file:mr-4 file:rounded-lg file:border-0 file:bg-violet-100 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-violet-800`}
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => handleImageChange(event, "institutionImage")}
+                  required={!institution?.imagen_url}
+                />
+                {(institutionImagePreview || (isEditing && institution?.imagen_url)) && (
+                  <img
+                    src={institutionImagePreview || institution.imagen_url}
+                    alt="Vista previa de la imagen representativa"
+                    className="mt-3 h-24 w-full rounded-xl border border-slate-200 object-cover"
+                  />
+                )}
               </div>
             </div>
             <div className="mt-7 flex flex-col-reverse justify-between gap-4 border-t border-slate-100 pt-6 sm:flex-row sm:items-center">
               <p className="m-0 max-w-lg text-xs leading-5 text-slate-500">
-                El logo se subirá a Cloudinary y los datos de la institución se guardarán en Laravel.
+                Las imágenes se subirán a Cloudinary y los datos se guardarán en Laravel.
               </p>
-              <button type="submit" disabled={submitting} className="inline-flex items-center justify-center gap-2 rounded-xl bg-violet-700 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-violet-700/20 transition hover:-translate-y-0.5 hover:bg-violet-800 focus:outline-none focus:ring-4 focus:ring-violet-500/30 disabled:cursor-not-allowed disabled:opacity-60">
-                <i className={`bi ${submitting ? "bi-arrow-repeat animate-spin" : "bi-check2-circle"}`} aria-hidden="true" />
-                {submitting ? "Subiendo y registrando..." : "Registrar institución"}
-              </button>
+              <div className="flex flex-col-reverse gap-3 sm:flex-row">
+                {isEditing && (
+                  <button
+                    type="button"
+                    onClick={cancelEditing}
+                    disabled={submitting}
+                    className="inline-flex items-center justify-center rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-60"
+                  >
+                    Cancelar
+                  </button>
+                )}
+                <button type="submit" disabled={submitting} className="inline-flex items-center justify-center gap-2 rounded-xl bg-violet-700 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-violet-700/20 transition hover:-translate-y-0.5 hover:bg-violet-800 focus:outline-none focus:ring-4 focus:ring-violet-500/30 disabled:cursor-not-allowed disabled:opacity-60">
+                  <i className={`bi ${submitting ? "bi-arrow-repeat animate-spin" : "bi-check2-circle"}`} aria-hidden="true" />
+                  {submitting ? "Subiendo y guardando..." : isEditing ? "Guardar cambios" : "Registrar institución"}
+                </button>
+              </div>
             </div>
           </form>
         )}
