@@ -6,7 +6,7 @@ import Navbar from "./Components/Navbar";
 
 {/* Pages de inicio */}
 import Home from "./pages/Home";
-import Login from "./pages/Login";
+import Login from "./pages/Auth/Login";
 
 import Nosotros from './pages/Nosotros';
 import Servicios from './pages/Servicios';
@@ -18,7 +18,7 @@ import StudentLayout from './layouts/StudentLayout';
 import RectorLayout from './layouts/RectorLayout';
 
 {/* Pages de Autenticación y Estudiantes */}
-import SelecionRol from './pages/Registro/SelecionRol';
+import SelecionRol from './pages/Auth/SelecionRol';
 import ReperaContra from './pages/Contrarecuperar/ReperaContra';
 import RegistroU from './pages/Estudiante/RegistroU';
 import PerfilUsuario from './pages/Estudiante/PerfilUsuario';
