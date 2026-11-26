@@ -1,29 +1,53 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import logoazul from "../assets/LogoAzul.png";
-import ilustracion from "../assets/ilustracion estudiando.jpg";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import logoazul from "../../assets/LogoAzul.png";
+import ilustracion from "../../assets/ilustracion estudiando.jpg";
+import api from "../../Config/env";
+import { getApiErrorMessage, getCollection, getDashboardPath } from "./authUtils";
 
 // Gestiona la interfaz de inicio de sesión y la navegación posterior.
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
     setError("");
+    setSubmitting(true);
 
-    if (email === "admin@easymatric.com" && password === "123456") {
-      navigate("/admin");
-    } else if (email === "estudiante@easymatric.com" && password === "123456") {
-      navigate("/student");
-    } else if (email === "docente@easymatric.com" && password === "123456") {
-      navigate("/teacher");
-    } else if (email === "rector@easymatric.com" && password === "123456") {
-      navigate("/rector");
-    } else {
-      setError("Credenciales incorrectas. Inténtalo de nuevo.");
+    try {
+      const response = await api.post("/login", { identifier: email.trim(), password });
+      const responseData = response.data;
+      const user = responseData?.user || responseData?.data?.user || responseData?.data?.user_system || responseData?.data;
+      const embeddedRole = user?.rol || user?.role;
+      let dashboard = getDashboardPath(
+        typeof embeddedRole === "string"
+          ? embeddedRole
+          : embeddedRole?.slug || embeddedRole?.name_role || embeddedRole?.name ||
+            user?.role_slug || user?.rol_slug || user?.role_name,
+      );
+
+      if (!dashboard && (user?.rol_id || user?.role_id)) {
+        const rolesResponse = await api.get("/rols/list");
+        const roles = getCollection(rolesResponse.data, "roles");
+        const userRole = roles.find((role) => String(role.id) === String(user.rol_id || user.role_id));
+        dashboard = getDashboardPath(userRole?.slug || userRole?.name_role);
+      }
+
+      if (!user || !dashboard) {
+        throw new Error("El servidor autenticó la cuenta, pero no devolvió un rol válido para dirigirla.");
+      }
+
+      navigate(dashboard, { replace: true });
+    } catch (loginError) {
+      console.error("Error al iniciar sesión:", loginError);
+      setError(getApiErrorMessage(loginError, "No se pudo iniciar sesión."));
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -81,6 +105,12 @@ const Login = () => {
               </p>
             </div>
 
+            {location.state?.notice && (
+              <div className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800" role="status">
+                {location.state.notice}
+              </div>
+            )}
+
             {error && (
               <div
                 className="mb-5 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
@@ -96,16 +126,16 @@ const Login = () => {
                 htmlFor="login-email"
                 className="mb-2 block text-sm font-semibold text-slate-700"
               >
-                Correo electrónico
+                Correo electrónico o nombre de usuario
               </label>
               <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 transition focus-within:border-blue-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-500/10">
                 <i className="bi bi-envelope text-blue-600" aria-hidden="true" />
                 <input
                   id="login-email"
                   className="min-w-0 flex-1 bg-transparent py-3.5 text-sm text-slate-800 outline-none placeholder:text-slate-400"
-                  type="email"
-                  placeholder="ejemplo@correo.com"
-                  autoComplete="email"
+                  type="text"
+                  placeholder="Correo electrónico o usuario"
+                  autoComplete="username"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   required
@@ -145,7 +175,7 @@ const Login = () => {
               type="submit"
               className="mt-5 w-full rounded-xl bg-blue-700 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-700/20 transition hover:-translate-y-0.5 hover:bg-blue-800 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-500/30"
             >
-              Ingresar
+              {submitting ? "Verificando..." : "Ingresar"}
               <i className="bi bi-arrow-right ml-2" aria-hidden="true" />
             </button>
 
