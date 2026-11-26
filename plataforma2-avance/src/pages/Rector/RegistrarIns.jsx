@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import api from "../../Config/env";
+import CampusManager from "../Administrador/CampusManager";
 
 const fieldClass = "w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-500/10";
 const labelClass = "mb-2 block text-sm font-semibold text-slate-700";
@@ -269,15 +270,16 @@ const RegistrarIns = () => {
       if (institution) {
         const response = await api.put(`/institutions/${institution.id}`, payload);
         const updatedInstitution = response.data?.institution || response.data?.data || {
-          ...institution,
-          ...payload,
+        ...institution,
+        ...payload,
         };
         setInstitution(normalizeInstitution(updatedInstitution));
         setNotice("Los datos de la institución se actualizaron correctamente.");
       } else {
         const response = await api.post("/institutions/store", payload);
         const createdInstitution = response.data?.institution || response.data?.data || payload;
-        setInstitution(normalizeInstitution(createdInstitution));
+        const normalizedInstitution = normalizeInstitution(createdInstitution);
+        setInstitution(normalizedInstitution.id ? normalizedInstitution : await requestInstitution());
         setNotice("La institución se registró correctamente.");
       }
 
@@ -332,6 +334,7 @@ const RegistrarIns = () => {
             Reintentar consulta
           </button>
         ) : institution && !isEditing ? (
+          <>
           <section className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-[0_12px_35px_rgba(15,23,42,0.06)]">
             <div className="bg-gradient-to-r from-violet-700 to-indigo-800 p-6 text-white sm:p-8">
               <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
@@ -397,6 +400,15 @@ const RegistrarIns = () => {
               ))}
             </dl>
           </section>
+          {institution.id && (
+            <CampusManager
+              institutions={[institution]}
+              uploadImage={uploadInstitutionImage}
+              restrictToInstitutions
+              accent="violet"
+            />
+          )}
+          </>
         ) : (
           <form onSubmit={handleSubmit} className="rounded-3xl border border-slate-100 bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.06)] sm:p-8">
             <div className="mb-6 flex items-start gap-3">

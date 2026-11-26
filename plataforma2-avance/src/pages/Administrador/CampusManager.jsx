@@ -40,7 +40,12 @@ const getErrorMessage = (error, fallback) => {
     return firstValidationError || error.response?.data?.message || error.message || fallback;
 };
 
-const CampusManager = ({ institutions, uploadImage }) => {
+const CampusManager = ({
+    institutions,
+    uploadImage,
+    restrictToInstitutions = false,
+    accent = "sky",
+}) => {
     const [campuses, setCampuses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -52,6 +57,19 @@ const CampusManager = ({ institutions, uploadImage }) => {
     const [facadeFile, setFacadeFile] = useState(null);
     const [facadePreview, setFacadePreview] = useState("");
     const facadePreviewUrl = useRef("");
+    const accentClasses = accent === "violet"
+        ? {
+            button: "bg-violet-700 hover:bg-violet-800 focus:ring-violet-500",
+            icon: "bg-violet-50 text-violet-700",
+            action: "hover:border-violet-200 hover:bg-violet-50 hover:text-violet-700",
+            checkbox: "text-violet-600 focus:ring-violet-500",
+        }
+        : {
+            button: "bg-sky-600 hover:bg-sky-700 focus:ring-sky-500",
+            icon: "bg-sky-50 text-sky-700",
+            action: "hover:border-sky-200 hover:bg-sky-50 hover:text-sky-700",
+            checkbox: "text-sky-600 focus:ring-sky-500",
+        };
 
     const loadCampuses = useCallback(async () => {
         setLoading(true);
@@ -229,6 +247,11 @@ const CampusManager = ({ institutions, uploadImage }) => {
         || campus.institution?.name_institution
         || "Institución no disponible"
     );
+    const visibleCampuses = restrictToInstitutions
+        ? campuses.filter((campus) => institutions.some(
+            (institution) => String(institution.id) === String(campus.institution_id ?? campus.institution?.id),
+        ))
+        : campuses;
 
     return (
         <section className="mt-10">
@@ -243,10 +266,10 @@ const CampusManager = ({ institutions, uploadImage }) => {
                     type="button"
                     onClick={openCreateModal}
                     disabled={institutions.length === 0}
-                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-bold text-white transition focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:opacity-50 ${accentClasses.button}`}
                 >
                     <i className="bi bi-plus-lg" aria-hidden="true" />
-                    Crear sede
+                    {restrictToInstitutions ? "Asociar sede" : "Crear sede"}
                 </button>
             </header>
 
@@ -271,10 +294,12 @@ const CampusManager = ({ institutions, uploadImage }) => {
                 <div role="status" className="rounded-2xl border border-slate-100 bg-white p-8 text-center text-sm text-slate-500 shadow-sm">
                     Cargando sedes...
                 </div>
-            ) : campuses.length === 0 ? (
+            ) : visibleCampuses.length === 0 ? (
                 <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center">
                     <i className="bi bi-geo-alt text-3xl text-slate-300" aria-hidden="true" />
-                    <p className="mb-0 mt-3 text-sm text-slate-500">Aún no hay sedes registradas.</p>
+                    <p className="mb-0 mt-3 text-sm text-slate-500">
+                        {restrictToInstitutions ? "Esta institución aún no tiene sedes asociadas." : "Aún no hay sedes registradas."}
+                    </p>
                 </div>
             ) : (
                 <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
@@ -291,14 +316,14 @@ const CampusManager = ({ institutions, uploadImage }) => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100">
-                                {campuses.map((campus) => (
+                                {visibleCampuses.map((campus) => (
                                     <tr key={campus.id} className="align-middle hover:bg-slate-50/70">
                                         <td className="px-5 py-4">
                                             <div className="flex items-center gap-3">
                                                 {campus.facade_url ? (
                                                     <img src={campus.facade_url} alt={`Fachada de ${campus.name}`} className="h-11 w-14 rounded-lg border border-slate-100 object-cover" />
                                                 ) : (
-                                                    <span className="flex h-11 w-14 items-center justify-center rounded-lg bg-sky-50 text-sky-700">
+                                                    <span className={`flex h-11 w-14 items-center justify-center rounded-lg ${accentClasses.icon}`}>
                                                         <i className="bi bi-building" aria-hidden="true" />
                                                     </span>
                                                 )}
@@ -323,7 +348,7 @@ const CampusManager = ({ institutions, uploadImage }) => {
                                                     type="button"
                                                     onClick={() => openEditModal(campus)}
                                                     aria-label={`Editar ${campus.name}`}
-                                                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:border-sky-200 hover:bg-sky-50 hover:text-sky-700"
+                                                    className={`flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition ${accentClasses.action}`}
                                                 >
                                                     <i className="bi bi-pencil" aria-hidden="true" />
                                                 </button>
@@ -344,7 +369,9 @@ const CampusManager = ({ institutions, uploadImage }) => {
                         </table>
                     </div>
                     <div className="border-t border-slate-100 px-5 py-3 text-xs text-slate-500">
-                        {campuses.length} {campuses.length === 1 ? "sede registrada" : "sedes registradas"}
+                        {visibleCampuses.length} {restrictToInstitutions
+                            ? (visibleCampuses.length === 1 ? "sede asociada" : "sedes asociadas")
+                            : (visibleCampuses.length === 1 ? "sede registrada" : "sedes registradas")}
                     </div>
                 </div>
             )}
@@ -407,7 +434,7 @@ const CampusManager = ({ institutions, uploadImage }) => {
                                     )}
                                 </div>
                                 <label className="sm:col-span-2 flex items-center gap-3 text-sm font-medium text-slate-700">
-                                    <input type="checkbox" name="is_main" checked={form.is_main} onChange={handleChange} className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
+                                    <input type="checkbox" name="is_main" checked={form.is_main} onChange={handleChange} className={`h-4 w-4 rounded border-slate-300 ${accentClasses.checkbox}`} />
                                     Esta es la sede principal de la institución
                                 </label>
                             </div>
@@ -418,7 +445,7 @@ const CampusManager = ({ institutions, uploadImage }) => {
                                 <button type="button" onClick={closeModal} disabled={saving} className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50">
                                     Cancelar
                                 </button>
-                                <button type="submit" disabled={saving} className="rounded-xl bg-sky-600 px-5 py-3 text-sm font-bold text-white hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60">
+                                <button type="submit" disabled={saving} className={`rounded-xl px-5 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-60 ${accentClasses.button}`}>
                                     {saving ? "Guardando..." : editingCampus ? "Guardar cambios" : "Crear sede"}
                                 </button>
                             </div>
