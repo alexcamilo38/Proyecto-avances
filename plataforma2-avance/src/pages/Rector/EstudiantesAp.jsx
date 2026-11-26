@@ -1,54 +1,146 @@
-import { useMemo, useState } from "react";
-import { useRectorData } from "./rectorStore";
+import { useEffect, useMemo, useState } from "react";
+import api from "../../Config/env";
 
-const fieldClass = "w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-500/10";
-const grades = ["Preescolar", "1°", "2°", "3°", "4°", "5°", "6°", "7°", "8°", "9°", "10°", "11°"];
+const getCollection = (responseData, key) => {
+  if (Array.isArray(responseData)) return responseData;
+  if (Array.isArray(responseData?.data)) return responseData.data;
+  if (Array.isArray(responseData?.[key])) return responseData[key];
+  if (Array.isArray(responseData?.data?.data)) return responseData.data.data;
 
-// Consulta, filtra y administra los estudiantes vinculados a la institución.
+  throw new Error(`El servidor devolvió una respuesta inesperada al consultar ${key}.`);
+};
+
+const getErrorMessage = (error, fallback) => (
+  error.response?.data?.message || error.message || fallback
+);
+
+const isApproved = (status) => (
+  ["aprobado", "aprobada", "approved", "aceptado", "aceptada"]
+    .includes(String(status || "").trim().toLowerCase())
+);
+
+const getStudentId = (enrollment) => enrollment.student_id ?? enrollment.student?.id;
+
+const getStudentName = (student) => {
+  const user = student.user_system || student.userSystem || {};
+  const name = [
+    user.first_name || student.first_name,
+    user.middle_name || student.middle_name,
+    user.last_name || student.last_name,
+    user.second_last_name || student.second_last_name,
+  ].filter(Boolean).join(" ");
+
+  return name || student.name || `Estudiante #${student.id}`;
+};
+
+const getStudentAge = (birthDate) => {
+  if (!birthDate) return "No registrado";
+  const date = new Date(`${String(birthDate).slice(0, 10)}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return "No registrado";
+
+  const today = new Date();
+  let age = today.getFullYear() - date.getFullYear();
+  if (
+    today.getMonth() < date.getMonth()
+    || (today.getMonth() === date.getMonth() && today.getDate() < date.getDate())
+  ) {
+    age -= 1;
+  }
+  return age >= 0 ? `${age} años` : "No registrado";
+};
+
+const getGender = (gender) => {
+  const value = String(gender || "").toLowerCase();
+  if (value === "m") return "Masculino";
+  if (value === "f") return "Femenino";
+  if (value === "o") return "Otro";
+  return gender || "No registrado";
+};
+
+// Consulta estudiantes con matrículas aprobadas desde la API.
 const EstudiantesAp = () => {
-  const { data, error, updateData } = useRectorData();
+  const [students, setStudents] = useState([]);
+  const [enrollments, setEnrollments] = useState([]);
   const [query, setQuery] = useState("");
-  const [studentEditing, setStudentEditing] = useState(null);
-  const [draft, setDraft] = useState(null);
-  const [actionError, setActionError] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [reloadKey, setReloadKey] = useState(0);
 
-  const students = useMemo(() => data.students.filter((student) => (
-    `${student.name} ${student.username} ${student.enrollmentId} ${student.grade}`
-      .toLowerCase()
-      .includes(query.toLowerCase())
-  )), [data.students, query]);
+  useEffect(() => {
+    let ignore = false;
 
-  const startEditing = (student) => {
-    setStudentEditing(student);
-    setDraft({ ...student });
-    setActionError("");
-  };
+    const loadStudents = async () => {
+      setLoading(true);
+      setError("");
 
-  const saveStudent = (event) => {
-    event.preventDefault();
-    const saved = updateData((current) => ({
-      ...current,
-      students: current.students.map((student) => (
-        student.applicationId === studentEditing.applicationId ? draft : student
-      )),
-    }));
-    if (saved) {
-      setStudentEditing(null);
-      setDraft(null);
-    } else {
-      setActionError("No se pudieron guardar los cambios del estudiante.");
-    }
-  };
+      try {
+        const [studentsResponse, enrollmentsResponse] = await Promise.all([
+          api.get("/students/list"),
+          api.get("/enrollments/list"),
+        ]);
+        const loadedStudents = getCollection(studentsResponse.data, "students");
+        const loadedEnrollments = getCollection(enrollmentsResponse.data, "enrollments");
 
-  const deleteStudent = (student) => {
-    if (!window.confirm(`¿Eliminar a ${student.name} de la lista de matriculados?`)) return;
-    setActionError("");
-    const saved = updateData((current) => ({
-      ...current,
-      students: current.students.filter(({ applicationId }) => applicationId !== student.applicationId),
-    }));
-    if (!saved) setActionError("No se pudo eliminar al estudiante.");
-  };
+        if (!ignore) {
+          setStudents(loadedStudents);
+          setEnrollments(loadedEnrollments);
+        }
+      } catch (loadError) {
+        console.error("Error al cargar estudiantes aprobados:", loadError);
+        if (!ignore) {
+          setError(getErrorMessage(loadError, "No se pudieron cargar los estudiantes."));
+        }
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    };
+
+    loadStudents();
+    return () => {
+      ignore = true;
+    };
+  }, [reloadKey]);
+
+  const approvedRows = useMemo(() => {
+    const studentsById = new Map(students.map((student) => [String(student.id), student]));
+    const latestApprovedEnrollments = [...enrollments]
+      .filter((enrollment) => isApproved(enrollment.status))
+      .sort((first, second) => (
+        String(second.enrollment_date || "").localeCompare(String(first.enrollment_date || ""))
+      ));
+    const seenStudentIds = new Set();
+
+    return latestApprovedEnrollments.flatMap((enrollment) => {
+      const studentId = getStudentId(enrollment);
+      if (studentId === null || studentId === undefined || seenStudentIds.has(String(studentId))) {
+        return [];
+      }
+
+      const student = enrollment.student || studentsById.get(String(studentId));
+      if (!student) return [];
+
+      seenStudentIds.add(String(studentId));
+      return [{ student, enrollment }];
+    });
+  }, [enrollments, students]);
+
+  const filteredStudents = useMemo(() => approvedRows.filter(({ student, enrollment }) => {
+    const user = student.user_system || student.userSystem || {};
+    const grade = enrollment.grade_level?.name
+      || student.current_grade_level?.name
+      || student.currentGradeLevel?.name
+      || enrollment.grade_level_id
+      || "";
+    const searchable = [
+      getStudentName(student),
+      user.username || student.username,
+      enrollment.enrollment_code || enrollment.id,
+      grade,
+      user.document || student.document,
+    ].join(" ").toLowerCase();
+
+    return searchable.includes(query.trim().toLowerCase());
+  }), [approvedRows, query]);
 
   return (
     <div className="ml-64 min-h-[calc(100vh-76px)] w-[calc(100%-16rem)] px-7 py-8 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] max-sm:px-4 max-sm:py-5">
@@ -64,13 +156,16 @@ const EstudiantesAp = () => {
           </div>
           <div className="rounded-2xl border border-violet-100 bg-white px-5 py-3 shadow-sm">
             <span className="block text-xs font-medium uppercase tracking-wide text-slate-400">Total matriculados</span>
-            <strong className="mt-1 block text-2xl text-slate-900">{data.students.length}</strong>
+            <strong className="mt-1 block text-2xl text-slate-900">{approvedRows.length}</strong>
           </div>
         </header>
 
-        {(error || actionError) && (
-          <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-            {actionError || error}
+        {error && (
+          <div role="alert" className="flex items-center justify-between gap-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <span>{error}</span>
+            <button type="button" onClick={() => setReloadKey((key) => key + 1)} className="shrink-0 font-semibold underline">
+              Reintentar
+            </button>
           </div>
         )}
 
@@ -78,7 +173,7 @@ const EstudiantesAp = () => {
           <div className="flex flex-col gap-4 border-b border-slate-100 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
             <div>
               <h2 className="m-0 text-lg font-semibold text-slate-900">Lista de matriculados</h2>
-              <p className="mb-0 mt-1 text-sm text-slate-500">Los estudiantes aparecen al aprobar su postulación.</p>
+              <p className="mb-0 mt-1 text-sm text-slate-500">Estudiantes cuyas matrículas fueron aprobadas.</p>
             </div>
             <label className="relative block w-full sm:max-w-xs">
               <span className="sr-only">Buscar estudiante</span>
@@ -95,43 +190,57 @@ const EstudiantesAp = () => {
                   <th className="px-5 py-4">Grado</th>
                   <th className="px-5 py-4">Edad</th>
                   <th className="px-5 py-4">Género</th>
-                  <th className="px-5 py-4">Acciones</th>
+                  <th className="px-5 py-4">Estado</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {students.map((student) => (
-                  <tr key={student.applicationId} className="transition hover:bg-violet-50/40">
+                {loading && (
+                  <tr>
+                    <td colSpan="6" className="px-5 py-12 text-center text-sm text-slate-500">Cargando estudiantes desde la API...</td>
+                  </tr>
+                )}
+                {!loading && filteredStudents.map(({ student, enrollment }) => {
+                  const user = student.user_system || student.userSystem || {};
+                  const grade = enrollment.grade_level?.name
+                    || student.current_grade_level?.name
+                    || student.currentGradeLevel?.name
+                    || enrollment.grade_level_id
+                    || "No registrado";
+                  const document = user.document || student.document;
+
+                  return (
+                  <tr key={`${student.id}-${enrollment.id}`} className="transition hover:bg-violet-50/40">
                     <td className="px-5 py-4">
-                      <strong className="block text-sm font-semibold text-slate-800">{student.name}</strong>
-                      <span className="mt-1 block text-xs text-slate-500">@{student.username}</span>
+                      <strong className="block text-sm font-semibold text-slate-800">{getStudentName(student)}</strong>
+                      <span className="mt-1 block text-xs text-slate-500">
+                        {user.username || student.username || (document ? `Documento: ${document}` : "Sin usuario")}
+                      </span>
                     </td>
-                    <td className="px-5 py-4 text-sm font-medium text-slate-600">{student.enrollmentId}</td>
-                    <td className="px-5 py-4">
-                      <span className="rounded-full bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-700">{student.grade}</span>
+                    <td className="px-5 py-4 text-sm font-medium text-slate-600">
+                      {enrollment.enrollment_code || `#${enrollment.id}`}
                     </td>
-                    <td className="px-5 py-4 text-sm text-slate-600">{student.age} años</td>
-                    <td className="px-5 py-4 text-sm text-slate-600">{student.gender}</td>
                     <td className="px-5 py-4">
-                      <div className="flex items-center gap-2">
-                        <button type="button" onClick={() => startEditing(student)} className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 transition hover:border-violet-200 hover:bg-violet-50 hover:text-violet-800 focus:outline-none focus:ring-4 focus:ring-violet-500/20">
-                          <i className="bi bi-pencil" aria-hidden="true" /> Editar
-                        </button>
-                        <button type="button" onClick={() => deleteStudent(student)} className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 px-3 py-2 text-xs font-bold text-red-700 transition hover:bg-red-50 focus:outline-none focus:ring-4 focus:ring-red-500/20">
-                          <i className="bi bi-trash3" aria-hidden="true" /> Borrar
-                        </button>
-                      </div>
+                      <span className="rounded-full bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-700">{grade}</span>
+                    </td>
+                    <td className="px-5 py-4 text-sm text-slate-600">{getStudentAge(student.birth_date)}</td>
+                    <td className="px-5 py-4 text-sm text-slate-600">{getGender(student.gender)}</td>
+                    <td className="px-5 py-4">
+                      <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                        {enrollment.status}
+                      </span>
                     </td>
                   </tr>
-                ))}
-                {students.length === 0 && (
+                  );
+                })}
+                {!loading && filteredStudents.length === 0 && (
                   <tr>
                     <td colSpan="6" className="px-5 py-12 text-center">
                       <i className="bi bi-person-plus mb-3 block text-3xl text-slate-300" aria-hidden="true" />
                       <span className="block text-sm font-semibold text-slate-700">
-                        {data.students.length === 0 ? "Aún no hay estudiantes aprobados" : "No se encontraron estudiantes"}
+                        {approvedRows.length === 0 ? "Aún no hay estudiantes aprobados" : "No se encontraron estudiantes"}
                       </span>
                       <span className="mt-1 block text-sm text-slate-500">
-                        {data.students.length === 0 ? "Aprueba una postulación para agregarla a esta lista." : "Prueba con otro nombre, usuario o grado."}
+                        {approvedRows.length === 0 ? "Las matrículas aprobadas aparecerán aquí." : "Prueba con otro nombre, usuario, documento o grado."}
                       </span>
                     </td>
                   </tr>
@@ -142,64 +251,6 @@ const EstudiantesAp = () => {
         </section>
       </div>
 
-      {studentEditing && draft && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4">
-          <form onSubmit={saveStudent} role="dialog" aria-modal="true" aria-labelledby="edit-student-title" className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl">
-            <div className="mb-6 flex items-start justify-between gap-4">
-              <div>
-                <span className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-violet-50 text-lg text-violet-700">
-                  <i className="bi bi-person-gear" aria-hidden="true" />
-                </span>
-                <h2 id="edit-student-title" className="m-0 text-xl font-bold text-slate-900">Editar estudiante</h2>
-                <p className="mb-0 mt-1 text-sm text-slate-500">Actualiza los datos de matrícula.</p>
-              </div>
-              <button type="button" aria-label="Cerrar" onClick={() => setStudentEditing(null)} className="rounded-lg p-2 text-slate-500 hover:bg-slate-100">
-                <i className="bi bi-x-lg" aria-hidden="true" />
-              </button>
-            </div>
-            {actionError && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-700">{actionError}</p>}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <label className="text-sm font-semibold text-slate-700 sm:col-span-2">
-                Nombre completo
-                <input className={`${fieldClass} mt-2`} value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} required />
-              </label>
-              <label className="text-sm font-semibold text-slate-700 sm:col-span-2">
-                Nombre de usuario
-                <input className={`${fieldClass} mt-2`} value={draft.username} onChange={(event) => setDraft({ ...draft, username: event.target.value })} required />
-              </label>
-              <label className="text-sm font-semibold text-slate-700">
-                ID de matrícula
-                <input className={`${fieldClass} mt-2`} value={draft.enrollmentId} onChange={(event) => setDraft({ ...draft, enrollmentId: event.target.value })} required />
-              </label>
-              <label className="text-sm font-semibold text-slate-700">
-                Grado
-                <select className={`${fieldClass} mt-2`} value={draft.grade} onChange={(event) => setDraft({ ...draft, grade: event.target.value })}>
-                  {grades.map((grade) => <option key={grade} value={grade}>{grade}</option>)}
-                </select>
-              </label>
-              <label className="text-sm font-semibold text-slate-700">
-                Edad
-                <input className={`${fieldClass} mt-2`} type="number" min="3" max="25" value={draft.age} onChange={(event) => setDraft({ ...draft, age: Number(event.target.value) })} required />
-              </label>
-              <label className="text-sm font-semibold text-slate-700">
-                Género
-                <select className={`${fieldClass} mt-2`} value={draft.gender} onChange={(event) => setDraft({ ...draft, gender: event.target.value })} required>
-                  <option>Femenino</option>
-                  <option>Masculino</option>
-                  <option>Otro</option>
-                  <option>Prefiero no decirlo</option>
-                </select>
-              </label>
-            </div>
-            <div className="mt-6 flex flex-col-reverse justify-end gap-3 border-t border-slate-100 pt-5 sm:flex-row">
-              <button type="button" onClick={() => setStudentEditing(null)} className="rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50">Cancelar</button>
-              <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-xl bg-violet-700 px-5 py-3 text-sm font-bold text-white transition hover:bg-violet-800 focus:outline-none focus:ring-4 focus:ring-violet-500/30">
-                <i className="bi bi-check2" aria-hidden="true" /> Guardar cambios
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
     </div>
   );
 };

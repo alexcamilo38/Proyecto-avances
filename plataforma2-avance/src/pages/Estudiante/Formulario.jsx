@@ -67,9 +67,9 @@ const Formulario = () => {
     const institutionId = searchParams.get("institutionId") || "";
     const initialCampusId = searchParams.get("campusId") || "";
     const [form, setForm] = useState({
-        campuse_id: initialCampusId,
+        campus_id: initialCampusId,
         grade_level_id: "",
-        academic__year_id: "",
+        academic_year_id: "",
         shift: "",
         student: emptyStudent,
         guardian: emptyGuardian,
@@ -138,9 +138,17 @@ const Formulario = () => {
         .filter(belongsToInstitution)
         .sort((first, second) => (first.sort_order || 0) - (second.sort_order || 0));
     const academicYears = (catalog?.academicYears || []).filter(belongsToInstitution);
-    const selectedCampus = campuses.find((campus) => String(campus.id) === form.campuse_id);
-    const selectedGrade = gradeLevels.find((grade) => String(grade.id) === form.grade_level_id);
-    const selectedYear = academicYears.find((year) => String(year.id) === form.academic__year_id);
+    const selectedCampus = campuses.find(
+        (campus) => String(campus.id) === String(form.campus_id),
+    ) || campuses.find(
+        (campus) => String(campus.id) === initialCampusId,
+    ) || (campuses.length === 1 ? campuses[0] : null);
+    const selectedGrade = gradeLevels.find(
+        (grade) => String(grade.id) === String(form.grade_level_id),
+    );
+    const selectedYear = academicYears.find(
+        (year) => String(year.id) === String(form.academic_year_id),
+    );
 
     const handleEnrollmentChange = (event) => {
         const { name, value } = event.target;
@@ -339,10 +347,10 @@ const Formulario = () => {
                         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                             <div>
                                 <label className={labelClass} htmlFor="campus-id">Sede</label>
-                                <select id="campus-id" className={fieldClass} name="campus_id" value={form.campus_id} onChange={handleEnrollmentChange} required>
+                                <select id="campus-id" className={fieldClass} name="campus_id" value={selectedCampus ? String(selectedCampus.id) : ""} onChange={handleEnrollmentChange} required>
                                     <option value="">Selecciona una sede</option>
                                     {campuses.map((campus) => (
-                                        <option key={campus.id} value={campus.id}>
+                                        <option key={campus.id} value={String(campus.id)}>
                                             {campus.name}{campus.is_main ? " (Principal)" : ""}
                                         </option>
                                     ))}
@@ -360,7 +368,7 @@ const Formulario = () => {
                                 <select id="academic-year-id" className={fieldClass} name="academic_year_id" value={form.academic_year_id} onChange={handleEnrollmentChange} required>
                                     <option value="">Selecciona un año</option>
                                     {academicYears.map((year) => (
-                                        <option key={year.id} value={year.id}>
+                                        <option key={year.id} value={String(year.id)}>
                                             {year.name}{year.is_current ? " (Actual)" : ""}
                                         </option>
                                     ))}
