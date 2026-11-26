@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import api from "../../Config/env";
+import CampusManager from "./CampusManager";
 
 const cloudinaryCloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 const cloudinaryUploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
@@ -382,6 +383,7 @@ const RegistrarSede = () => {
                         </div>
                     </div>
                 )}
+                <CampusManager institutions={institutions} uploadImage={uploadImage} />
             </div>
 
             {modalOpen && (

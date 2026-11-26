@@ -1,155 +1,248 @@
-//import React from 'react'
-import { Link } from "react-router-dom"
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import api from "../../Config/env";
 
+const getCollection = (responseData, key) => {
+    if (Array.isArray(responseData)) return responseData;
+    if (Array.isArray(responseData?.data)) return responseData.data;
+    if (Array.isArray(responseData?.[key])) return responseData[key];
+    if (Array.isArray(responseData?.data?.data)) return responseData.data.data;
 
-// Lista los módulos asignados al docente y enlaza a su gestión de grupos.
+    throw new Error(`El servidor devolvió una respuesta inesperada al consultar ${key}.`);
+};
+
+const getErrorMessage = (error, fallback) => (
+    error.response?.data?.message || error.message || fallback
+);
+
+const isPublished = (module) => (
+    module.is_published === true
+    || module.is_published === 1
+    || module.is_published === "1"
+);
+
 const DocenteMo = () => {
+    const [modules, setModules] = useState([]);
+    const [classGroups, setClassGroups] = useState([]);
+    const [gradeLevels, setGradeLevels] = useState([]);
+    const [moduleEnrollments, setModuleEnrollments] = useState([]);
+    const [search, setSearch] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const [reloadKey, setReloadKey] = useState(0);
+
+    useEffect(() => {
+        let ignore = false;
+        const requests = [
+            ["modules", "/modules/list", "modules"],
+            ["classGroups", "/class-groups/list", "class_groups"],
+            ["gradeLevels", "/grade-levels/list", "grade_levels"],
+            ["moduleEnrollments", "/module-enrollments/list", "module_enrollments"],
+        ];
+
+        Promise.allSettled(requests.map(([, url]) => api.get(url))).then((results) => {
+            if (ignore) return;
+
+            const values = {
+                modules: [],
+                classGroups: [],
+                gradeLevels: [],
+                moduleEnrollments: [],
+            };
+            const errors = [];
+
+            results.forEach((result, index) => {
+                const [key, , responseKey] = requests[index];
+                if (result.status === "fulfilled") {
+                    try {
+                        values[key] = getCollection(result.value.data, responseKey);
+                    } catch (parseError) {
+                        console.error(`Error al leer ${key}:`, parseError);
+                        errors.push(parseError.message);
+                    }
+                } else {
+                    console.error(`Error al cargar ${key}:`, result.reason);
+                    errors.push(getErrorMessage(result.reason, `No se pudo cargar ${key}.`));
+                }
+            });
+
+            setModules(values.modules);
+            setClassGroups(values.classGroups);
+            setGradeLevels(values.gradeLevels);
+            setModuleEnrollments(values.moduleEnrollments);
+            setError(errors.join(" "));
+            setLoading(false);
+        });
+
+        return () => {
+            ignore = true;
+        };
+    }, [reloadKey]);
+
+    const groupById = useMemo(
+        () => new Map(classGroups.map((group) => [String(group.id), group])),
+        [classGroups],
+    );
+    const gradeById = useMemo(
+        () => new Map(gradeLevels.map((grade) => [String(grade.id), grade])),
+        [gradeLevels],
+    );
+
+    const getGroupLabel = useCallback((module) => {
+        const group = module.class_group
+            || module.classGroup
+            || groupById.get(String(module.class_group_id));
+        if (!group) return "Curso no asignado";
+
+        const grade = group.grade_level
+            || group.gradeLevel
+            || gradeById.get(String(group.grade_level_id));
+        const gradeName = grade?.name || (group.grade_level_id ? `Grado ${group.grade_level_id}` : "");
+        const parts = [
+            gradeName,
+            group.section,
+            group.shift,
+            group.campus?.name || group.campuse?.name,
+        ].filter(Boolean);
+
+        return parts.join(" · ") || "Curso no asignado";
+    }, [gradeById, groupById]);
+
+    const getEnrollmentCount = (module) => {
+        const studentIds = new Set(
+            moduleEnrollments
+                .filter((enrollment) => String(enrollment.module_id ?? enrollment.module?.id) === String(module.id))
+                .map((enrollment) => enrollment.student_id ?? enrollment.student?.id)
+                .filter((studentId) => studentId !== null && studentId !== undefined),
+        );
+        return studentIds.size;
+    };
+
+    const filteredModules = useMemo(() => {
+        const normalizedSearch = search.trim().toLocaleLowerCase();
+        if (!normalizedSearch) return modules;
+
+        return modules.filter((module) => (
+            [module.name_module, getGroupLabel(module)]
+                .some((value) => value?.toLocaleLowerCase().includes(normalizedSearch))
+        ));
+    }, [modules, search, getGroupLabel]);
+
+    const retryLoad = () => {
+        setLoading(true);
+        setError("");
+        setReloadKey((current) => current + 1);
+    };
+
     return (
-        <div>
-            {/* Menú lateral de navegación */}
-
-            <div className={"contenido-principal-docentess04 [margin-left:260px] [width:calc(100%_-_260px)] [min-height:100vh] [background:#f4f6fa] [padding:40px] [width:82vw]"}>
-
-                <header className={"header-tabla-docentess04 [display:flex] [justify-content:space-between] [align-items:center] [margin-bottom:25px] [gap:20px]"}>
-                    <div className="titulo-area-docentess04">
-                        <h1 className={"[.titulo-area-docentess04_&]:[font-size:34px] [.titulo-area-docentess04_&]:[color:#0d1b3d] [.titulo-area-docentess04_&]:[margin-bottom:8px]"}>Mis Módulos Asignados</h1>
-                        <p className={"[.titulo-area-docentess04_&]:[font-size:15px]"}>
+        <main className="ml-64 min-h-screen w-[calc(100%-16rem)] bg-slate-100 px-5 py-8 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] md:px-8">
+            <div className="mx-auto max-w-7xl">
+                <header className="mb-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <h1 className="mb-2 mt-0 text-3xl font-semibold text-slate-900">Mis Módulos Asignados</h1>
+                        <p className="mb-0 text-slate-600">
                             Gestiona los contenidos, revisa los estudiantes inscritos y sube las calificaciones finales.
                         </p>
                     </div>
-
-                    <Link to="/SubirModulo" className={"btn-primario-docentess04 [background:#4da3ff] [color:white] [padding:14px_22px] [border-radius:12px] [text-decoration:none] [display:inline-flex] [align-items:center] [gap:10px] [font-weight:600] [transition:0.3s] [&:hover]:[background:#318cff]"}>
-                        <i className={"bi bi-plus-lg [.caja-busqueda-docentess04_&]:[color:#6b7280] [.caja-busqueda-docentess04_&]:[font-size:15px]"}></i> Subir Nuevo Módulo
+                    <Link
+                        to="/SubirModulo"
+                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-5 py-3 font-semibold text-white no-underline transition hover:bg-sky-600"
+                    >
+                        <i className="bi bi-plus-lg" aria-hidden="true" />
+                        Subir Nuevo Módulo
                     </Link>
                 </header>
 
-                <section className={"contenedor-tabla-soft-docentess04 [background:white] [border-radius:22px] [padding:25px]"}>
+                {error && (
+                    <div role="alert" className="mb-5 flex items-start justify-between gap-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                        <span>{error}</span>
+                        <button type="button" onClick={retryLoad} className="shrink-0 font-semibold underline">
+                            Reintentar
+                        </button>
+                    </div>
+                )}
 
-                    <div className={"barra-herramientas-docentess04 [display:flex] [justify-content:space-between] [align-items:center] [margin-bottom:25px]"}>
-                        <div className={"caja-busqueda-docentess04 [width:350px] [background:#f3f6fa] [border:1px_solid_#dbe2ea] [border-radius:12px] [padding:12px_15px] [display:flex] [align-items:center] [gap:10px]"}>
-                            <i className={"bi bi-search [.caja-busqueda-docentess04_&]:[color:#6b7280] [.caja-busqueda-docentess04_&]:[font-size:15px]"}></i>
-
-                            <input className={"[.caja-busqueda-docentess04_&]:[width:100%] [.caja-busqueda-docentess04_&]:[border:none] [.caja-busqueda-docentess04_&]:[background:transparent] [.caja-busqueda-docentess04_&]:[outline:none] [.caja-busqueda-docentess04_&]:[font-size:14px]"} type="text" placeholder="Buscar módulo o grado..." />
-                        </div>
+                <section className="rounded-2xl bg-white p-6 shadow-sm">
+                    <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <label className="flex w-full max-w-sm items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                            <i className="bi bi-search text-slate-400" aria-hidden="true" />
+                            <input
+                                className="w-full border-0 bg-transparent text-sm outline-none"
+                                type="search"
+                                value={search}
+                                onChange={(event) => setSearch(event.target.value)}
+                                placeholder="Buscar módulo o grado..."
+                                aria-label="Buscar módulo o grado"
+                            />
+                        </label>
+                        <span className="text-sm text-slate-500">
+                            {loading ? "Cargando módulos..." : `${filteredModules.length} módulo(s)`}
+                        </span>
                     </div>
 
-                    <div className={"tabla-scroll-docentess04 [overflow-x:auto]"}>
-
-                        <table className={"tabla-matriculados-docentess04 [width:100%] [border-collapse:collapse]"}>
-
-                            <thead className={"[.tabla-matriculados-docentess04_&]:[background:#f5f7fb]"}>
+                    <div className="overflow-x-auto">
+                        <table className="w-full min-w-[760px] border-collapse text-left">
+                            <thead className="bg-slate-50">
                                 <tr>
-                                    <th className={"[.tabla-matriculados-docentess04_&]:[padding:16px] [.tabla-matriculados-docentess04_&]:[text-align:left] [.tabla-matriculados-docentess04_&]:[color:#0d1b3d] [.tabla-matriculados-docentess04_&]:[font-size:14px] [.tabla-matriculados-docentess04_&]:[font-weight:700]"}>N°</th>
-                                    <th className={"[.tabla-matriculados-docentess04_&]:[padding:16px] [.tabla-matriculados-docentess04_&]:[text-align:left] [.tabla-matriculados-docentess04_&]:[color:#0d1b3d] [.tabla-matriculados-docentess04_&]:[font-size:14px] [.tabla-matriculados-docentess04_&]:[font-weight:700]"}>Nombre del Módulo</th>
-                                    <th className={"[.tabla-matriculados-docentess04_&]:[padding:16px] [.tabla-matriculados-docentess04_&]:[text-align:left] [.tabla-matriculados-docentess04_&]:[color:#0d1b3d] [.tabla-matriculados-docentess04_&]:[font-size:14px] [.tabla-matriculados-docentess04_&]:[font-weight:700]"}>Grado / Curso</th>
-                                    <th className={"[.tabla-matriculados-docentess04_&]:[padding:16px] [.tabla-matriculados-docentess04_&]:[text-align:left] [.tabla-matriculados-docentess04_&]:[color:#0d1b3d] [.tabla-matriculados-docentess04_&]:[font-size:14px] [.tabla-matriculados-docentess04_&]:[font-weight:700]"}>Estudiantes Inscritos</th>
-                                    <th className={"[.tabla-matriculados-docentess04_&]:[padding:16px] [.tabla-matriculados-docentess04_&]:[text-align:left] [.tabla-matriculados-docentess04_&]:[color:#0d1b3d] [.tabla-matriculados-docentess04_&]:[font-size:14px] [.tabla-matriculados-docentess04_&]:[font-weight:700]"}>Estado</th>
-                                    <th className={"[.tabla-matriculados-docentess04_&]:[padding:16px] [.tabla-matriculados-docentess04_&]:[text-align:left] [.tabla-matriculados-docentess04_&]:[color:#0d1b3d] [.tabla-matriculados-docentess04_&]:[font-size:14px] [.tabla-matriculados-docentess04_&]:[font-weight:700]"}>Acciones</th>
+                                    {["N°", "Nombre del módulo", "Grado / Curso", "Estudiantes inscritos", "Estado", "Acciones"].map((heading) => (
+                                        <th key={heading} className="px-4 py-4 text-sm font-bold text-slate-900">{heading}</th>
+                                    ))}
                                 </tr>
                             </thead>
-
                             <tbody>
-
-                                <tr>
-                                    <td className={"[.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px]"}>01</td>
-
-                                    <td className={"nombre-est-docentess04 [.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
-                                        Comprensión Lectora y Redacción
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px]"}>
-                                        <span className={"grado-tag-docentess04 [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
-                                            3° Primaria
-                                        </span>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px]"}>
-                                        <strong>28 Alumnos</strong>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px]"}>
-                                        <span className={"badge-activo-docentess04 [background:#e2f0d9] [color:#385723] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}> Activo</span>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px]"}>
-                                        <Link to="/GrupoModulo" className={"btn-tabla-docentess04 [background:#4da3ff] [color:white] [padding:8px_14px] [border-radius:10px] [text-decoration:none] [display:inline-flex] [align-items:center] [gap:8px] [font-size:14px] [transition:0.3s] [&:hover]:[background:#318cff]"} title="Gestionar Estudiantes y Notas">
-                                            <i className={"bi bi-eye-fill [.caja-busqueda-docentess04_&]:[color:#6b7280] [.caja-busqueda-docentess04_&]:[font-size:15px]"}></i> Ver Grupo
-                                        </Link>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td className={"[.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px]"}>02</td>
-
-                                    <td className={"nombre-est-docentess04 [.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
-                                        Matemáticas Fundamentales
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px]"}>
-                                        <span className={"grado-tag-docentess04 [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
-                                            4° Primaria
-                                        </span>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px]"}>
-                                        <strong>25 Alumnos</strong>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px]"}>
-                                        <span className={"badge-activo-docentess04 [background:#e2f0d9] [color:#385723] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
-                                            Activo
-                                        </span>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px]"}>
-                                        <Link to="/GrupoModulo" className={"btn-tabla-docentess04 [background:#4da3ff] [color:white] [padding:8px_14px] [border-radius:10px] [text-decoration:none] [display:inline-flex] [align-items:center] [gap:8px] [font-size:14px] [transition:0.3s] [&:hover]:[background:#318cff]"} title="Gestionar Estudiantes y Notas">
-                                            <i className={"bi bi-eye-fill [.caja-busqueda-docentess04_&]:[color:#6b7280] [.caja-busqueda-docentess04_&]:[font-size:15px]"}></i> Ver Grupo
-                                        </Link>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td className={"[.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px]"}>03</td>
-
-                                    <td className={"nombre-est-docentess04 [.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
-                                        Ciencias Naturales y Entorno
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px]"}>
-                                        <span className={"grado-tag-docentess04 [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
-                                            5° Primaria
-                                        </span>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px]"}>
-                                        <strong>30 Alumnos</strong>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px]"}>
-                                        <span className={"badge-pendiente-docentess04 [background:#fce4d6] [color:#c65911] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
-                                            Pendiente
-                                        </span>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentess04_&]:[padding:18px_16px] [.tabla-matriculados-docentess04_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentess04_&]:[color:#44506b] [.tabla-matriculados-docentess04_&]:[font-size:14px]"}>
-                                        <Link to="/GrupoModulo" className={"btn-tabla-docentess04 [background:#4da3ff] [color:white] [padding:8px_14px] [border-radius:10px] [text-decoration:none] [display:inline-flex] [align-items:center] [gap:8px] [font-size:14px] [transition:0.3s] [&:hover]:[background:#318cff]"} title="Gestionar Estudiantes y Notas" >
-                                            <i className={"bi bi-eye-fill [.caja-busqueda-docentess04_&]:[color:#6b7280] [.caja-busqueda-docentess04_&]:[font-size:15px]"}></i> Ver Grupo
-                                        </Link>
-                                    </td>
-                                </tr>
-
+                                {loading && (
+                                    <tr>
+                                        <td colSpan="6" className="px-4 py-10 text-center text-sm text-slate-500">
+                                            Cargando módulos...
+                                        </td>
+                                    </tr>
+                                )}
+                                {!loading && filteredModules.length === 0 && (
+                                    <tr>
+                                        <td colSpan="6" className="px-4 py-10 text-center text-sm text-slate-500">
+                                            {modules.length ? "No hay módulos que coincidan con la búsqueda." : "Aún no hay módulos registrados."}
+                                        </td>
+                                    </tr>
+                                )}
+                                {!loading && filteredModules.map((module, index) => {
+                                    const published = isPublished(module);
+                                    return (
+                                        <tr key={module.id} className="border-b border-slate-100 last:border-0">
+                                            <td className="px-4 py-5 text-sm text-slate-500">{String(index + 1).padStart(2, "0")}</td>
+                                            <td className="px-4 py-5 text-sm font-semibold text-slate-900">{module.name_module}</td>
+                                            <td className="px-4 py-5 text-sm text-slate-700">
+                                                <span className="inline-flex rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700">
+                                                    {getGroupLabel(module)}
+                                                </span>
+                                            </td>
+                                            <td className="px-4 py-5 text-sm font-semibold text-slate-700">
+                                                {getEnrollmentCount(module)} estudiante(s)
+                                            </td>
+                                            <td className="px-4 py-5 text-sm">
+                                                <span className={`inline-flex rounded-full px-3 py-1.5 text-xs font-semibold ${published ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}`}>
+                                                    {published ? "Activo" : "Pendiente"}
+                                                </span>
+                                            </td>
+                                            <td className="px-4 py-5">
+                                                <Link
+                                                    to={`/GrupoModulo?moduleId=${encodeURIComponent(module.id)}`}
+                                                    className="inline-flex items-center gap-2 rounded-lg bg-sky-500 px-3 py-2 text-sm font-semibold text-white no-underline transition hover:bg-sky-600"
+                                                    title="Gestionar estudiantes y notas"
+                                                >
+                                                    <i className="bi bi-eye-fill" aria-hidden="true" />
+                                                    Ver Grupo
+                                                </Link>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
-
                         </table>
-
                     </div>
-
                 </section>
-
             </div>
+        </main>
+    );
+};
 
-        </div>
-    )
-}
-
-export default DocenteMo
+export default DocenteMo;

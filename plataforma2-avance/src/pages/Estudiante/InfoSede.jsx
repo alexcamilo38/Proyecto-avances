@@ -1,103 +1,245 @@
-//import React from 'react'
-import { Link } from "react-router-dom"
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import api from "../../Config/env";
 
+const getCollection = (responseData, key) => {
+    if (Array.isArray(responseData)) return responseData;
+    if (Array.isArray(responseData?.data)) return responseData.data;
+    if (Array.isArray(responseData?.[key])) return responseData[key];
+    if (Array.isArray(responseData?.data?.data)) return responseData.data.data;
 
+    throw new Error(`El servidor devolvió una respuesta inesperada al consultar ${key}.`);
+};
 
-// Presenta la información de una sede seleccionada antes de iniciar la matrícula.
+const getErrorMessage = (error, fallback) => {
+    const validationErrors = error.response?.data?.errors;
+    const firstValidationError = validationErrors && Object.values(validationErrors).flat()[0];
+
+    return firstValidationError || error.response?.data?.message || error.message || fallback;
+};
+
+const Detail = ({ label, value }) => (
+    <div className="rounded-xl bg-slate-50 p-4">
+        <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</dt>
+        <dd className="mb-0 mt-1 break-words text-sm font-medium text-slate-800">{value || "No registrado"}</dd>
+    </div>
+);
+
 const InfoSede = () => {
-    return (
-        <div >
-            {/* Menú lateral principal */}
+    const [searchParams] = useSearchParams();
+    const institutionId = searchParams.get("institutionId") || "";
+    const campusId = searchParams.get("campusId") || "";
+    const [reloadKey, setReloadKey] = useState(0);
+    const requestKey = `${institutionId}:${campusId}:${reloadKey}`;
+    const [result, setResult] = useState({
+        key: "",
+        institution: null,
+        campus: null,
+        error: "",
+    });
 
-            <div className={"contenido-principal3 [margin-left:260px] [padding:40px]"}>
-                <header className={"bienvenida-sede [height:250px] [background:#1a1c2d_url('imagenes/fondo-sede.jpg')] [background-size:cover] [background-position:center] [border-radius:20px] [display:flex] [align-items:flex-end] [padding:30px] [margin-bottom:30px] [color:white]"}>
-                    <div className="overlay-texto">
-                        <h1>Institución Educativa Técnica Industrial</h1>
-                        <p><i className={"bi bi-geo-alt [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i> Popayán, Cauca — Sede Central</p>
+    useEffect(() => {
+        if (!institutionId) return undefined;
+
+        let ignore = false;
+        const institutionRequest = api.get("/institutions/list")
+            .then((response) => getCollection(response.data, "institutions"));
+        const campusRequest = campusId
+            ? api.get("/campuses/list").then((response) => getCollection(response.data, "campuses"))
+            : Promise.resolve([]);
+
+        Promise.all([institutionRequest, campusRequest])
+            .then(([institutions, campuses]) => {
+                const institution = institutions.find((item) => String(item.id) === institutionId);
+                if (!institution) throw new Error("No se encontró la institución seleccionada.");
+
+                let campus = null;
+                if (campusId) {
+                    campus = campuses.find((item) => String(item.id) === campusId);
+                    if (!campus) throw new Error("No se encontró la sede seleccionada.");
+
+                    const campusInstitutionId = campus.institution_id ?? campus.institution?.id;
+                    if (String(campusInstitutionId) !== String(institution.id)) {
+                        throw new Error("La sede seleccionada no pertenece a esta institución.");
+                    }
+                }
+
+                if (!ignore) setResult({ key: requestKey, institution, campus, error: "" });
+            })
+            .catch((error) => {
+                console.error("Error al cargar los detalles de la institución o sede:", error);
+                if (!ignore) {
+                    setResult({
+                        key: requestKey,
+                        institution: null,
+                        campus: null,
+                        error: getErrorMessage(error, "No se pudo cargar la información seleccionada."),
+                    });
+                }
+            });
+
+        return () => {
+            ignore = true;
+        };
+    }, [institutionId, campusId, requestKey]);
+
+    const isLoading = Boolean(institutionId) && result.key !== requestKey;
+    const institution = result.key === requestKey ? result.institution : null;
+    const campus = result.key === requestKey ? result.campus : null;
+    const error = result.key === requestKey ? result.error : "";
+    const heroImage = campus?.facade_url || institution?.logo_url;
+
+    if (!institutionId) {
+        return (
+            <main className="ml-64 min-h-screen w-[calc(100%-16rem)] bg-slate-50 px-5 py-10 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] md:px-10">
+                <section className="mx-auto max-w-3xl rounded-2xl bg-white p-8 text-center shadow-sm">
+                    <h1 className="mt-0 text-2xl font-bold text-slate-900">Selecciona una institución</h1>
+                    <p className="text-slate-600">Abre una institución o una de sus sedes desde el listado para ver sus datos.</p>
+                    <Link to="/Colegios" className="inline-flex rounded-xl bg-sky-600 px-5 py-3 font-semibold text-white no-underline hover:bg-sky-700">
+                        Volver a instituciones
+                    </Link>
+                </section>
+            </main>
+        );
+    }
+
+    if (isLoading) {
+        return (
+            <main className="ml-64 min-h-screen w-[calc(100%-16rem)] bg-slate-50 px-5 py-10 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] md:px-10">
+                <div role="status" className="mx-auto max-w-5xl rounded-2xl bg-white p-8 text-center text-slate-600 shadow-sm">
+                    Cargando información...
+                </div>
+            </main>
+        );
+    }
+
+    if (error || !institution) {
+        return (
+            <main className="ml-64 min-h-screen w-[calc(100%-16rem)] bg-slate-50 px-5 py-10 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] md:px-10">
+                <section className="mx-auto max-w-3xl rounded-2xl border border-red-200 bg-white p-8 text-center shadow-sm">
+                    <p role="alert" className="text-red-700">{error || "No se encontró la institución seleccionada."}</p>
+                    <div className="flex justify-center gap-3">
+                        <button
+                            type="button"
+                            onClick={() => setReloadKey((current) => current + 1)}
+                            className="rounded-xl bg-sky-600 px-5 py-3 font-semibold text-white hover:bg-sky-700"
+                        >
+                            Reintentar
+                        </button>
+                        <Link to="/Colegios" className="rounded-xl border border-slate-200 px-5 py-3 font-semibold text-slate-700 no-underline hover:bg-slate-50">
+                            Volver al listado
+                        </Link>
+                    </div>
+                </section>
+            </main>
+        );
+    }
+
+    const locationCity = campus?.city || institution.city || "";
+    const locationAddress = campus?.address || institution.address_institution || "";
+    const mapQuery = [locationAddress, locationCity].filter(Boolean).join(", ");
+    const enrollmentParams = new URLSearchParams({ institutionId: String(institution.id) });
+    if (campus?.id) enrollmentParams.set("campusId", String(campus.id));
+
+    return (
+        <main className="ml-64 min-h-screen w-[calc(100%-16rem)] bg-slate-50 px-5 py-8 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] md:px-10">
+            <div className="mx-auto max-w-6xl">
+                <header className="relative mb-8 overflow-hidden rounded-3xl bg-slate-900 px-6 py-10 text-white shadow-sm sm:px-10">
+                    {heroImage && (
+                        <img src={heroImage} alt="" className="absolute inset-0 h-full w-full object-cover opacity-30" />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 to-slate-900/50" />
+                    <div className="relative">
+                        <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-sky-200">
+                            {campus ? "Sede seleccionada" : "Institución"}
+                        </p>
+                        <h1 className="mb-2 mt-0 text-3xl font-bold">
+                            {campus?.name || institution.name_institution}
+                        </h1>
+                        {campus && <p className="mb-2 text-sm text-slate-200">{institution.name_institution}</p>}
+                        <p className="mb-0 text-sm text-slate-200">
+                            <i className="bi bi-geo-alt mr-2" aria-hidden="true" />
+                            {[locationCity, locationAddress].filter(Boolean).join(" · ") || "Ubicación no registrada"}
+                        </p>
                     </div>
                 </header>
 
-                <div className={"grid-informacion-limpia [display:grid] [grid-template-columns:1fr_340px] [gap:30px]"}>
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+                    <div className="space-y-6">
+                        {campus && (
+                            <section className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+                                <h2 className="mb-4 mt-0 text-xl font-bold text-slate-900">Información de la sede</h2>
+                                {campus.facade_url && (
+                                    <img src={campus.facade_url} alt={`Fachada de ${campus.name}`} className="mb-5 h-56 w-full rounded-xl object-cover" />
+                                )}
+                                <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                    <Detail label="Nombre" value={campus.name} />
+                                    <Detail label="Sede principal" value={campus.is_main ? "Sí" : "No"} />
+                                    <Detail label="Ciudad" value={campus.city} />
+                                    <Detail label="Dirección" value={campus.address} />
+                                    <Detail label="Teléfono" value={campus.phone} />
+                                    <Detail label="Correo" value={campus.email} />
+                                </dl>
+                            </section>
+                        )}
 
-                <div className="bloque-lectura">
-                        {/* Información general de la sede */}
-                        <section className={"tarjeta-blanca [background-color:#ffffff] [border:1px_solid_#e2e8f0] [border-radius:12px] [padding:24px] [box-shadow:0_4px_6px_rgba(0,_0,_0,_0.05)] [background:white] [padding:25px] [border-radius:20px] [box-shadow:0_10px_25px_rgba(0,0,0,0.03)] [margin-bottom:25px]"}>
-                            <h2 className={"[.tarjeta-blanca_&]:[color:#1e3a8a] [.tarjeta-blanca_&]:[font-size:1.25rem] [.tarjeta-blanca_&]:[font-weight:600] [.tarjeta-blanca_&]:[margin-bottom:16px] [.tarjeta-blanca_&]:[display:flex] [.tarjeta-blanca_&]:[align-items:center] [.tarjeta-blanca_&]:[gap:8px] [.tarjeta-blanca_&]:[font-size:1.2rem] [.tarjeta-blanca_&]:[color:#1a1c2d] [.tarjeta-blanca_&]:[margin-bottom:15px] [.tarjeta-blanca_&]:[gap:10px]"}><i className={"bi bi-info-circle-fill [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i> Acerca de nuestra Sede</h2>
-                            <p>Nuestra institución se destaca por ofrecer un ambiente educativo moderno, enfocado en el desarrollo integral y técnico de los estudiantes en la región. Contamos con instalaciones adecuadas para el aprendizaje práctico y teórico, asegurando una formación de alta calidad.</p>
-                            <div className={"mini-grid-servicios [display:flex] [flex-wrap:wrap] [gap:10px] [margin-top:20px]"}>
-                            <div className={"servicio-tag [background:#f1f5f9] [padding:8px_15px] [border-radius:50px] [font-size:0.85rem] [color:#475569] [display:flex] [align-items:center] [gap:8px]"}><i className={"bi bi-wifi [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i> Zona WiFi</div>
-                            <div className={"servicio-tag [background:#f1f5f9] [padding:8px_15px] [border-radius:50px] [font-size:0.85rem] [color:#475569] [display:flex] [align-items:center] [gap:8px]"}><i className={"bi bi-bus-front [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i> Transporte</div>
-                            <div className={"servicio-tag [background:#f1f5f9] [padding:8px_15px] [border-radius:50px] [font-size:0.85rem] [color:#475569] [display:flex] [align-items:center] [gap:8px]"}><i className={"bi bi-book [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i> Biblioteca</div>
-                            <div className={"servicio-tag [background:#f1f5f9] [padding:8px_15px] [border-radius:50px] [font-size:0.85rem] [color:#475569] [display:flex] [align-items:center] [gap:8px]"}><i className={"bi bi-cup-hot [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i> Comedor</div>
-                            </div>
-                        </section>
-                        <section className={"tarjeta-blanca [background-color:#ffffff] [border:1px_solid_#e2e8f0] [border-radius:12px] [padding:24px] [box-shadow:0_4px_6px_rgba(0,_0,_0,_0.05)] [background:white] [padding:25px] [border-radius:20px] [box-shadow:0_10px_25px_rgba(0,0,0,0.03)] [margin-bottom:25px]"}>
-                            <h2 className={"[.tarjeta-blanca_&]:[color:#1e3a8a] [.tarjeta-blanca_&]:[font-size:1.25rem] [.tarjeta-blanca_&]:[font-weight:600] [.tarjeta-blanca_&]:[margin-bottom:16px] [.tarjeta-blanca_&]:[display:flex] [.tarjeta-blanca_&]:[align-items:center] [.tarjeta-blanca_&]:[gap:8px] [.tarjeta-blanca_&]:[font-size:1.2rem] [.tarjeta-blanca_&]:[color:#1a1c2d] [.tarjeta-blanca_&]:[margin-bottom:15px] [.tarjeta-blanca_&]:[gap:10px]"}><i className={"bi bi-geo-alt-fill [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i> Ubicación de la Sede</h2>
-                            <div className={"mapa-contenedor [width:100%] [height:280px] [border-radius:10px] [overflow:hidden] [border:2px_solid_#3b82f6] [box-shadow:0_8px_20px_rgba(59,_130,_246,_0.3)] [transition:transform_0.3s_ease,_box-shadow_0.3s_ease] [&:hover]:[transform:translateY(-3px)] [&:hover]:[box-shadow:0_12px_28px_rgba(29,_78,_216,_0.45)]"}>
-                            <iframe
-                                title="Ubicación de la Sede"
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3986.113009581831!2d-76.6085121!3d2.4419213!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMsKwMjYnMzAuOSJOIDc2wrAzNicyNC42Ilc!5e0!3m2!1ses!2sco!4v1700000000000!5m2!1ses!2sco"
-                                className={"mapa-iframe [width:100%] [height:100%] [border:0]"}
-                                allowFullScreen=""
-                                loading="lazy"
-                                referrerPolicy="no-referrer-when-downgrade"
-                            ></iframe>
-                            </div>
-                        </section>
-                        {/* Documentos importantes de la institución */}
-                        <section className={"tarjeta-blanca [background-color:#ffffff] [border:1px_solid_#e2e8f0] [border-radius:12px] [padding:24px] [box-shadow:0_4px_6px_rgba(0,_0,_0,_0.05)] [background:white] [padding:25px] [border-radius:20px] [box-shadow:0_10px_25px_rgba(0,0,0,0.03)] [margin-bottom:25px]"}>
-                            <h2 className={"[.tarjeta-blanca_&]:[color:#1e3a8a] [.tarjeta-blanca_&]:[font-size:1.25rem] [.tarjeta-blanca_&]:[font-weight:600] [.tarjeta-blanca_&]:[margin-bottom:16px] [.tarjeta-blanca_&]:[display:flex] [.tarjeta-blanca_&]:[align-items:center] [.tarjeta-blanca_&]:[gap:8px] [.tarjeta-blanca_&]:[font-size:1.2rem] [.tarjeta-blanca_&]:[color:#1a1c2d] [.tarjeta-blanca_&]:[margin-bottom:15px] [.tarjeta-blanca_&]:[gap:10px]"}><i className={"bi bi-file-earmark-text-fill [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i> Documentos Institucionales</h2>
-                            <div className="lista-descargas">
-                            <div className={"archivo-item [display:flex] [align-items:center] [padding:15px] [background:#f8fafc] [border-radius:15px] [margin-top:10px] [gap:15px]"}>
-                                <span className={"icono-pdf [color:#ef4444] [font-size:1.8rem]"}><i className={"bi bi-filetype-pdf [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i></span>
-                                <div className="archivo-info">
-                                <strong className={"[.archivo-info_&]:[display:block] [.archivo-info_&]:[font-size:0.95rem]"}>Manual de Convivencia</strong>
-                                <small className={"[.archivo-info_&]:[color:#64748b] [.archivo-info_&]:[font-size:0.8rem]"}>Versión 2026 actualizada</small>
-                                </div>
-                                <button className="btn-circular-ver"><i className={"bi bi-eye [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i></button>
-                            </div>
-                            <div className={"archivo-item [display:flex] [align-items:center] [padding:15px] [background:#f8fafc] [border-radius:15px] [margin-top:10px] [gap:15px]"}>
-                                <span className={"icono-pdf [color:#ef4444] [font-size:1.8rem]"}><i className={"bi bi-filetype-pdf [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i></span>
-                                <div className="archivo-info">
-                                <strong className={"[.archivo-info_&]:[display:block] [.archivo-info_&]:[font-size:0.95rem]"}>Proyecto Educativo (PEI)</strong>
-                                <small className={"[.archivo-info_&]:[color:#64748b] [.archivo-info_&]:[font-size:0.8rem]"}>Modelo de formación integral</small>
-                                </div>
-                                <button className="btn-circular-ver"><i className={"bi bi-eye [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i></button>
-                            </div>
-                            </div>
+                        <section className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+                            <h2 className="mb-4 mt-0 text-xl font-bold text-slate-900">Información de la institución</h2>
+                            {institution.description_institution && (
+                                <p className="mb-5 leading-7 text-slate-600">{institution.description_institution}</p>
+                            )}
+                            <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                <Detail label="Nombre" value={institution.name_institution} />
+                                <Detail label="NIT" value={institution.nit} />
+                                <Detail label="Ciudad" value={institution.city} />
+                                <Detail label="Dirección" value={institution.address_institution} />
+                                <Detail label="Correo" value={institution.email_institution} />
+                                <Detail label="Teléfono" value={institution.phone_institution} />
+                                <Detail label="Inicio de clases" value={institution.class_start_date} />
+                                <Detail label="Fin de clases" value={institution.class_end_date} />
+                            </dl>
                         </section>
                     </div>
-
-                    <aside className="bloque-lateral-accion">
-                         {/* Tarjeta para iniciar matrícula */}
-                        <div className={"tarjeta-accion-matricula [background:white] [padding:30px] [border-radius:25px] [border:1px_solid_#e2e8f0] [position:sticky] [top:30px]"}>
-                            <h3>Inicia tu Proceso</h3>
-                            <p>Asegura tu cupo de manera fácil y 100% digital a través de nuestra plataforma.</p>
-
-                            <div className="requisitos-resumen">
-                                <h4>Requisitos:</h4>
-                                <ul className={"[.requisitos-resumen_&]:[list-style:none] [.requisitos-resumen_&]:[padding:0] [.requisitos-resumen_&]:[margin:15px_0]"}>
-                                    <li className={"[.requisitos-resumen_&]:[font-size:0.85rem] [.requisitos-resumen_&]:[margin-bottom:8px] [.requisitos-resumen_&]:[color:#475569]"}><i className={"bi bi-check2 [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i> Identidad del estudiante</li>
-                                    <li className={"[.requisitos-resumen_&]:[font-size:0.85rem] [.requisitos-resumen_&]:[margin-bottom:8px] [.requisitos-resumen_&]:[color:#475569]"}><i className={"bi bi-check2 [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i> Certificados de notas</li>
-                                    <li className={"[.requisitos-resumen_&]:[font-size:0.85rem] [.requisitos-resumen_&]:[margin-bottom:8px] [.requisitos-resumen_&]:[color:#475569]"}><i className={"bi bi-check2 [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i> Seguro estudiantil</li>
-                                </ul>
+                    <section className="lg:col-start-1 lg:row-start-2 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+                        <h2 className="mb-4 mt-0 flex items-center gap-2 text-xl font-bold text-slate-900">
+                            <i className="bi bi-geo-alt-fill text-sky-600" aria-hidden="true" />
+                            Ubicación de {campus ? "la sede" : "la institución"}
+                        </h2>
+                        {mapQuery ? (
+                            <div className="aspect-video overflow-hidden rounded-xl border border-slate-200">
+                                <iframe
+                                    title={`Mapa de ${campus?.name || institution.name_institution}`}
+                                    src={`https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`}
+                                    className="h-full w-full border-0"
+                                    allowFullScreen
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                />
                             </div>
+                        ) : (
+                            <p className="mb-0 rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
+                                La dirección no está registrada, así que no se puede mostrar el mapa.
+                            </p>
+                        )}
+                    </section>
 
-                            <Link to="/Formulario" className={"btn-iniciar-matricula [.menu-lista_li_&]:[display:flex] [.menu-lista_li_&]:[align-items:center] [.menu-lista_li_&]:[gap:15px] [.menu-lista_li_&]:[padding:15px_30px] [.menu-lista_li_&]:[color:#94a3b8] [.menu-lista_li_&]:[text-decoration:none] [.menu-lista_li_&]:[transition:0.3s] [.menu-lista_li_&:hover]:[color:white] [.menu-lista_li_&:hover]:[background:rgba(79,_172,_254,_0.1)] [.menu-lista_li_&:hover]:[border-left:4px_solid_var(--cyan-em)] [display:flex] [justify-content:space-between] [align-items:center] [background:#1a1c2d] ![color:#4facfe] [text-decoration:none] [padding:18px_25px] [border-radius:15px] [font-weight:800] [font-size:0.9rem] [letter-spacing:1px] [transition:0.4s_ease] [margin-top:20px] [border:1px_solid_rgba(79,_172,_254,_0.3)] [&:hover]:[background:#4facfe] [&:hover]:![color:#1a1c2d] [&:hover]:[transform:translateY(-5px)] [&:hover]:[box-shadow:0_15px_30px_rgba(79,_172,_254,_0.4)]"}>
-                                <span>INICIAR MATRÍCULA</span>
-                                <i className={"bi bi-rocket-takeoff-fill [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i>
-                            </Link>
-
-                            <div className={"pie-ayuda [color:#10b981]"}>
-                                <Link className={"[.menu-lista_li_&]:[display:flex] [.menu-lista_li_&]:[align-items:center] [.menu-lista_li_&]:[gap:15px] [.menu-lista_li_&]:[padding:15px_30px] [.menu-lista_li_&]:[color:#94a3b8] [.menu-lista_li_&]:[text-decoration:none] [.menu-lista_li_&]:[transition:0.3s] [.menu-lista_li_&:hover]:[color:white] [.menu-lista_li_&:hover]:[background:rgba(79,_172,_254,_0.1)] [.menu-lista_li_&:hover]:[border-left:4px_solid_var(--cyan-em)] [.menu-lista_li_&]:[color:white] [.menu-lista_li_&]:[background:rgba(79,_172,_254,_0.1)] [.menu-lista_li_&]:[border-left:4px_solid_var(--cyan-em)]"} to="/Contacto"><i className={"bi bi-whatsapp [.menu-lista_li_a_&]:[font-size:1.2rem] [.tarjeta-blanca_h2_&]:[color:#2563eb] [.requisitos-resumen_&]:[color:#10b981]"}></i> ¿Necesitas soporte?</Link>
-                            </div>
-                        </div>
+                    <aside className="h-fit rounded-2xl border border-slate-100 bg-white p-6 shadow-sm lg:col-start-2 lg:row-start-1 lg:sticky lg:top-6">
+                        <h2 className="mb-3 mt-0 text-xl font-bold text-slate-900">Inicia tu proceso</h2>
+                        <p className="text-sm leading-6 text-slate-600">
+                            Revisa los datos de la institución y la sede seleccionadas antes de iniciar la matrícula.
+                        </p>
+                        <Link to={`/Formulario?${enrollmentParams.toString()}`} className="mt-4 flex items-center justify-between rounded-xl bg-slate-900 px-5 py-4 font-bold text-sky-300 no-underline transition hover:bg-sky-700 hover:text-white">
+                            <span>Iniciar matrícula</span>
+                            <i className="bi bi-arrow-right" aria-hidden="true" />
+                        </Link>
+                        <Link to="/Colegios" className="mt-4 inline-block text-sm font-semibold text-sky-700 no-underline hover:text-sky-900">
+                            Volver a instituciones
+                        </Link>
                     </aside>
-
                 </div>
             </div>
-        </div>
-    )
-}
+        </main>
+    );
+};
 
-export default InfoSede
+export default InfoSede;

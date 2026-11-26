@@ -1,403 +1,465 @@
-//import React from 'react'
-import { Link } from "react-router-dom"
+import { useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import api from "../../Config/env";
 
+const getCollection = (responseData, key) => {
+    if (Array.isArray(responseData)) return responseData;
+    if (Array.isArray(responseData?.data)) return responseData.data;
+    if (Array.isArray(responseData?.[key])) return responseData[key];
+    if (Array.isArray(responseData?.data?.data)) return responseData.data.data;
 
-// Muestra los estudiantes de un módulo y sus controles de calificación.
+    throw new Error(`El servidor devolvió una respuesta inesperada al consultar ${key}.`);
+};
+
+const getEntity = (responseData) => (
+    responseData?.data?.data
+    || responseData?.data
+    || responseData?.module
+    || responseData
+);
+
+const getErrorMessage = (error, fallback) => {
+    const validationErrors = error.response?.data?.errors;
+    const firstValidationError = validationErrors && Object.values(validationErrors).flat()[0];
+
+    return firstValidationError || error.response?.data?.message || error.message || fallback;
+};
+
+const getStudentId = (row) => row.student_id ?? row.student?.id;
+
+const getStudentName = (row) => {
+    const student = row.student || {};
+    const user = student.user_system || student.userSystem || row.user_system || row.userSystem || {};
+    const name = [
+        user.first_name || student.first_name || row.first_name,
+        user.middle_name || student.middle_name || row.middle_name,
+        user.last_name || student.last_name || row.last_name,
+        user.second_last_name || student.second_last_name || row.second_last_name,
+    ].filter(Boolean).join(" ");
+
+    return name || `Estudiante #${getStudentId(row) ?? row.id}`;
+};
+
+const displayGender = (value) => {
+    const normalized = String(value || "").toLowerCase();
+    if (normalized === "m") return "Masculino";
+    if (normalized === "f") return "Femenino";
+    if (normalized === "o") return "Otro";
+    return value || "No registrado";
+};
+
+const today = () => {
+    const currentDate = new Date();
+    return [
+        currentDate.getFullYear(),
+        String(currentDate.getMonth() + 1).padStart(2, "0"),
+        String(currentDate.getDate()).padStart(2, "0"),
+    ].join("-");
+};
+
 const GrupoModulo = () => {
+    const [searchParams] = useSearchParams();
+    const moduleId = searchParams.get("moduleId") || "";
+    const [module, setModule] = useState(null);
+    const [roster, setRoster] = useState([]);
+    const [grades, setGrades] = useState([]);
+    const [classGroups, setClassGroups] = useState([]);
+    const [gradeLevels, setGradeLevels] = useState([]);
+    const [teachers, setTeachers] = useState([]);
+    const [gradeValues, setGradeValues] = useState({});
+    const [loading, setLoading] = useState(Boolean(moduleId));
+    const [saving, setSaving] = useState(false);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+    const [reloadKey, setReloadKey] = useState(0);
+
+    useEffect(() => {
+        if (!moduleId) return undefined;
+
+        let ignore = false;
+        const requests = [
+            ["module", () => api.get(`/modules/${moduleId}`), "module"],
+            ["moduleEnrollments", () => api.get("/module-enrollments/list", { params: { module_id: moduleId } }), "module_enrollments"],
+            ["students", () => api.get("/students/list"), "students"],
+            ["enrollments", () => api.get("/enrollments/list"), "enrollments"],
+            ["grades", () => api.get("/grades/list", { params: { module_id: moduleId } }), "grades"],
+            ["classGroups", () => api.get("/class-groups/list"), "class_groups"],
+            ["gradeLevels", () => api.get("/grade-levels/list"), "grade_levels"],
+            ["teachers", () => api.get("/teachers/list"), "teachers"],
+        ];
+
+        Promise.allSettled(requests.map(([, request]) => request())).then((results) => {
+            if (ignore) return;
+
+            const values = {
+                module: null,
+                moduleEnrollments: [],
+                students: [],
+                enrollments: [],
+                grades: [],
+                classGroups: [],
+                gradeLevels: [],
+                teachers: [],
+            };
+            const errors = [];
+
+            results.forEach((result, index) => {
+                const [key, , responseKey] = requests[index];
+                if (result.status === "rejected") {
+                    console.error(`Error al cargar ${key}:`, result.reason);
+                    errors.push(getErrorMessage(result.reason, `No se pudo cargar ${key}.`));
+                    return;
+                }
+
+                try {
+                    values[key] = key === "module"
+                        ? getEntity(result.value.data)
+                        : getCollection(result.value.data, responseKey);
+                } catch (parseError) {
+                    console.error(`Error al leer ${key}:`, parseError);
+                    errors.push(parseError.message);
+                }
+            });
+
+            const moduleEnrollments = values.moduleEnrollments.filter(
+                (item) => String(item.module_id ?? item.module?.id) === String(moduleId),
+            );
+            const studentById = new Map(values.students.map((student) => [String(student.id), student]));
+            const enrollmentByStudentId = new Map();
+            [...values.enrollments]
+                .sort((first, second) => String(second.enrollment_date || "").localeCompare(String(first.enrollment_date || "")))
+                .forEach((enrollment) => {
+                    const studentId = enrollment.student_id ?? enrollment.student?.id;
+                    if (studentId !== null && studentId !== undefined && !enrollmentByStudentId.has(String(studentId))) {
+                        enrollmentByStudentId.set(String(studentId), enrollment);
+                    }
+                });
+
+            const studentRows = moduleEnrollments.map((item) => {
+                const studentId = getStudentId(item);
+                const student = item.student || studentById.get(String(studentId));
+                const enrollment = item.enrollment
+                    || student?.enrollment
+                    || enrollmentByStudentId.get(String(studentId));
+
+                return {
+                    ...item,
+                    student,
+                    enrollment,
+                };
+            });
+            const moduleGrades = values.grades.filter((grade) => (
+                String(grade.module_id ?? grade.module?.id) === String(moduleId)
+            ));
+
+            setModule(values.module);
+            setRoster(studentRows);
+            setGrades(moduleGrades);
+            setClassGroups(values.classGroups);
+            setGradeLevels(values.gradeLevels);
+            setTeachers(values.teachers);
+            setGradeValues(Object.fromEntries(studentRows.map((row) => {
+                const studentId = getStudentId(row);
+                const finalGrade = moduleGrades.find((grade) => (
+                    String(grade.student_id ?? grade.student?.id) === String(studentId)
+                    && String(grade.evaluation_type || "").toLowerCase() === "final"
+                ));
+                return [String(studentId ?? row.id), finalGrade?.grade ?? ""];
+            })));
+            setError(errors.join(" "));
+            setLoading(false);
+        });
+
+        return () => {
+            ignore = true;
+        };
+    }, [moduleId, reloadKey]);
+
+    const classGroupById = useMemo(
+        () => new Map(
+            classGroups
+                .concat(module?.class_group ? [module.class_group] : [])
+                .concat(module?.classGroup ? [module.classGroup] : [])
+                .map((group) => [String(group.id), group]),
+        ),
+        [classGroups, module],
+    );
+    const gradeLevelById = useMemo(
+        () => new Map(
+            gradeLevels
+                .concat(module?.class_group?.grade_level ? [module.class_group.grade_level] : [])
+                .concat(module?.classGroup?.gradeLevel ? [module.classGroup.gradeLevel] : [])
+                .map((grade) => [String(grade.id), grade]),
+        ),
+        [gradeLevels, module],
+    );
+
+    const getGroupLabel = () => {
+        const group = module?.class_group
+            || module?.classGroup
+            || classGroupById.get(String(module?.class_group_id));
+        const grade = group?.grade_level
+            || group?.gradeLevel
+            || gradeLevelById.get(String(group?.grade_level_id));
+
+        return [
+            grade?.name || (group?.grade_level_id ? `Grado ${group.grade_level_id}` : ""),
+            group?.section,
+        ].filter(Boolean).join(" ") || (module?.class_group_id ? `Grupo #${module.class_group_id}` : "Grupo no asignado");
+    };
+
+    const teachersById = useMemo(
+        () => new Map(
+            teachers
+                .concat(module?.teacher ? [module.teacher] : [])
+                .map((teacher) => [String(teacher.id), teacher]),
+        ),
+        [module, teachers],
+    );
+    const moduleAcademicPeriodId = module?.academic_period_id
+        ?? module?.academic__period_id
+        ?? module?.academic_period?.id
+        ?? module?.academicPeriod?.id;
+    const teacher = teachersById.get(String(module?.teacher_id));
+    const recordedBy = teacher?.user_system_id
+        ?? teacher?.userSystem?.id
+        ?? teacher?.user_system?.id;
+
+    const finalGradeFor = (studentId) => grades.find((grade) => (
+        String(grade.student_id ?? grade.student?.id) === String(studentId)
+        && String(grade.evaluation_type || "").toLowerCase() === "final"
+    ));
+
+    const saveGradeRequest = async (row) => {
+        const studentId = getStudentId(row);
+        const gradeValue = gradeValues[String(studentId ?? row.id)];
+        const numericGrade = Number(gradeValue);
+
+        if (gradeValue === "" || !Number.isFinite(numericGrade) || numericGrade < 0 || numericGrade > 5) {
+            throw new Error(`Ingresa una nota entre 0 y 5 para ${getStudentName(row)}.`);
+        }
+
+        const currentGrade = finalGradeFor(studentId);
+        const payload = {
+            grade: numericGrade,
+            evaluation_type: "Final",
+            registration_date: today(),
+            student_id: studentId,
+            module_id: Number(moduleId),
+        };
+        if (moduleAcademicPeriodId) payload.academic_period_id = moduleAcademicPeriodId;
+        if (recordedBy) payload.recorded_by = recordedBy;
+
+        const response = currentGrade?.id
+            ? await api.put(`/grades/${currentGrade.id}`, payload)
+            : await api.post("/grades/store", payload);
+
+        return response.data?.data ?? response.data?.grade ?? response.data;
+    };
+
+    const updateSavedGrades = (savedGrades, rows) => {
+        setGrades((current) => {
+            const nextGrades = [...current];
+            savedGrades.forEach((saved, index) => {
+                const row = rows[index];
+                const studentId = getStudentId(row);
+                const existingIndex = nextGrades.findIndex((grade) => (
+                    String(grade.student_id ?? grade.student?.id) === String(studentId)
+                    && String(grade.evaluation_type || "").toLowerCase() === "final"
+                ));
+                const normalized = {
+                    ...saved,
+                    module_id: saved.module_id ?? Number(moduleId),
+                    student_id: saved.student_id ?? studentId,
+                    evaluation_type: saved.evaluation_type ?? "Final",
+                    grade: saved.grade ?? gradeValues[String(studentId ?? row.id)],
+                };
+
+                if (existingIndex >= 0) nextGrades[existingIndex] = normalized;
+                else nextGrades.push(normalized);
+            });
+            return nextGrades;
+        });
+    };
+
+    const handleSaveOne = async (row) => {
+        setSaving(true);
+        setError("");
+        setSuccess("");
+
+        try {
+            const saved = await saveGradeRequest(row);
+            updateSavedGrades([saved], [row]);
+            setSuccess(`Nota de ${getStudentName(row)} guardada.`);
+        } catch (saveError) {
+            console.error("Error al guardar la nota:", saveError);
+            setError(getErrorMessage(saveError, "No se pudo guardar la nota."));
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const handleSaveAll = async () => {
+        const rowsToSave = roster.filter((row) => (
+            gradeValues[String(getStudentId(row) ?? row.id)] !== ""
+        ));
+        if (rowsToSave.length === 0) {
+            setError("Ingresa al menos una nota antes de guardar.");
+            return;
+        }
+
+        setSaving(true);
+        setError("");
+        setSuccess("");
+        const results = await Promise.allSettled(rowsToSave.map(saveGradeRequest));
+        const savedGrades = [];
+        const savedRows = [];
+        const failures = [];
+
+        results.forEach((result, index) => {
+            if (result.status === "fulfilled") {
+                savedGrades.push(result.value);
+                savedRows.push(rowsToSave[index]);
+            } else {
+                console.error("Error al guardar una nota:", result.reason);
+                failures.push(getErrorMessage(result.reason, `No se pudo guardar la nota de ${getStudentName(rowsToSave[index])}.`));
+            }
+        });
+
+        if (savedGrades.length > 0) updateSavedGrades(savedGrades, savedRows);
+        if (failures.length > 0) setError(failures.join(" "));
+        if (savedGrades.length > 0) setSuccess(`${savedGrades.length} nota(s) guardada(s).`);
+        setSaving(false);
+    };
+
+    if (!moduleId) {
+        return (
+            <main className="ml-64 min-h-screen w-[calc(100%-16rem)] bg-slate-50 px-5 py-10 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] md:px-8">
+                <section className="mx-auto max-w-3xl rounded-2xl bg-white p-8 text-center shadow-sm">
+                    <h1 className="mt-0 text-2xl font-bold text-slate-900">Selecciona un módulo</h1>
+                    <p className="text-slate-600">No llegó el identificador del módulo que quieres revisar.</p>
+                    <Link to="/DocenteMo" className="font-semibold text-sky-700">Volver a Mis Módulos</Link>
+                </section>
+            </main>
+        );
+    }
+
     return (
-        <div>
-            {/* Menú lateral de navegación */}
-
-            <div className={"contenido-principal-docentes-modulos [margin-left:260px] [width:calc(100%_-_260px)] [min-height:100vh] [background:#f6f6f6] [padding:40px] [width:82vw]"}>
-
-                <header className={"header-tabla-docentes-modulos [display:flex] [justify-content:space-between] [align-items:center] [gap:20px] [margin-bottom:25px]"}>
-
-                    <div className="titulo-area-docentes-modulos">
-
-                        <div className={"titulo-flex-docentes-modulos [display:flex] [align-items:center] [gap:10px]"}>
-
-                            <Link
-                                to="/DocenteMo"
-                                className={"btn-volver-docentes-modulos [color:#64748b] [font-size:38px] [text-decoration:none] [display:flex] [align-items:center]"}
-                            >
-                                <i className={"bi bi-arrow-left-short [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
+        <main className="ml-64 min-h-screen w-[calc(100%-16rem)] bg-slate-50 px-5 py-8 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] md:px-8">
+            <div className="mx-auto max-w-7xl">
+                <header className="mb-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <div className="flex items-center gap-3">
+                            <Link to="/DocenteMo" className="text-3xl text-slate-500 no-underline hover:text-sky-600" aria-label="Volver a mis módulos">
+                                <i className="bi bi-arrow-left-short" aria-hidden="true" />
                             </Link>
-
-                            <h1 className={"[.titulo-area-docentes-modulos_&]:[font-size:34px] [.titulo-area-docentes-modulos_&]:[color:#0d1b3d] [.titulo-area-docentes-modulos_&]:[margin:0]"}>Estudiantes e Historial de Notas</h1>
-
+                            <h1 className="mb-0 mt-0 text-3xl font-semibold text-slate-900">Estudiantes e Historial de Notas</h1>
                         </div>
-
-                        <p className={"[.titulo-area-docentes-modulos_&]:[margin-top:8px] [.titulo-area-docentes-modulos_&]:[color:#64748b] [.titulo-area-docentes-modulos_&]:[font-size:15px]"}>
-                            Módulo:
-                            <strong>
-                                {" "}Comprensión Lectora y Redacción (3° Primaria)
-                            </strong>
+                        <p className="mb-0 mt-2 text-slate-600">
+                            Módulo: <strong>{module?.name_module || "Cargando módulo..."}</strong>
+                            {module && <strong> ({getGroupLabel()})</strong>}
                         </p>
-
                     </div>
-
-                    <button className={"btn-primario-docentes-modulos [background:#4da3ff] [color:white] [border:none] [padding:14px_22px] [border-radius:12px] [font-size:15px] [font-weight:600] [cursor:pointer] [display:flex] [align-items:center] [gap:10px] [transition:0.3s] [&:hover]:[background:#318cff]"}>
-                        <i className={"bi bi-save [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
-                        Guardar Todas las Notas
+                    <button
+                        type="button"
+                        onClick={handleSaveAll}
+                        disabled={loading || saving || roster.length === 0}
+                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-5 py-3 font-semibold text-white transition hover:bg-sky-600 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                        <i className="bi bi-save" aria-hidden="true" />
+                        {saving ? "Guardando..." : "Guardar Todas las Notas"}
                     </button>
-
                 </header>
 
-                <section className={"contenedor-tabla-soft-docentes-modulos [background:white] [border-radius:22px] [padding:25px]"}>
+                {error && (
+                    <div role="alert" className="mb-5 flex items-start justify-between gap-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                        <span>{error}</span>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setLoading(true);
+                                setError("");
+                                setReloadKey((current) => current + 1);
+                            }}
+                            className="shrink-0 font-semibold underline"
+                        >
+                            Reintentar
+                        </button>
+                    </div>
+                )}
+                {success && <p role="status" className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">{success}</p>}
 
-                    <div className={"tabla-scroll-docentes-modulos [overflow-x:auto]"}>
-
-                        <table className={"tabla-matriculados-docentes-modulos [width:100%] [border-collapse:collapse]"}>
-
-                            <thead className={"[.tabla-matriculados-docentes-modulos_&]:[background:#f5f7fb]"}>
+                <section className="rounded-2xl bg-white p-6 shadow-sm">
+                    <div className="overflow-x-auto">
+                        <table className="w-full min-w-[850px] border-collapse text-left">
+                            <thead className="bg-slate-50">
                                 <tr>
-                                    <th className={"[.tabla-matriculados-docentes-modulos_&]:[padding:16px] [.tabla-matriculados-docentes-modulos_&]:[text-align:left] [.tabla-matriculados-docentes-modulos_&]:[color:#0d1b3d] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [.tabla-matriculados-docentes-modulos_&]:[font-weight:700]"}>N°</th>
-                                    <th className={"[.tabla-matriculados-docentes-modulos_&]:[padding:16px] [.tabla-matriculados-docentes-modulos_&]:[text-align:left] [.tabla-matriculados-docentes-modulos_&]:[color:#0d1b3d] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [.tabla-matriculados-docentes-modulos_&]:[font-weight:700]"}>Nombre Completo</th>
-                                    <th className={"[.tabla-matriculados-docentes-modulos_&]:[padding:16px] [.tabla-matriculados-docentes-modulos_&]:[text-align:left] [.tabla-matriculados-docentes-modulos_&]:[color:#0d1b3d] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [.tabla-matriculados-docentes-modulos_&]:[font-weight:700]"}>ID Matrícula</th>
-                                    <th className={"[.tabla-matriculados-docentes-modulos_&]:[padding:16px] [.tabla-matriculados-docentes-modulos_&]:[text-align:left] [.tabla-matriculados-docentes-modulos_&]:[color:#0d1b3d] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [.tabla-matriculados-docentes-modulos_&]:[font-weight:700]"}>Género</th>
-                                    <th className={"[.tabla-matriculados-docentes-modulos_&]:[padding:16px] [.tabla-matriculados-docentes-modulos_&]:[text-align:left] [.tabla-matriculados-docentes-modulos_&]:[color:#0d1b3d] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [.tabla-matriculados-docentes-modulos_&]:[font-weight:700]"}>Nota Final</th>
-                                    <th className={"[.tabla-matriculados-docentes-modulos_&]:[padding:16px] [.tabla-matriculados-docentes-modulos_&]:[text-align:left] [.tabla-matriculados-docentes-modulos_&]:[color:#0d1b3d] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [.tabla-matriculados-docentes-modulos_&]:[font-weight:700]"}>Acciones</th>
+                                    {["N°", "Nombre completo", "ID Matrícula", "Género", "Nota final", "Acciones"].map((heading) => (
+                                        <th key={heading} className="px-4 py-4 text-sm font-bold text-slate-900">{heading}</th>
+                                    ))}
                                 </tr>
                             </thead>
-
                             <tbody>
-
-                                <tr>
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>01</td>
-
-                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
-                                        Nicolás Mateo Salazar
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
-                                            PRI01
-                                        </span>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Masculino</td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <input
-                                            type="number"
-                                            step="0.1"
-                                            min="0"
-                                            max="5"
-                                            defaultValue="4.5"
-                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
-                                        />
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual" >
-                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>02</td>
-
-                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
-                                        Salome Catalina López
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
-                                            PRI02
-                                        </span>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Femenino</td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <input
-                                            type="number"
-                                            step="0.1"
-                                            min="0"
-                                            max="5"
-                                            defaultValue="3.8"
-                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
-                                        />
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual">
-                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>03</td>
-
-                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
-                                        Ginna Gabriela Goyes
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
-                                            PRI03
-                                        </span>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Femenino</td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <input
-                                            type="number"
-                                            step="0.1"
-                                            min="0"
-                                            max="5"
-                                            defaultValue="3.8"
-                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
-                                        />
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual">
-                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>04</td>
-
-                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
-                                        Alex Santiago Gomez Ayala
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
-                                            PRI04
-                                        </span>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Masculino</td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <input
-                                            type="number"
-                                            step="0.1"
-                                            min="0"
-                                            max="5"
-                                            defaultValue="3.8"
-                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
-                                        />
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual">
-                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
-                                        </button>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>05</td>
-
-                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
-                                        Jhosntin Fabian Castillo
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
-                                            PRI05
-                                        </span>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Masculino</td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <input
-                                            type="number"
-                                            step="0.1"
-                                            min="0"
-                                            max="5"
-                                            defaultValue="3.8"
-                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
-                                        />
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual" >
-                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>06</td>
-
-                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
-                                        Yeraldin Fernanda España
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
-                                            PRI06
-                                        </span>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Femenino</td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <input
-                                            type="number"
-                                            step="0.1"
-                                            min="0"
-                                            max="5"
-                                            defaultValue="3.8"
-                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
-                                        />
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual">
-                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>07</td>
-
-                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
-                                        María Alejandra Gomez Gomez
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
-                                            PRI07
-                                        </span>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Femenino</td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <input
-                                            type="number"
-                                            step="0.1"
-                                            min="0"
-                                            max="5"
-                                            defaultValue="3.8"
-                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
-                                        />
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual">
-                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>08</td>
-
-                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
-                                        Yannin Ayala
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
-                                            PRI08
-                                        </span>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Femenino</td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <input
-                                            type="number"
-                                            step="0.1"
-                                            min="0"
-                                            max="5"
-                                            defaultValue="3.8"
-                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
-                                        />
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual">
-                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>09</td>
-
-                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
-                                        Yuneidi Rincon
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
-                                            PRI09
-                                        </span>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Femenino</td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <input
-                                            type="number"
-                                            step="0.1"
-                                            min="0"
-                                            max="5"
-                                            defaultValue="3.8"
-                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
-                                        />
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual">
-                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>10</td>
-
-                                    <td className={"nombre-est-docentes-modulos [.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px] [font-weight:600] [color:#0d1b3d]"}>
-                                        Cristian Alejandro Guerrero
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <span className={"badge-id-docentes-modulos [background:#e8f1ff] [color:#2563eb] [padding:7px_12px] [border-radius:30px] [font-size:13px] [font-weight:600]"}>
-                                            PRI10
-                                        </span>
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>Masculino</td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <input
-                                            type="number"
-                                            step="0.1"
-                                            min="0"
-                                            max="5"
-                                            defaultValue="3.8"
-                                            className={"input-nota-docentes-modulos [width:80px] [padding:8px] [border:1px_solid_#dbe2ea] [border-radius:10px] [text-align:center] [font-weight:bold] [background:#f8fafc] [outline:none]"}
-                                        />
-                                    </td>
-
-                                    <td className={"[.tabla-matriculados-docentes-modulos_&]:[padding:18px_16px] [.tabla-matriculados-docentes-modulos_&]:[border-bottom:1px_solid_#edf1f5] [.tabla-matriculados-docentes-modulos_&]:[color:#44506b] [.tabla-matriculados-docentes-modulos_&]:[font-size:14px]"}>
-                                        <button className={"btn-tabla-docentes-modulos [width:40px] [height:40px] [border:none] [border-radius:10px] [background:#ecfdf5] [cursor:pointer] [display:flex] [align-items:center] [justify-content:center] [transition:0.3s] [&:hover]:[background:#d1fae5]"} title="Guardar Nota Individual">
-                                            <i className={"bi bi-check-lg [.btn-tabla-docentes-modulos_&]:[color:#10b981] [.btn-tabla-docentes-modulos_&]:[font-size:18px]"}></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                {loading && (
+                                    <tr>
+                                        <td colSpan="6" className="px-4 py-10 text-center text-sm text-slate-500">Cargando estudiantes y notas...</td>
+                                    </tr>
+                                )}
+                                {!loading && roster.length === 0 && (
+                                    <tr>
+                                        <td colSpan="6" className="px-4 py-10 text-center text-sm text-slate-500">
+                                            No hay estudiantes inscritos en este módulo.
+                                        </td>
+                                    </tr>
+                                )}
+                                {!loading && roster.map((row, index) => {
+                                    const studentId = getStudentId(row);
+                                    const key = String(studentId ?? row.id);
+                                    const enrollmentCode = row.enrollment?.enrollment_code
+                                        || row.enrollment_code
+                                        || "—";
+                                    return (
+                                        <tr key={key} className="border-b border-slate-100 last:border-0">
+                                            <td className="px-4 py-5 text-sm text-slate-500">{String(index + 1).padStart(2, "0")}</td>
+                                            <td className="px-4 py-5 text-sm font-semibold text-slate-900">{getStudentName(row)}</td>
+                                            <td className="px-4 py-5">
+                                                <span className="inline-flex rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700">{enrollmentCode}</span>
+                                            </td>
+                                            <td className="px-4 py-5 text-sm text-slate-600">{displayGender(row.student?.gender ?? row.gender)}</td>
+                                            <td className="px-4 py-5">
+                                                <input
+                                                    type="number"
+                                                    step="0.1"
+                                                    min="0"
+                                                    max="5"
+                                                    value={gradeValues[key] ?? ""}
+                                                    onChange={(event) => setGradeValues((current) => ({ ...current, [key]: event.target.value }))}
+                                                    aria-label={`Nota final de ${getStudentName(row)}`}
+                                                    className="w-24 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-center font-semibold text-slate-800 outline-none focus:border-sky-500"
+                                                />
+                                            </td>
+                                            <td className="px-4 py-5">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleSaveOne(row)}
+                                                    disabled={saving}
+                                                    className="flex h-10 w-10 items-center justify-center rounded-lg border-0 bg-emerald-50 text-emerald-600 transition hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50"
+                                                    title="Guardar nota individual"
+                                                    aria-label={`Guardar nota de ${getStudentName(row)}`}
+                                                >
+                                                    <i className="bi bi-check-lg" aria-hidden="true" />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>
                 </section>
             </div>
-        </div>
-    )
-}
+        </main>
+    );
+};
 
-export default GrupoModulo
+export default GrupoModulo;
