@@ -1,17 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import Docente from "../../assets/docente.jpeg";
-
-const professionalDetails = [
-  { label: "Nombres", value: "Carlos Alberto" },
-  { label: "Apellidos", value: "Mendoza Ruíz" },
-  { label: "Número de identificación", value: "10.452.963" },
-  { label: "ID registro docente", value: "DOC-2026-88" },
-  { label: "Especialidad académica", value: "Licenciatura en Lengua Castellana y Literatura", wide: true },
-  { label: "Sede educativa asignada", value: "Institución Educativa San Vicente · Sede Principal", wide: true },
-  { label: "Teléfono de contacto", value: "315 789 0123" },
-  { label: "Correo institucional", value: "carlos.mendoza@easymatric.edu.co" },
-];
+import TeacherSessionContext from "../../Config/TeacherSessionContext";
+import { displayTeacherValue, getTeacherInitials, getTeacherName } from "../../Config/teacherProfile";
 
 // Representa un aviso configurable en las preferencias del docente.
 const ProfilePreference = ({ label, enabled, onToggle }) => (
@@ -34,21 +24,55 @@ const ProfilePreference = ({ label, enabled, onToggle }) => (
 const PerfilDocente = () => {
   const [newStudentNotifications, setNewStudentNotifications] = useState(true);
   const [closingReminders, setClosingReminders] = useState(true);
+  const { profile, loading, error } = useContext(TeacherSessionContext);
+  const user = profile?.user;
+  const teacherName = getTeacherName(profile);
+  const names = [user?.first_name, user?.middle_name].filter(Boolean).join(" ");
+  const lastNames = [user?.last_name, user?.second_last_name].filter(Boolean).join(" ");
+  const professionalDetails = [
+    { label: "Nombres", value: names },
+    { label: "Apellidos", value: lastNames },
+    { label: "Número de identificación", value: user?.document },
+    { label: "ID registro docente", value: profile?.id },
+    { label: "Especialidad académica", value: profile?.specialty, wide: true },
+    { label: "Institución asignada", value: profile?.institution?.name_institution, wide: true },
+    { label: "Sede educativa asignada", value: profile?.campus?.name, wide: true },
+    { label: "Teléfono de contacto", value: user?.phone },
+    { label: "Correo institucional", value: user?.email },
+  ];
 
   return (
     <div className="ml-64 min-h-[calc(100vh-76px)] w-[calc(100%-16rem)] px-7 py-8 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] max-sm:px-4 max-sm:py-5">
       <div className="mx-auto max-w-6xl space-y-6">
+        {loading && (
+          <section className="rounded-3xl bg-white p-6 text-sm text-slate-500 shadow-sm" role="status">
+            Cargando tu perfil docente...
+          </section>
+        )}
+        {error && (
+          <section className="rounded-3xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900" role="alert">
+            {error}
+          </section>
+        )}
+        {!loading && !error && profile && (
+          <>
         <header className="grid overflow-hidden rounded-3xl bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)] md:grid-cols-[minmax(220px,0.8fr)_1.2fr]">
           <div className="relative min-h-64 bg-gradient-to-br from-sky-100 via-slate-100 to-indigo-100 md:min-h-72">
-            <img
-              src={Docente}
-              alt="Carlos Alberto Mendoza, docente"
-              className="absolute inset-0 h-full w-full object-cover object-center"
-            />
+            {user?.photo_url ? (
+              <img
+                src={user.photo_url}
+                alt={`Perfil de ${teacherName}`}
+                className="absolute inset-0 h-full w-full object-cover object-center"
+              />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center text-7xl font-semibold text-sky-700/70" aria-hidden="true">
+                {getTeacherInitials(profile)}
+              </div>
+            )}
             <span className="absolute inset-0 bg-gradient-to-t from-slate-950/35 via-transparent to-transparent md:bg-gradient-to-r" />
             <span className="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/90 px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur">
               <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              Cuenta activa
+              Perfil autenticado
             </span>
           </div>
 
@@ -59,14 +83,14 @@ const PerfilDocente = () => {
                 Perfil docente
               </span>
               <h1 className="m-0 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-                Carlos Alberto Mendoza
+                {teacherName}
               </h1>
               <p className="mb-2 mt-3 font-semibold text-sky-600">
-                Docente de planta <span className="px-1 text-slate-300">·</span> Humanidades
+                Docente <span className="px-1 text-slate-300">·</span> {displayTeacherValue(profile.specialty)}
               </p>
               <p className="m-0 flex items-center gap-2 text-sm text-slate-500">
                 <i className="bi bi-geo-alt-fill text-sky-500" aria-hidden="true" />
-                Popayán, Colombia
+                {displayTeacherValue(profile.institution?.city)}
               </p>
             </div>
             <a
@@ -98,7 +122,7 @@ const PerfilDocente = () => {
                   className={`min-w-0 rounded-2xl border border-slate-100 bg-slate-50/80 p-4 ${wide ? "sm:col-span-2" : ""}`}
                 >
                   <dt className="mb-1.5 text-xs font-medium uppercase tracking-wide text-slate-400">{label}</dt>
-                  <dd className="m-0 break-words text-sm font-semibold leading-6 text-slate-700">{value}</dd>
+                  <dd className="m-0 break-words text-sm font-semibold leading-6 text-slate-700">{displayTeacherValue(value)}</dd>
                 </div>
               ))}
             </dl>
@@ -147,6 +171,8 @@ const PerfilDocente = () => {
             </section>
           </aside>
         </div>
+          </>
+        )}
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import logoazul from "../../assets/LogoAzul.png";
 import ilustracion from "../../assets/ilustracion estudiando.jpg";
 import api from "../../Config/env";
+import { saveAuthSession } from "../../Config/auth";
 import { getApiErrorMessage, getCollection, getDashboardPath } from "./authUtils";
 
 // Gestiona la interfaz de inicio de sesión y la navegación posterior.
@@ -42,6 +43,18 @@ const Login = () => {
         throw new Error("El servidor autenticó la cuenta, pero no devolvió un rol válido para dirigirla.");
       }
 
+      const token = responseData?.token || responseData?.access_token || responseData?.data?.token;
+      if (!token) {
+        throw new Error("El servidor no devolvió el token de sesión. Contacta al administrador.");
+      }
+
+      saveAuthSession({
+        token,
+        user: {
+          ...user,
+          teacher_id: user.teacher_id ?? user.teacher?.id ?? user.teacher?.teacher_id ?? null,
+        },
+      });
       navigate(dashboard, { replace: true });
     } catch (loginError) {
       console.error("Error al iniciar sesión:", loginError);

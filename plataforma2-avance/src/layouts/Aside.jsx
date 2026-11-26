@@ -1,5 +1,7 @@
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import logoblanco from "../assets/LogoBlanco.png";
+import { clearAuthSession } from "../Config/auth";
+import api from "../Config/env";
 
 const navigation = {
   admin: [
@@ -74,6 +76,17 @@ const roleStyles = {
 // Construye el menú lateral según el rol y resalta la ruta activa.
 const Aside = ({ role }) => {
   const styles = roleStyles[role];
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await api.post("/logout");
+    } catch (error) {
+      console.error("No se pudo invalidar el token de sesión en el servidor:", error);
+    }
+    clearAuthSession();
+    navigate("/login", { replace: true });
+  };
 
   return (
     <aside className="fixed inset-y-0 left-0 z-40 flex h-screen w-64 flex-col bg-[#111629] py-7 text-white max-sm:w-[72px]">
@@ -121,14 +134,15 @@ const Aside = ({ role }) => {
     </nav>
 
     <div className="mt-auto border-t border-white/10 px-6 pt-5 max-sm:px-2">
-      <Link
-        to="/login"
-        className="mb-4 flex items-center gap-3 text-red-400 no-underline transition-colors hover:text-red-300 max-sm:justify-center"
+      <button
+        type="button"
+        onClick={handleLogout}
+        className="mb-4 flex cursor-pointer items-center gap-3 border-0 bg-transparent p-0 text-red-400 no-underline transition-colors hover:text-red-300 max-sm:justify-center"
         title="Cerrar sesión"
       >
         <i className="bi bi-box-arrow-left" aria-hidden="true" />
         <span className="max-sm:hidden">Cerrar sesión</span>
-      </Link>
+      </button>
       <div className={`flex items-center gap-3 text-xs font-semibold tracking-wide max-sm:justify-center ${styles.text}`}>
         <i className="bi bi-person-circle text-lg" aria-hidden="true" />
         <span className="max-sm:hidden">{roleLabels[role]}</span>

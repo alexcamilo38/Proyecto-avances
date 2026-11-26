@@ -224,14 +224,24 @@ const DocenteMo = () => {
                                                 </span>
                                             </td>
                                             <td className="px-4 py-5">
-                                                <Link
-                                                    to={`/GrupoModulo?moduleId=${encodeURIComponent(module.id)}`}
-                                                    className="inline-flex items-center gap-2 rounded-lg bg-sky-500 px-3 py-2 text-sm font-semibold text-white no-underline transition hover:bg-sky-600"
-                                                    title="Gestionar estudiantes y notas"
-                                                >
-                                                    <i className="bi bi-eye-fill" aria-hidden="true" />
-                                                    Ver Grupo
-                                                </Link>
+                                                <div className="flex flex-wrap gap-2">
+                                                    <Link
+                                                        to={`/EditarModulo/${encodeURIComponent(module.id)}`}
+                                                        className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 no-underline transition hover:border-sky-200 hover:bg-sky-50 hover:text-sky-700"
+                                                        title="Editar módulo"
+                                                    >
+                                                        <i className="bi bi-pencil-square" aria-hidden="true" />
+                                                        Editar
+                                                    </Link>
+                                                    <Link
+                                                        to={`/GrupoModulo?moduleId=${encodeURIComponent(module.id)}`}
+                                                        className="inline-flex items-center gap-2 rounded-lg bg-sky-500 px-3 py-2 text-sm font-semibold text-white no-underline transition hover:bg-sky-600"
+                                                        title="Gestionar estudiantes y notas"
+                                                    >
+                                                        <i className="bi bi-eye-fill" aria-hidden="true" />
+                                                        Ver Grupo
+                                                    </Link>
+                                                </div>
                                             </td>
                                         </tr>
                                     );
