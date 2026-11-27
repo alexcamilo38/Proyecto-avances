@@ -155,6 +155,7 @@ const App = () => {
           <Route path="/teacher" element={<Dashboard role="teacher" />} />
           <Route path="/PerfilDocente" element={<PerfilDocente />} />
           <Route path="/SubirModulo" element={<SubirModulo />} />
+          <Route path="/EditarModulo/:moduleId" element={<SubirModulo />} />
           <Route path="/DocenteMo" element={<DocenteMo />} />
           <Route path="/GrupoModulo" element={<GrupoModulo />} />
         </Route>

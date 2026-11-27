@@ -1,4 +1,7 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import TeacherSessionContext from "../Config/TeacherSessionContext";
+import { getTeacherInitials } from "../Config/teacherProfile";
 
 const roleDetails = {
   admin: { title: "Administración", search: "Buscar institución o estudiante", initials: "AD", profile: "/PerfilAd" },
@@ -9,7 +12,11 @@ const roleDetails = {
 
 // Muestra búsqueda y acceso al perfil con textos e iniciales según el rol.
 const Header = ({ role }) => {
-  const { title, search, initials, profile } = roleDetails[role];
+  const { title, search, initials: defaultInitials, profile: profilePath } = roleDetails[role];
+  const teacherSession = useContext(TeacherSessionContext);
+  const initials = role === "teacher"
+    ? getTeacherInitials(teacherSession?.profile)
+    : defaultInitials;
 
   return (
     <header className="ml-64 flex min-h-[76px] items-center gap-5 border-b border-slate-200 bg-[#f1f5f9] px-8 max-sm:ml-[72px] max-sm:gap-3 max-sm:px-4">
@@ -23,7 +30,7 @@ const Header = ({ role }) => {
         />
       </label>
       <Link
-        to={profile}
+        to={profilePath}
         aria-label={`Ver perfil de ${title}`}
         className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#111629] text-xs font-semibold text-white no-underline"
       >

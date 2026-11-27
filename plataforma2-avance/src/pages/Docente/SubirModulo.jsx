@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../Config/env";
+import { getAuthSession } from "../../Config/auth";
 
 const emptyForm = {
     name_module: "",
@@ -40,10 +42,12 @@ const getTeacherName = (teacher) => {
     const user = teacher.user_system || teacher.userSystem || {};
     const name = [
         user.first_name || teacher.first_name,
+        user.middle_name || teacher.middle_name,
         user.last_name || teacher.last_name,
-    ].filter(Boolean).join(" ");
+        user.second_last_name || teacher.second_last_name,
+    ].map((part) => part?.trim()).filter(Boolean).join(" ");
 
-    return name || `Docente #${teacher.id}`;
+    return name || "Nombre no disponible";
 };
 
 const getClassGroupName = (group) => {
@@ -57,6 +61,23 @@ const getClassGroupName = (group) => {
 };
 
 const SubirModulo = () => {
+    const { moduleId } = useParams();
+    const navigate = useNavigate();
+    const isEditing = Boolean(moduleId);
+    const authSession = getAuthSession();
+    const currentUser = authSession?.user || {};
+    const currentRole = String(
+        currentUser.rol?.slug
+        || currentUser.rol?.name_role
+        || (typeof currentUser.rol === "string" ? currentUser.rol : "")
+        || currentUser.role?.slug
+        || currentUser.role?.name
+        || (typeof currentUser.role === "string" ? currentUser.role : "")
+        || "",
+    ).toLowerCase();
+    const isTeacher = ["teacher", "docente", "profesor", "profesora"].includes(currentRole);
+    const isAdmin = ["admin", "administrador", "administrator"].includes(currentRole);
+    const currentTeacherId = currentUser.teacher_id ?? currentUser.teacher?.id;
     const [catalogs, setCatalogs] = useState({
         classGroups: [],
         periods: [],
@@ -66,7 +87,12 @@ const SubirModulo = () => {
     const [catalogLoading, setCatalogLoading] = useState(true);
     const [catalogError, setCatalogError] = useState("");
     const [reloadKey, setReloadKey] = useState(0);
-    const [form, setForm] = useState(emptyForm);
+    const [editLoadState, setEditLoadState] = useState({ moduleId: null, error: "" });
+    const [currentSyllabusUrl, setCurrentSyllabusUrl] = useState("");
+    const [form, setForm] = useState(() => ({
+        ...emptyForm,
+        teacher_id: isTeacher && currentTeacherId ? String(currentTeacherId) : "",
+    }));
     const [syllabus, setSyllabus] = useState(null);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
@@ -112,6 +138,55 @@ const SubirModulo = () => {
         };
     }, [reloadKey]);
 
+    useEffect(() => {
+        if (!moduleId) return undefined;
+
+        let ignore = false;
+        api.get(`/modules/${encodeURIComponent(moduleId)}`)
+            .then((response) => {
+                const module = response.data?.module || response.data?.data || response.data;
+                if (!module?.id) {
+                    throw new Error("El servidor no devolvió los datos del módulo.");
+                }
+
+                if (ignore) return;
+                setForm({
+                    name_module: module.name_module || "",
+                    description_module: module.description_module || "",
+                    subject_id: module.subject_id ? String(module.subject_id) : "",
+                    class_group_id: module.class_group_id ? String(module.class_group_id) : "",
+                    academic_period_id: String(module.academic__period_id ?? module.academic_period_id ?? ""),
+                    teacher_id: String(module.teacher_id ?? ""),
+                    schedule: module.schedule || "",
+                    duration: module.duration || "",
+                    seats: String(module.seats ?? ""),
+                    weekly_hours: String(module.weekly_hours ?? ""),
+                    enrollment_opens_at: String(module.enrollment_opens_at || "").slice(0, 10),
+                    enrollment_closes_at: String(module.enrollment_closes_at || "").slice(0, 10),
+                    allow_self_enrollment: module.allow_self_enrollment === true
+                        || module.allow_self_enrollment === 1
+                        || module.allow_self_enrollment === "1",
+                });
+                setCurrentSyllabusUrl(module.syllabus_url || "");
+                setEditLoadState({ moduleId, error: "" });
+            })
+            .catch((loadError) => {
+                if (ignore) return;
+                console.error("Error al cargar el módulo para editar:", loadError);
+                setEditLoadState({
+                    moduleId,
+                    error: getErrorMessage(loadError, "No se pudo cargar el módulo."),
+                });
+            });
+
+        return () => {
+            ignore = true;
+        };
+    }, [moduleId]);
+
+    const moduleLoading = isEditing && editLoadState.moduleId !== moduleId;
+    const moduleLoadError = editLoadState.moduleId === moduleId ? editLoadState.error : "";
+
     const handleChange = (event) => {
         const { name, value, type, checked } = event.target;
         setForm((current) => ({
@@ -151,8 +226,20 @@ const SubirModulo = () => {
         setError("");
         setSuccess("");
 
-        if (!syllabus) {
+        if (!isEditing && !syllabus) {
             setError("Adjunta el syllabus o guía curricular del módulo.");
+            return;
+        }
+        if (!isTeacher && !isAdmin) {
+            setError("Solo un docente o administrador puede publicar módulos.");
+            return;
+        }
+        if (isTeacher && !currentTeacherId) {
+            setError("La cuenta no tiene un perfil docente asociado. Contacta al administrador.");
+            return;
+        }
+        if (isAdmin && !form.teacher_id) {
+            setError("Selecciona el docente responsable del módulo.");
             return;
         }
         if (new Date(form.enrollment_opens_at) >= new Date(form.enrollment_closes_at)) {
@@ -162,34 +249,53 @@ const SubirModulo = () => {
 
         setSaving(true);
         try {
-            const payload = new FormData();
-            payload.append("name_module", form.name_module.trim());
-            payload.append("description_module", form.description_module.trim());
-            payload.append("subject_id", form.subject_id);
-            payload.append("class_group_id", form.class_group_id);
-            payload.append("academic__period_id", form.academic_period_id);
-            payload.append("teacher_id", form.teacher_id);
-            payload.append("schedule", form.schedule.trim());
-            payload.append("duration", form.duration.trim());
-            payload.append("seats", form.seats);
-            payload.append("weekly_hours", form.weekly_hours);
-            payload.append("enrollment_opens_at", form.enrollment_opens_at);
-            payload.append("enrollment_closes_at", form.enrollment_closes_at);
-            payload.append("allow_self_enrollment", form.allow_self_enrollment ? "1" : "0");
-            payload.append("is_published", "1");
-            payload.append("syllabus", syllabus);
+            const moduleData = {
+                name_module: form.name_module.trim(),
+                description_module: form.description_module.trim(),
+                subject_id: form.subject_id,
+                class_group_id: form.class_group_id,
+                academic__period_id: form.academic_period_id,
+                schedule: form.schedule.trim(),
+                duration: form.duration.trim(),
+                seats: form.seats,
+                weekly_hours: form.weekly_hours,
+                enrollment_opens_at: form.enrollment_opens_at,
+                enrollment_closes_at: form.enrollment_closes_at,
+                allow_self_enrollment: form.allow_self_enrollment,
+            };
 
-            await api.post("/modules/store", payload, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
+            if (isEditing) {
+                if (isAdmin) moduleData.teacher_id = form.teacher_id;
+                await api.put(`/modules/${encodeURIComponent(moduleId)}`, moduleData);
+                setSuccess("Los cambios del módulo se guardaron correctamente.");
+                navigate(-1);
+            } else {
+                const payload = new FormData();
+                Object.entries(moduleData).forEach(([key, value]) => {
+                    const formValue = key === "allow_self_enrollment"
+                        ? (value ? "1" : "0")
+                        : String(value);
+                    payload.append(key, formValue);
+                });
+                if (isAdmin) payload.append("teacher_id", form.teacher_id);
+                payload.append("is_published", "1");
+                payload.append("syllabus", syllabus);
 
-            setSuccess("El módulo se publicó correctamente.");
-            setForm(emptyForm);
-            setSyllabus(null);
-            if (syllabusInputRef.current) syllabusInputRef.current.value = "";
+                await api.post("/modules/store", payload, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                });
+
+                setSuccess("El módulo se publicó correctamente.");
+                setForm(emptyForm);
+                setSyllabus(null);
+                if (syllabusInputRef.current) syllabusInputRef.current.value = "";
+            }
         } catch (submitError) {
-            console.error("Error al publicar el módulo:", submitError);
-            setError(getErrorMessage(submitError, "No se pudo publicar el módulo."));
+            console.error(isEditing ? "Error al actualizar el módulo:" : "Error al publicar el módulo:", submitError);
+            setError(getErrorMessage(
+                submitError,
+                isEditing ? "No se pudo actualizar el módulo." : "No se pudo publicar el módulo.",
+            ));
         } finally {
             setSaving(false);
         }
@@ -201,20 +307,32 @@ const SubirModulo = () => {
                 <header className="mb-6 flex flex-col gap-5 rounded-2xl bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h1 className="mb-1 mt-0 flex items-center gap-3 text-3xl font-bold text-slate-900">
-                            <i className="bi bi-cloud-arrow-up-fill text-sky-500" aria-hidden="true" />
-                            Configuración y Carga de Módulos
+                            <i className={`bi ${isEditing ? "bi-pencil-square" : "bi-cloud-arrow-up-fill"} text-sky-500`} aria-hidden="true" />
+                            {isEditing ? "Editar módulo" : "Configuración y Carga de Módulos"}
                         </h1>
-                        <p className="mb-0 font-semibold text-sky-600">Oferta Académica e Inscripciones</p>
+                        <p className="mb-0 font-semibold text-sky-600">
+                            {isEditing ? "Actualiza los datos de tu módulo" : "Oferta Académica e Inscripciones"}
+                        </p>
                     </div>
-                    <button
-                        type="submit"
-                        form="form-subir-modulo"
-                        disabled={saving || catalogLoading}
-                        className="rounded-xl bg-sky-500 px-5 py-3 font-semibold text-white transition hover:bg-sky-600 disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                        <i className="bi bi-plus-circle mr-2" aria-hidden="true" />
-                        {saving ? "Publicando..." : "Publicar Módulo"}
-                    </button>
+                    <div className="flex flex-wrap items-center gap-3">
+                        {isEditing && (
+                            <Link
+                                to="/DocenteMo"
+                                className="rounded-xl border border-slate-200 px-5 py-3 text-center font-semibold text-slate-700 no-underline transition hover:bg-slate-50"
+                            >
+                                Cancelar
+                            </Link>
+                        )}
+                        <button
+                            type="submit"
+                            form="form-subir-modulo"
+                            disabled={saving || catalogLoading || moduleLoading || Boolean(moduleLoadError)}
+                            className="rounded-xl bg-sky-500 px-5 py-3 font-semibold text-white transition hover:bg-sky-600 disabled:cursor-not-allowed disabled:opacity-60"
+                        >
+                            <i className={`bi ${isEditing ? "bi-check-lg" : "bi-plus-circle"} mr-2`} aria-hidden="true" />
+                            {saving ? (isEditing ? "Guardando..." : "Publicando...") : (isEditing ? "Guardar cambios" : "Publicar módulo")}
+                        </button>
+                    </div>
                 </header>
 
                 {catalogError && (
@@ -239,8 +357,17 @@ const SubirModulo = () => {
                             Parámetros de la Asignatura
                         </h2>
 
-                        {catalogLoading ? (
-                            <p role="status" className="mb-0 text-sm text-slate-600">Cargando cursos, periodos, asignaturas y docentes...</p>
+                        {catalogLoading || moduleLoading ? (
+                            <p role="status" className="mb-0 text-sm text-slate-600">
+                                {moduleLoading ? "Cargando los datos del módulo..." : "Cargando cursos, periodos, asignaturas y docentes..."}
+                            </p>
+                        ) : moduleLoadError ? (
+                            <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                                <p className="mb-3">{moduleLoadError}</p>
+                                <Link to="/DocenteMo" className="font-semibold text-red-800 underline">
+                                    Volver a Mis módulos
+                                </Link>
+                            </div>
                         ) : (
                             <form id="form-subir-modulo" onSubmit={handleSubmit} className="grid grid-cols-1 gap-5 md:grid-cols-2">
                                 <div className="md:col-span-2">
@@ -269,11 +396,25 @@ const SubirModulo = () => {
                                 </div>
                                 <div>
                                     <label className={labelClass} htmlFor="docente">Docente responsable</label>
-                                    <select className={fieldClass} id="docente" name="teacher_id" value={form.teacher_id} onChange={handleChange} required>
-                                        <option value="">Selecciona un docente...</option>
-                                        {catalogs.teachers.map((teacher) => (
-                                            <option key={teacher.id} value={teacher.id}>{getTeacherName(teacher)}</option>
-                                        ))}
+                                    <select
+                                        className={fieldClass}
+                                        id="docente"
+                                        name="teacher_id"
+                                        value={isTeacher ? String(currentTeacherId || "") : form.teacher_id}
+                                        onChange={handleChange}
+                                        disabled={isTeacher}
+                                        required
+                                    >
+                                        {!isTeacher && <option value="">Selecciona un docente...</option>}
+                                        {isTeacher
+                                            && currentTeacherId
+                                            && !catalogs.teachers.some((teacher) => String(teacher.id) === String(currentTeacherId))
+                                            && <option value={String(currentTeacherId)}>Docente #{currentTeacherId}</option>}
+                                        {catalogs.teachers
+                                            .filter((teacher) => !isTeacher || String(teacher.id) === String(currentTeacherId))
+                                            .map((teacher) => (
+                                                <option key={teacher.id} value={teacher.id}>{getTeacherName(teacher)}</option>
+                                            ))}
                                     </select>
                                 </div>
                                 <div>
@@ -334,17 +475,41 @@ const SubirModulo = () => {
                                     />
                                 </div>
                                 <div className="md:col-span-2">
-                                    <label className={labelClass} htmlFor="documento">Syllabus / guía curricular (JPG, PNG o WEBP; máximo 5 MB)</label>
-                                    <input
-                                        className={`${fieldClass} file:mr-4 file:rounded-lg file:border-0 file:bg-sky-50 file:px-4 file:py-2 file:font-semibold file:text-sky-700`}
-                                        id="documento"
-                                        ref={syllabusInputRef}
-                                        type="file"
-                                        accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-                                        onChange={handleSyllabusChange}
-                                        required
-                                    />
-                                    {syllabus && <p className="mb-0 mt-2 text-xs text-slate-500">{syllabus.name}</p>}
+                                    {isEditing ? (
+                                        <>
+                                            <span className={labelClass}>Syllabus / guía curricular</span>
+                                            {currentSyllabusUrl ? (
+                                                <a
+                                                    href={currentSyllabusUrl}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="inline-flex rounded-lg border border-slate-200 px-4 py-3 text-sm font-semibold text-sky-700 no-underline hover:bg-sky-50"
+                                                >
+                                                    <i className="bi bi-file-earmark-image mr-2" aria-hidden="true" />
+                                                    Ver syllabus actual
+                                                </a>
+                                            ) : (
+                                                <p className="mb-0 text-sm text-slate-500">Este módulo no tiene un syllabus adjunto.</p>
+                                            )}
+                                            <p className="mb-0 mt-2 text-xs text-slate-500">
+                                                El archivo actual se conservará al guardar los cambios.
+                                            </p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <label className={labelClass} htmlFor="documento">Syllabus / guía curricular (JPG, PNG o WEBP; máximo 5 MB)</label>
+                                            <input
+                                                className={`${fieldClass} file:mr-4 file:rounded-lg file:border-0 file:bg-sky-50 file:px-4 file:py-2 file:font-semibold file:text-sky-700`}
+                                                id="documento"
+                                                ref={syllabusInputRef}
+                                                type="file"
+                                                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                                                onChange={handleSyllabusChange}
+                                                required
+                                            />
+                                            {syllabus && <p className="mb-0 mt-2 text-xs text-slate-500">{syllabus.name}</p>}
+                                        </>
+                                    )}
                                 </div>
                                 <label className="flex items-center gap-3 text-sm font-medium text-slate-700 md:col-span-2">
                                     <input
@@ -367,11 +532,13 @@ const SubirModulo = () => {
                                 Estado de oferta
                             </h2>
                             <p className="mb-5 leading-7 text-slate-600">
-                                Al publicar, el módulo queda disponible para el proceso de selección de asignaturas del alumnado.
+                                {isEditing
+                                    ? "Al guardar, se actualizarán los datos del módulo y se conservará el syllabus actual."
+                                    : "Al publicar, el módulo queda disponible para el proceso de selección de asignaturas del alumnado."}
                             </p>
                             <div className="flex items-center gap-3 border-t border-slate-100 pt-4 text-sm text-slate-700">
                                 <i className="bi bi-check-circle-fill text-emerald-500" aria-hidden="true" />
-                                Se publicará al enviar el formulario.
+                                {isEditing ? "Se conservará el estado de publicación actual." : "Se publicará al enviar el formulario."}
                             </div>
                         </section>
 

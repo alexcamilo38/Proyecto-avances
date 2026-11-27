@@ -27,6 +27,7 @@ const initialForm = {
   password_confirmation: "",
   username: "",
   institution_id: "",
+  specialty: "",
 };
 
 const fieldClass = "mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-normal text-slate-800 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10";
@@ -154,6 +155,7 @@ const RegisterUserSystem = ({ roleKey }) => {
         status: true,
         institution_id: form.institution_id ? Number(form.institution_id) : null,
         rol_id: Number(selectedRole.id),
+        ...(roleKey === "teacher" ? { specialty: form.specialty.trim() } : {}),
       };
 
       await api.post("/user-systems/store", payload);
@@ -263,6 +265,12 @@ const RegisterUserSystem = ({ roleKey }) => {
                       </option>
                     ))}
                   </select>
+                </label>
+              )}
+              {roleKey === "teacher" && (
+                <label className={labelClass}>
+                  Especialidad
+                  <input className={fieldClass} name="specialty" value={form.specialty} onChange={handleChange} required maxLength="255" />
                 </label>
               )}
               <label className={labelClass}>

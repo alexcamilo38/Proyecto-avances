@@ -1,3 +1,4 @@
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../Config/env";
@@ -5,6 +6,9 @@ import colegioSanVicente from "../assets/cole1.jpg";
 import colegioComuner from "../assets/cole2.jpg";
 import colegioTecnico from "../assets/cole3.jpg";
 import { getApiErrorMessage, getCollection } from "./Auth/authUtils";
+import api from "../Config/env";
+import TeacherSessionContext from "../Config/TeacherSessionContext";
+import { getTeacherName } from "../Config/teacherProfile";
 
 // Muestra una métrica resumida con icono, etiqueta, valor y color contextual.
 const Metric = ({ icon, label, value, tone }) => (
@@ -246,25 +250,215 @@ const AdminDashboard = () => {
   );
 };
 
-// Presenta al docente sus módulos, indicadores y avisos pendientes.
+const getCollection = (responseData, key) => {
+  if (Array.isArray(responseData)) return responseData;
+  if (Array.isArray(responseData?.data)) return responseData.data;
+  if (Array.isArray(responseData?.[key])) return responseData[key];
+  if (Array.isArray(responseData?.data?.data)) return responseData.data.data;
+  throw new Error(`El servidor devolvió una respuesta inesperada al consultar ${key}.`);
+};
+
+const isPublished = (module) => (
+  module.is_published === true
+  || module.is_published === 1
+  || module.is_published === "1"
+);
+
+const getDaysUntil = (dateValue) => {
+  if (!dateValue) return null;
+  const date = new Date(`${String(dateValue).slice(0, 10)}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return null;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return Math.ceil((date.getTime() - today.getTime()) / 86400000);
+};
+
+const getStudentId = (enrollment) => enrollment.student_id ?? enrollment.student?.id;
+const EMPTY_LIST = Object.freeze([]);
+
+// Presenta al docente sus módulos, indicadores y avisos de su sesión autenticada.
 const TeacherDashboard = () => {
-  const modules = [
-    { name: "Lengua Castellana I", progress: 80 },
-    { name: "Literatura", progress: 55 },
-    { name: "Comprensión lectora", progress: 30 },
-  ];
-  const notices = [
-    { icon: "bi-people", label: "4 alumnos nuevos", status: "Nuevo", tone: "bg-sky-100 text-sky-700" },
-    { icon: "bi-calendar-event", label: "Cierre en 12 días", status: "Pronto", tone: "bg-amber-100 text-amber-700" },
-    { icon: "bi-cloud-upload", label: "Módulo 3 sin subir", status: "Pendiente", tone: "bg-violet-100 text-violet-700" },
-  ];
+  const { profile, loading: profileLoading, error: profileError } = useContext(TeacherSessionContext);
+  const [modules, setModules] = useState([]);
+  const [enrollments, setEnrollments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [dataOwnerId, setDataOwnerId] = useState(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    let active = true;
+
+    if (!profile?.id) {
+      return () => controller.abort();
+    }
+
+    Promise.all([
+      api.get("/modules/list", { signal: controller.signal }),
+      api.get("/module-enrollments/list", { signal: controller.signal }),
+    ])
+      .then(([modulesResponse, enrollmentsResponse]) => {
+        const ownModules = getCollection(modulesResponse.data, "modules");
+        const moduleIds = new Set(ownModules.map((module) => String(module.id)));
+        const ownEnrollments = getCollection(enrollmentsResponse.data, "module_enrollments")
+          .filter((enrollment) => moduleIds.has(String(enrollment.module_id ?? enrollment.module?.id)));
+        if (active) {
+          setModules(ownModules);
+          setEnrollments(ownEnrollments);
+          setDataOwnerId(String(profile.id));
+          setError("");
+          setLoading(false);
+        }
+      })
+      .catch((requestError) => {
+        if (!active || controller.signal.aborted) return;
+        console.error("Error al cargar los datos del dashboard docente:", requestError);
+        setModules([]);
+        setEnrollments([]);
+        setDataOwnerId(String(profile.id));
+        setLoading(false);
+        setError(
+          requestError.response?.data?.message
+          || requestError.message
+          || "No se pudieron cargar los datos del docente.",
+        );
+      });
+
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, [profile?.id]);
+
+  const dataIsCurrent = String(dataOwnerId) === String(profile?.id);
+  const currentModules = dataIsCurrent ? modules : EMPTY_LIST;
+  const currentEnrollments = dataIsCurrent ? enrollments : EMPTY_LIST;
+  const dashboardError = dataIsCurrent ? error : "";
+  const dashboardLoading = profileLoading
+    || Boolean(profile?.id && (loading || !dataIsCurrent));
+
+  const moduleSummaries = useMemo(() => currentModules.map((module) => {
+    const moduleEnrollments = currentEnrollments.filter(
+      (enrollment) => String(enrollment.module_id ?? enrollment.module?.id) === String(module.id),
+    );
+    const studentIds = new Set(
+      moduleEnrollments.map(getStudentId)
+        .filter((studentId) => studentId !== null && studentId !== undefined)
+        .map(String),
+    );
+    const seats = Math.max(Number(module.seats) || 0, 0);
+    const occupied = studentIds.size;
+
+    return {
+      ...module,
+      occupied,
+      seats,
+      occupancy: seats ? Math.min(Math.round((occupied / seats) * 100), 100) : 0,
+    };
+  }), [currentModules, currentEnrollments]);
+
+  const newStudents = useMemo(() => {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 7);
+    return new Set(
+      currentEnrollments
+        .filter((enrollment) => {
+          const createdAt = new Date(enrollment.created_at);
+          return getStudentId(enrollment) !== null
+            && getStudentId(enrollment) !== undefined
+            && !Number.isNaN(createdAt.getTime())
+            && createdAt >= cutoff;
+        })
+        .map((enrollment) => String(getStudentId(enrollment))),
+    ).size;
+  }, [currentEnrollments]);
+
+  const nextClosing = useMemo(() => moduleSummaries
+    .map((module) => ({ module, days: getDaysUntil(module.enrollment_closes_at) }))
+    .filter(({ days }) => days !== null && days >= 0)
+    .sort((left, right) => left.days - right.days)[0] || null, [moduleSummaries]);
+
+  const notices = useMemo(() => {
+    const items = [];
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 7);
+    const recentByModule = new Map();
+
+    currentEnrollments.forEach((enrollment) => {
+      const createdAt = new Date(enrollment.created_at);
+      const studentId = getStudentId(enrollment);
+      if (studentId === null || studentId === undefined || Number.isNaN(createdAt.getTime()) || createdAt < cutoff) return;
+
+      const moduleId = String(enrollment.module_id ?? enrollment.module?.id);
+      const students = recentByModule.get(moduleId) || new Set();
+      students.add(String(studentId));
+      recentByModule.set(moduleId, students);
+    });
+
+    moduleSummaries.forEach((module) => {
+      const recentCount = recentByModule.get(String(module.id))?.size || 0;
+      if (recentCount) {
+        items.push({
+          key: `students-${module.id}`,
+          icon: "bi-people",
+          label: `${recentCount} alumno(s) nuevo(s) · ${module.name_module}`,
+          status: "Nuevo",
+          tone: "bg-sky-100 text-sky-700",
+        });
+      }
+
+      const days = getDaysUntil(module.enrollment_closes_at);
+      if (days !== null && days >= 0 && days <= 7) {
+        items.push({
+          key: `closing-${module.id}`,
+          icon: "bi-calendar-event",
+          label: days === 0 ? `La inscripción cierra hoy · ${module.name_module}` : `Cierre en ${days} día(s) · ${module.name_module}`,
+          status: "Pronto",
+          tone: "bg-amber-100 text-amber-700",
+        });
+      }
+
+      if (!isPublished(module)) {
+        items.push({
+          key: `unpublished-${module.id}`,
+          icon: "bi-cloud-upload",
+          label: `${module.name_module}: pendiente de publicación`,
+          status: "Pendiente",
+          tone: "bg-violet-100 text-violet-700",
+        });
+      }
+    });
+
+    return items;
+  }, [currentEnrollments, moduleSummaries]);
+
+  if (dashboardLoading) {
+    return (
+      <div className="ml-64 space-y-4 p-7 max-sm:ml-[72px] max-sm:space-y-3 max-sm:p-4">
+        <section className="rounded-2xl bg-white p-6 text-sm text-slate-500 shadow-sm" role="status">
+          Cargando los datos del docente...
+        </section>
+      </div>
+    );
+  }
+
+  if (profileError) {
+    return (
+      <div className="ml-64 space-y-4 p-7 max-sm:ml-[72px] max-sm:space-y-3 max-sm:p-4">
+        <section className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900" role="alert">
+          {profileError}
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="ml-64 space-y-4 p-7 max-sm:ml-[72px] max-sm:space-y-3 max-sm:p-4">
       <section className="flex min-h-28 items-center justify-between gap-5 rounded-2xl bg-[#111629] px-6 py-5 text-white">
         <div>
-          <p className="mb-1 text-sm text-slate-400">Docente de planta · Humanidades</p>
-          <h1 className="m-0 text-2xl font-semibold max-sm:text-xl">Hola, Carlos Alberto</h1>
+          <p className="mb-1 text-sm text-slate-400">{profile.specialty || "Docente"}</p>
+          <h1 className="m-0 text-2xl font-semibold max-sm:text-xl">Hola, {getTeacherName(profile)}</h1>
           <Link to="/SubirModulo" className="mt-4 inline-flex items-center gap-2 rounded-xl bg-emerald-400 px-4 py-2.5 text-sm font-semibold text-[#111629] no-underline transition hover:bg-emerald-300">
             <i className="bi bi-cloud-upload" aria-hidden="true" />
             Subir módulo
@@ -276,50 +470,76 @@ const TeacherDashboard = () => {
       </section>
 
       <section aria-label="Resumen docente" className="grid grid-cols-3 gap-3 max-[650px]:grid-cols-1">
-        <Metric icon="bi-journal-bookmark" label="Mis módulos" value="6" tone="bg-sky-100 text-sky-600" />
-        <Metric icon="bi-people" label="Alumnos nuevos" value="4" tone="bg-emerald-100 text-emerald-600" />
-        <Metric icon="bi-calendar-event" label="Cierre en" value="12 días" tone="bg-amber-100 text-amber-600" />
+        <Metric icon="bi-journal-bookmark" label="Mis módulos" value={modules.length} tone="bg-sky-100 text-sky-600" />
+        <Metric icon="bi-people" label="Alumnos nuevos (7 días)" value={newStudents} tone="bg-emerald-100 text-emerald-600" />
+        <Metric
+          icon="bi-calendar-event"
+          label="Próximo cierre"
+          value={!nextClosing ? "—" : nextClosing.days === 0 ? "Hoy" : `${nextClosing.days} días`}
+          tone="bg-amber-100 text-amber-600"
+        />
       </section>
+
+      {dashboardError && (
+        <section className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900" role="alert">
+          {dashboardError}
+        </section>
+      )}
 
       <div className="grid grid-cols-[1.2fr_1fr] gap-4 max-[760px]:grid-cols-1">
         <SectionCard
           title="Mis módulos"
           action={<Link to="/DocenteMo" className="text-xs font-semibold text-sky-600 no-underline hover:text-sky-800">Ver todos</Link>}
         >
-          <ul className="m-0 list-none space-y-4 p-0">
-            {modules.map(({ name, progress }) => (
-              <li key={name}>
+          {moduleSummaries.length === 0 ? (
+            <p className="m-0 rounded-xl bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
+              Aún no tienes módulos registrados.
+            </p>
+          ) : (
+            <ul className="m-0 list-none space-y-4 p-0">
+              {moduleSummaries.map((module) => (
+              <li key={module.id}>
                 <div className="mb-2 flex items-center justify-between gap-3 text-sm">
-                  <span className="font-medium text-slate-700">{name}</span>
-                  <span className="text-xs text-slate-500">{progress}%</span>
+                  <span className="font-medium text-slate-700">{module.name_module}</span>
+                  <span className="text-xs text-slate-500">{module.occupancy}% ocupado</span>
                 </div>
                 <div
                   className="h-2 overflow-hidden rounded-full bg-slate-100"
                   role="progressbar"
-                  aria-label={`Avance de ${name}`}
+                  aria-label={`Ocupación de ${module.name_module}`}
                   aria-valuemin="0"
                   aria-valuemax="100"
-                  aria-valuenow={progress}
+                  aria-valuenow={module.occupancy}
                 >
-                  <div className="h-full rounded-full bg-sky-400" style={{ width: `${progress}%` }} />
+                  <div className="h-full rounded-full bg-sky-400" style={{ width: `${module.occupancy}%` }} />
                 </div>
+                <p className="mb-0 mt-1 text-right text-xs text-slate-400">
+                  {module.occupied} de {module.seats} cupos
+                </p>
               </li>
-            ))}
-          </ul>
+              ))}
+            </ul>
+          )}
         </SectionCard>
 
         <SectionCard title="Avisos">
-          <ul className="m-0 list-none divide-y divide-slate-100 p-0">
-            {notices.map(({ icon, label, status, tone }) => (
-              <li key={label} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
-                  <i className={`bi ${icon}`} aria-hidden="true" />
-                </span>
-                <span className="flex-1 text-sm text-slate-700">{label}</span>
-                <span className={`rounded-full px-3 py-1 text-[11px] font-medium ${tone}`}>{status}</span>
-              </li>
-            ))}
-          </ul>
+          {notices.length === 0 ? (
+            <p className="m-0 rounded-xl bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
+              No tienes avisos pendientes.
+            </p>
+          ) : (
+            <ul className="m-0 list-none divide-y divide-slate-100 p-0">
+              {notices.map(({ key, icon, label, status, tone }) => (
+                <li key={key} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
+                    <i className={`bi ${icon}`} aria-hidden="true" />
+                  </span>
+                  <span className="flex-1 text-sm text-slate-700">{label}</span>
+                  <span className={`rounded-full px-3 py-1 text-[11px] font-medium ${tone}`}>{status}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </SectionCard>
       </div>
     </div>
