@@ -1,3 +1,24 @@
+const CURRENT_USER_KEY = "easymatric.current-user";
+
+export const storeCurrentUser = (user) => {
+  const id = user?.id ?? user?.user_system_id;
+  if (id == null) {
+    sessionStorage.removeItem(CURRENT_USER_KEY);
+    return;
+  }
+  sessionStorage.setItem(CURRENT_USER_KEY, JSON.stringify({ id }));
+};
+
+export const getCurrentUserId = () => {
+  const storedUser = sessionStorage.getItem(CURRENT_USER_KEY);
+  if (!storedUser) return null;
+  return JSON.parse(storedUser)?.id ?? null;
+};
+
+export const clearCurrentUser = () => {
+  sessionStorage.removeItem(CURRENT_USER_KEY);
+};
+
 export const getCollection = (responseData, collectionName) => {
   if (Array.isArray(responseData)) return responseData;
   if (Array.isArray(responseData?.data)) return responseData.data;

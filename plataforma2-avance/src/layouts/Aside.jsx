@@ -1,13 +1,12 @@
 import { NavLink, Link } from "react-router-dom";
 import logoblanco from "../assets/LogoBlanco.png";
+import { clearCurrentUser } from "../pages/Auth/authUtils";
 
 const navigation = {
   admin: [
     { to: "/RegistrarSede", label: "Instituciones", icon: "bi-bank" },
-    { to: "/RevicionD", label: "Matrículas", icon: "bi-journal-bookmark" },
-    { to: "/Matriculados", label: "Estudiantes", icon: "bi-people" },
+    { to: "/Usuarios", label: "Usuarios", icon: "bi-people" },
     { to: "/Roles", label: "Roles", icon: "bi-shield-lock" },
-    { to: "/NotasCa", label: "Catálogos", icon: "bi-folder2-open" },
     { to: "/PerfilAd", label: "Mi perfil", icon: "bi-person-badge" },
   ],
   teacher: [
@@ -123,6 +122,7 @@ const Aside = ({ role }) => {
     <div className="mt-auto border-t border-white/10 px-6 pt-5 max-sm:px-2">
       <Link
         to="/login"
+        onClick={clearCurrentUser}
         className="mb-4 flex items-center gap-3 text-red-400 no-underline transition-colors hover:text-red-300 max-sm:justify-center"
         title="Cerrar sesión"
       >

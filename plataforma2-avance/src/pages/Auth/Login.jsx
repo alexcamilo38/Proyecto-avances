@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import logoazul from "../../assets/LogoAzul.png";
 import ilustracion from "../../assets/ilustracion estudiando.jpg";
 import api from "../../Config/env";
-import { getApiErrorMessage, getCollection, getDashboardPath } from "./authUtils";
+import { getApiErrorMessage, getCollection, getDashboardPath, storeCurrentUser } from "./authUtils";
 
 // Gestiona la interfaz de inicio de sesión y la navegación posterior.
 const Login = () => {
@@ -42,6 +42,7 @@ const Login = () => {
         throw new Error("El servidor autenticó la cuenta, pero no devolvió un rol válido para dirigirla.");
       }
 
+      storeCurrentUser(user);
       navigate(dashboard, { replace: true });
     } catch (loginError) {
       console.error("Error al iniciar sesión:", loginError);

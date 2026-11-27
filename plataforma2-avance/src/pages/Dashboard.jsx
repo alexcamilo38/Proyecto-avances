@@ -1,7 +1,10 @@
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import api from "../Config/env";
 import colegioSanVicente from "../assets/cole1.jpg";
 import colegioComuner from "../assets/cole2.jpg";
 import colegioTecnico from "../assets/cole3.jpg";
+import { getApiErrorMessage, getCollection } from "./Auth/authUtils";
 
 // Muestra una métrica resumida con icono, etiqueta, valor y color contextual.
 const Metric = ({ icon, label, value, tone }) => (
@@ -27,43 +30,107 @@ const SectionCard = ({ title, action, children, className = "" }) => (
   </section>
 );
 
-// Resume para administración las matrículas, instituciones y actividad reciente.
+const loadAdminDashboardData = async () => {
+  const [institutionsResponse, usersResponse, rolesResponse] = await Promise.all([
+    api.get("/institutions/list"),
+    api.get("/user-systems/list"),
+    api.get("/rols/list"),
+  ]);
+  return {
+    institutions: getCollection(institutionsResponse.data, "institutions"),
+    users: getCollection(usersResponse.data, "user_systems"),
+    roles: getCollection(rolesResponse.data, "roles"),
+  };
+};
+
+const isUserActive = (status) => {
+  const normalized = String(status).toLowerCase();
+  return status === true || status === 1 || ["1", "true", "active", "activo", "enabled", "habilitado"].includes(normalized);
+};
+
+const getUserName = (user) => [
+  user.first_name,
+  user.middle_name,
+  user.last_name,
+  user.second_last_name,
+].filter(Boolean).join(" ") || user.username || "Usuario sin nombre";
+
+const formatDate = (value) => {
+  if (!value) return "Fecha no disponible";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? "Fecha no disponible"
+    : new Intl.DateTimeFormat("es-CO", { dateStyle: "medium" }).format(date);
+};
+
+// Resume las cuentas, instituciones y roles existentes en la plataforma.
 const AdminDashboard = () => {
+  const [data, setData] = useState({ institutions: [], users: [], roles: [] });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const loadDashboard = useCallback(async () => {
+    setLoading(true);
+    setError("");
+    try {
+      setData(await loadAdminDashboardData());
+    } catch (loadError) {
+      console.error("Error al cargar los datos del dashboard administrativo:", loadError);
+      setError(getApiErrorMessage(loadError, "No se pudieron cargar los datos del dashboard."));
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+
+    loadAdminDashboardData()
+      .then((loadedData) => {
+        if (!ignore) setData(loadedData);
+      })
+      .catch((loadError) => {
+        console.error("Error al cargar los datos del dashboard administrativo:", loadError);
+        if (!ignore) setError(getApiErrorMessage(loadError, "No se pudieron cargar los datos del dashboard."));
+      })
+      .finally(() => {
+        if (!ignore) setLoading(false);
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  const activeUsers = data.users.filter((user) => isUserActive(user.status)).length;
+  const recentUsers = [...data.users]
+    .sort((a, b) => (
+      (Date.parse(b.created_at || "") || 0) - (Date.parse(a.created_at || "") || 0)
+      || Number(b.id || 0) - Number(a.id || 0)
+    ))
+    .slice(0, 5);
+  const recentInstitutions = [...data.institutions]
+    .sort((a, b) => (
+      (Date.parse(b.created_at || "") || 0) - (Date.parse(a.created_at || "") || 0)
+      || Number(b.id || 0) - Number(a.id || 0)
+    ))
+    .slice(0, 4);
   const metrics = [
-    { icon: "bi-bank", label: "Instituciones", value: "12", tone: "bg-sky-100 text-sky-600" },
-    { icon: "bi-journal-check", label: "Matrículas", value: "248", tone: "bg-emerald-100 text-emerald-600" },
-    { icon: "bi-hourglass-split", label: "Pendientes", value: "17", tone: "bg-amber-100 text-amber-600" },
-    { icon: "bi-person-check", label: "Activos", value: "190", tone: "bg-violet-100 text-violet-600" },
-  ];
-  const applications = [
-    { initials: "JE", name: "Juan Estrada", status: "Aprobada", tone: "bg-emerald-100 text-emerald-700" },
-    { initials: "MR", name: "María Ruiz", status: "Pendiente", tone: "bg-amber-100 text-amber-700" },
-    { initials: "LM", name: "Luis Mora", status: "En revisión", tone: "bg-sky-100 text-sky-700" },
-  ];
-  const recentActivity = [
-    { icon: "bi-check-circle", title: "Matrícula aprobada", detail: "Juan Estrada · Institución San Vicente", time: "Hace 10 min", tone: "bg-emerald-100 text-emerald-600" },
-    { icon: "bi-person-plus", title: "Nueva solicitud de matrícula", detail: "María Ruiz · Pendiente de revisión", time: "Hace 35 min", tone: "bg-amber-100 text-amber-600" },
-    { icon: "bi-file-earmark-check", title: "Documentos enviados", detail: "Luis Mora · En revisión", time: "Hace 1 hora", tone: "bg-sky-100 text-sky-600" },
-    { icon: "bi-building-add", title: "Institución registrada", detail: "La información está lista para revisión", time: "Ayer", tone: "bg-violet-100 text-violet-600" },
-  ];
-  const chart = [
-    { month: "May", height: "42%" },
-    { month: "Jun", height: "58%" },
-    { month: "Jul", height: "48%" },
-    { month: "Ago", height: "76%" },
-    { month: "Sep", height: "94%" },
-    { month: "Oct", height: "66%" },
+    { icon: "bi-bank", label: "Instituciones", value: data.institutions.length, href: "/RegistrarSede", tone: "bg-sky-100 text-sky-600" },
+    { icon: "bi-people", label: "Usuarios", value: data.users.length, href: "/Usuarios", tone: "bg-violet-100 text-violet-600" },
+    { icon: "bi-person-check", label: "Usuarios activos", value: activeUsers, href: "/Usuarios", tone: "bg-emerald-100 text-emerald-600" },
+    { icon: "bi-shield-lock", label: "Roles", value: data.roles.length, href: "/Roles", tone: "bg-amber-100 text-amber-600" },
   ];
 
   return (
     <div className="ml-64 space-y-4 p-7 max-sm:ml-[72px] max-sm:space-y-3 max-sm:p-4">
       <section className="flex min-h-28 items-center justify-between gap-5 rounded-2xl bg-[#111629] px-6 py-5 text-white">
         <div>
-          <p className="mb-1 text-sm text-slate-400">Así va la plataforma hoy.</p>
+          <p className="mb-1 text-sm text-slate-400">Resumen de la información registrada en la plataforma.</p>
           <h1 className="m-0 text-2xl font-semibold max-sm:text-xl">Hola, Administrador</h1>
-          <Link to="/RegistrarSede" className="mt-4 inline-flex items-center gap-2 rounded-xl bg-sky-400 px-4 py-2.5 text-sm font-semibold text-[#111629] no-underline transition hover:bg-sky-300">
+          <Link to="/Usuarios" className="mt-4 inline-flex items-center gap-2 rounded-xl bg-sky-400 px-4 py-2.5 text-sm font-semibold text-[#111629] no-underline transition hover:bg-sky-300">
             <i className="bi bi-plus-lg" aria-hidden="true" />
-            Registrar institución
+            Administrar usuarios
           </Link>
         </div>
         <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-sky-400/15 text-3xl text-sky-300 max-sm:hidden">
@@ -71,57 +138,109 @@ const AdminDashboard = () => {
         </span>
       </section>
 
+      {error && (
+        <div role="alert" className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <span>{error}</span>
+          <button type="button" onClick={loadDashboard} disabled={loading} className="font-bold underline disabled:opacity-50">
+            {loading ? "Cargando..." : "Reintentar"}
+          </button>
+        </div>
+      )}
+
       <section aria-label="Resumen de la plataforma" className="grid grid-cols-4 gap-3 max-lg:grid-cols-2 max-[520px]:grid-cols-1">
-        {metrics.map((metric) => <Metric key={metric.label} {...metric} />)}
+        {metrics.map((metric) => (
+          <Link key={metric.label} to={metric.href} className="rounded-2xl text-inherit no-underline transition hover:-translate-y-0.5">
+            <Metric {...metric} value={loading ? "…" : error ? "—" : metric.value.toLocaleString("es-CO")} />
+          </Link>
+        ))}
       </section>
 
       <div className="grid grid-cols-[1.2fr_1fr] gap-4 max-[760px]:grid-cols-1">
-        <SectionCard title="Matrículas por mes" action={<span className="text-xs font-semibold text-sky-600">2026</span>}>
-          <div className="flex h-36 items-end justify-around gap-3 border-b border-slate-100 px-2">
-            {chart.map(({ month, height }) => (
-              <div key={month} className="flex h-full flex-1 flex-col items-center justify-end gap-2">
-                <span
-                  className={`w-full max-w-8 rounded-t-md ${month === "Sep" ? "bg-sky-500" : "bg-sky-200"}`}
-                  style={{ height }}
-                  aria-label={`${month}: ${height}`}
-                />
-                <span className="pb-2 text-[11px] text-slate-400">{month}</span>
-              </div>
-            ))}
-          </div>
+        <SectionCard
+          title="Usuarios registrados"
+          action={<Link to="/Usuarios" className="text-xs font-semibold text-sky-600 no-underline hover:text-sky-800">Ver todas</Link>}
+        >
+          {loading ? (
+            <p role="status" className="m-0 py-8 text-center text-sm text-slate-500">Cargando usuarios...</p>
+          ) : recentUsers.length ? (
+            <ul className="m-0 list-none divide-y divide-slate-100 p-0">
+              {recentUsers.map((user) => {
+                const role = user.rol?.name_role
+                  || user.role?.name_role
+                  || data.roles.find((item) => String(item.id) === String(user.rol_id))?.name_role
+                  || "Sin rol";
+                return (
+                  <li key={user.id} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sky-100 text-xs font-semibold text-sky-700">
+                      {getUserName(user).charAt(0).toUpperCase()}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <strong className="block truncate text-sm font-medium text-slate-700">{getUserName(user)}</strong>
+                      <small className="block truncate text-xs text-slate-500">@{user.username || user.email || "Sin usuario"}</small>
+                    </span>
+                    <span className="shrink-0 text-right">
+                      <span className="block text-xs font-medium text-slate-600">{role}</span>
+                      <time className="text-[11px] text-slate-400">{formatDate(user.created_at)}</time>
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <p className="m-0 py-8 text-center text-sm text-slate-500">
+              {error ? "No se pudieron cargar los usuarios." : "Aún no hay usuarios registrados."}
+            </p>
+          )}
         </SectionCard>
 
         <SectionCard
-          title="Últimas matrículas"
-          action={<Link to="/RevicionD" className="text-xs font-semibold text-sky-600 no-underline hover:text-sky-800">Ver todas</Link>}
+          title="Instituciones registradas"
+          action={<Link to="/RegistrarSede" className="text-xs font-semibold text-sky-600 no-underline hover:text-sky-800">Administrar</Link>}
         >
-          <ul className="m-0 list-none divide-y divide-slate-100 p-0">
-            {applications.map(({ initials, name, status, tone }) => (
-              <li key={name} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-xs font-semibold text-slate-600">{initials}</span>
-                <span className="flex-1 text-sm text-slate-700">{name}</span>
-                <span className={`rounded-full px-3 py-1 text-[11px] font-medium ${tone}`}>{status}</span>
-              </li>
-            ))}
-          </ul>
+          {loading ? (
+            <p role="status" className="m-0 py-8 text-center text-sm text-slate-500">Cargando instituciones...</p>
+          ) : recentInstitutions.length ? (
+            <ul className="m-0 list-none divide-y divide-slate-100 p-0">
+              {recentInstitutions.map((institution) => (
+                <li key={institution.id} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-100 text-sky-600">
+                    <i className="bi bi-bank" aria-hidden="true" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <strong className="block truncate text-sm font-medium text-slate-700">{institution.name_institution || "Institución sin nombre"}</strong>
+                    <small className="block truncate text-xs text-slate-500">{institution.city || institution.address_institution || "Ubicación no registrada"}</small>
+                  </span>
+                  <time className="shrink-0 text-[11px] text-slate-400">{formatDate(institution.created_at)}</time>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="m-0 py-8 text-center text-sm text-slate-500">
+              {error ? "No se pudieron cargar las instituciones." : "Aún no hay instituciones registradas."}
+            </p>
+          )}
         </SectionCard>
       </div>
 
-      <SectionCard title="Actividad reciente">
-        <ul className="m-0 list-none divide-y divide-slate-100 p-0">
-          {recentActivity.map(({ icon, title, detail, time, tone }) => (
-            <li key={title} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0 sm:gap-4">
-              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-base ${tone}`}>
+      <SectionCard title="Accesos de administración">
+        <div className="grid grid-cols-3 gap-3 max-[650px]:grid-cols-1">
+          {[
+            { to: "/RegistrarSede", icon: "bi-bank", title: "Instituciones", detail: "Gestionar sedes e instituciones", tone: "bg-sky-100 text-sky-600" },
+            { to: "/Usuarios", icon: "bi-people", title: "Usuarios", detail: "Administrar cuentas del sistema", tone: "bg-violet-100 text-violet-600" },
+            { to: "/Roles", icon: "bi-shield-lock", title: "Roles", detail: "Configurar perfiles de acceso", tone: "bg-amber-100 text-amber-600" },
+          ].map(({ to, icon, title, detail, tone }) => (
+            <Link key={to} to={to} className="flex items-center gap-3 rounded-xl border border-slate-100 p-4 text-slate-800 no-underline transition hover:border-sky-200 hover:bg-slate-50">
+              <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${tone}`}>
                 <i className={`bi ${icon}`} aria-hidden="true" />
               </span>
-              <div className="min-w-0 flex-1">
-                <p className="m-0 text-sm font-semibold text-slate-700">{title}</p>
-                <p className="m-0 truncate text-xs text-slate-500">{detail}</p>
-              </div>
-              <time className="shrink-0 text-[11px] text-slate-400 sm:text-xs">{time}</time>
-            </li>
+              <span>
+                <strong className="block text-sm">{title}</strong>
+                <small className="text-xs text-slate-500">{detail}</small>
+              </span>
+              <i className="bi bi-arrow-right ml-auto text-slate-400" aria-hidden="true" />
+            </Link>
           ))}
-        </ul>
+        </div>
       </SectionCard>
     </div>
   );

@@ -35,9 +35,7 @@ import EditarPerfil from './pages/Estudiante/EditarPerfil';
 import RegistroAd from './pages/Administrador/RegistroAd';
 import RegistrarSede from './pages/Administrador/RegistrarSede';
 import Roles from './pages/Administrador/Roles';
-import Matriculados from './pages/Administrador/Matriculados';
-import NotasCa from './pages/Administrador/NotasCa';
-import RevicionD from './pages/Administrador/RevicionD';
+import Usuarios from './pages/Administrador/Usuarios';
 import GradoPrescolar from './pages/Administrador/Grados/GradoPrescolar';
 import GradoPrimaria from './pages/Administrador/Grados/GradoPrimaria';
 import GradoSecundaria from './pages/Administrador/Grados/GradoSecundaria';
@@ -144,9 +142,7 @@ const App = () => {
           <Route path="/admin" element={<Dashboard role="admin" />} />
           <Route path="/RegistrarSede" element={<RegistrarSede />} />
           <Route path="/Roles" element={<Roles />} />
-          <Route path="/Matriculados" element={<Matriculados />} />
-          <Route path="/NotasCa" element={<NotasCa />} />
-          <Route path="/RevicionD" element={<RevicionD />} />
+          <Route path="/Usuarios" element={<Usuarios />} />
           <Route path="/PerfilAd" element={<PerfilAd />} />
           <Route path="/Matriculados/GradoPrescolar" element={<GradoPrescolar />} />
           <Route path="/Matriculados/GradoPrimaria" element={<GradoPrimaria />} />

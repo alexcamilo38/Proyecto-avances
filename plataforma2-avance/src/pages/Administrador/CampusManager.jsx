@@ -50,6 +50,7 @@ const CampusManager = ({
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [deletingId, setDeletingId] = useState(null);
+    const [selectedInstitutionId, setSelectedInstitutionId] = useState("");
     const [error, setError] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
     const [editingCampus, setEditingCampus] = useState(null);
@@ -130,7 +131,7 @@ const CampusManager = ({
         setEditingCampus(null);
         setForm({
             ...emptyCampus,
-            institution_id: institutions.length === 1 ? String(institutions[0].id) : "",
+            institution_id: selectedInstitutionId || (institutions.length === 1 ? String(institutions[0].id) : ""),
         });
         setFacadeFile(null);
         clearFacadePreview();
@@ -247,11 +248,15 @@ const CampusManager = ({
         || campus.institution?.name_institution
         || "Institución no disponible"
     );
-    const visibleCampuses = restrictToInstitutions
-        ? campuses.filter((campus) => institutions.some(
-            (institution) => String(institution.id) === String(campus.institution_id ?? campus.institution?.id),
-        ))
-        : campuses;
+    const visibleCampuses = campuses.filter((campus) => {
+        const institutionId = String(campus.institution_id ?? campus.institution?.id ?? "");
+        const belongsToAvailableInstitution = !restrictToInstitutions || institutions.some(
+            (institution) => String(institution.id) === institutionId,
+        );
+        return belongsToAvailableInstitution
+            && (!selectedInstitutionId || institutionId === selectedInstitutionId);
+    });
+    const scopedToInstitution = restrictToInstitutions || Boolean(selectedInstitutionId);
 
     return (
         <section className="mt-10">
@@ -262,15 +267,36 @@ const CampusManager = ({
                         Administra las sedes y vincúlalas con su institución.
                     </p>
                 </div>
-                <button
-                    type="button"
-                    onClick={openCreateModal}
-                    disabled={institutions.length === 0}
-                    className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-bold text-white transition focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:opacity-50 ${accentClasses.button}`}
-                >
-                    <i className="bi bi-plus-lg" aria-hidden="true" />
-                    {restrictToInstitutions ? "Asociar sede" : "Crear sede"}
-                </button>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    {!restrictToInstitutions && (
+                        <label className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3">
+                            <i className="bi bi-funnel text-slate-400" aria-hidden="true" />
+                            <span className="sr-only">Filtrar sedes por institución</span>
+                            <select
+                                value={selectedInstitutionId}
+                                onChange={(event) => setSelectedInstitutionId(event.target.value)}
+                                aria-label="Filtrar sedes por institución"
+                                className="min-w-52 bg-transparent py-3 text-sm text-slate-700 outline-none"
+                            >
+                                <option value="">Todas las instituciones</option>
+                                {institutions.map((institution) => (
+                                    <option key={institution.id} value={String(institution.id)}>
+                                        {institution.name_institution}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                    )}
+                    <button
+                        type="button"
+                        onClick={openCreateModal}
+                        disabled={institutions.length === 0}
+                        className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-bold text-white transition focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:opacity-50 ${accentClasses.button}`}
+                    >
+                        <i className="bi bi-plus-lg" aria-hidden="true" />
+                        {restrictToInstitutions ? "Asociar sede" : "Crear sede"}
+                    </button>
+                </div>
             </header>
 
             {institutions.length === 0 && !loading && (
@@ -298,7 +324,7 @@ const CampusManager = ({
                 <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center">
                     <i className="bi bi-geo-alt text-3xl text-slate-300" aria-hidden="true" />
                     <p className="mb-0 mt-3 text-sm text-slate-500">
-                        {restrictToInstitutions ? "Esta institución aún no tiene sedes asociadas." : "Aún no hay sedes registradas."}
+                        {scopedToInstitution ? "La institución seleccionada aún no tiene sedes asociadas." : "Aún no hay sedes registradas."}
                     </p>
                 </div>
             ) : (
@@ -369,7 +395,7 @@ const CampusManager = ({
                         </table>
                     </div>
                     <div className="border-t border-slate-100 px-5 py-3 text-xs text-slate-500">
-                        {visibleCampuses.length} {restrictToInstitutions
+                        {visibleCampuses.length} {scopedToInstitution
                             ? (visibleCampuses.length === 1 ? "sede asociada" : "sedes asociadas")
                             : (visibleCampuses.length === 1 ? "sede registrada" : "sedes registradas")}
                     </div>

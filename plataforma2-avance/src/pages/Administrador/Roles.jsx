@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../../Config/env";
+import { findRole } from "../Auth/authUtils";
 
 const emptyRole = { name_role: "", slug: "", description: "" };
 const fieldClass = "w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-sky-500 focus:bg-white focus:ring-4 focus:ring-sky-500/10";
@@ -28,6 +29,8 @@ const slugify = (value) => value
     .trim()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
+
+const isProtectedAdminRole = (role) => Boolean(findRole([role], "admin"));
 
 const Roles = () => {
     const [roles, setRoles] = useState([]);
@@ -276,11 +279,16 @@ const Roles = () => {
                                                         <button
                                                             type="button"
                                                             onClick={() => deleteRole(role)}
-                                                            disabled={deletingId === role.id}
-                                                            aria-label={`Eliminar ${role.name_role}`}
+                                                            disabled={deletingId === role.id || isProtectedAdminRole(role)}
+                                                            aria-label={isProtectedAdminRole(role)
+                                                                ? `${role.name_role} no se puede eliminar`
+                                                                : `Eliminar ${role.name_role}`}
+                                                            title={isProtectedAdminRole(role)
+                                                                ? "El rol Administrador del sistema no se puede eliminar."
+                                                                : `Eliminar ${role.name_role}`}
                                                             className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-red-600 transition hover:border-red-200 hover:bg-red-50 disabled:opacity-50"
                                                         >
-                                                            <i className={`bi ${deletingId === role.id ? "bi-arrow-repeat animate-spin" : "bi-trash3"}`} aria-hidden="true" />
+                                                            <i className={`bi ${deletingId === role.id ? "bi-arrow-repeat animate-spin" : isProtectedAdminRole(role) ? "bi-shield-lock" : "bi-trash3"}`} aria-hidden="true" />
                                                         </button>
                                                     </div>
                                                 </td>

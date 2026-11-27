@@ -44,6 +44,7 @@ const getErrorMessage = (error, fallback) => {
 
 const RegistrarSede = () => {
     const [institutions, setInstitutions] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [deletingId, setDeletingId] = useState(null);
@@ -259,6 +260,17 @@ const RegistrarSede = () => {
         }
     };
 
+    const filteredInstitutions = institutions.filter((institution) => (
+        [
+            institution.name_institution,
+            institution.nit,
+            institution.email_institution,
+            institution.phone_institution,
+            institution.city,
+            institution.address_institution,
+        ].some((value) => String(value || "").toLowerCase().includes(searchTerm.trim().toLowerCase()))
+    ));
+
     return (
         <div className="ml-64 min-h-screen w-[calc(100%-16rem)] bg-slate-50 px-5 py-8 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] md:px-10">
             <div className="mx-auto max-w-7xl">
@@ -273,14 +285,27 @@ const RegistrarSede = () => {
                             Consulta y administra las instituciones registradas en la plataforma.
                         </p>
                     </div>
-                    <button
-                        type="button"
-                        onClick={openCreateModal}
-                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-sky-700/20 transition hover:bg-sky-700 focus:outline-none focus:ring-4 focus:ring-sky-500/30"
-                    >
-                        <i className="bi bi-plus-lg" aria-hidden="true" />
-                        Crear institución
-                    </button>
+                    <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+                        <label className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 sm:w-72">
+                            <i className="bi bi-search text-slate-400" aria-hidden="true" />
+                            <input
+                                type="search"
+                                value={searchTerm}
+                                onChange={(event) => setSearchTerm(event.target.value)}
+                                placeholder="Buscar instituciones..."
+                                aria-label="Buscar instituciones"
+                                className="w-full bg-transparent py-3 text-sm text-slate-700 outline-none placeholder:text-slate-400"
+                            />
+                        </label>
+                        <button
+                            type="button"
+                            onClick={openCreateModal}
+                            className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-sky-700/20 transition hover:bg-sky-700 focus:outline-none focus:ring-4 focus:ring-sky-500/30"
+                        >
+                            <i className="bi bi-plus-lg" aria-hidden="true" />
+                            Crear institución
+                        </button>
+                    </div>
                 </header>
 
                 {error && (
@@ -307,6 +332,12 @@ const RegistrarSede = () => {
                             Crear institución
                         </button>
                     </div>
+                ) : filteredInstitutions.length === 0 ? (
+                    <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-14 text-center">
+                        <i className="bi bi-search text-4xl text-slate-300" aria-hidden="true" />
+                        <h2 className="mt-4 text-lg font-semibold text-slate-800">No se encontraron instituciones</h2>
+                        <p className="mt-2 text-sm text-slate-500">Prueba con otro nombre, NIT, correo o ubicación.</p>
+                    </div>
                 ) : (
                     <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
                         <div className="overflow-x-auto">
@@ -322,7 +353,7 @@ const RegistrarSede = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100">
-                                    {institutions.map((institution) => (
+                                    {filteredInstitutions.map((institution) => (
                                         <tr key={institution.id} className="align-middle hover:bg-slate-50/70">
                                             <td className="px-5 py-4">
                                                 <div className="flex items-center gap-3">
@@ -379,7 +410,7 @@ const RegistrarSede = () => {
                             </table>
                         </div>
                         <div className="border-t border-slate-100 px-5 py-3 text-xs text-slate-500">
-                            {institutions.length} {institutions.length === 1 ? "institución registrada" : "instituciones registradas"}
+                            Mostrando {filteredInstitutions.length} de {institutions.length} {institutions.length === 1 ? "institución registrada" : "instituciones registradas"}
                         </div>
                     </div>
                 )}
