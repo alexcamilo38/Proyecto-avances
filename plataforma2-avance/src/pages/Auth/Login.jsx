@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logoazul from "../../assets/LogoAzul.png";
-import ilustracion from "../../assets/ilustracion estudiando.jpg";
+import ilustracion from "../../assets/easymatric-enrollment-illustration.png";
 import api from "../../Config/env";
 import { saveAuthSession } from "../../Config/auth";
 import { getApiErrorMessage, getCollection, getDashboardPath, storeCurrentUser } from "./authUtils";
@@ -104,8 +104,8 @@ const Login = () => {
             </p>
             <img
               src={ilustracion}
-              alt="Estudiantes aprendiendo juntos"
-              className="mx-auto mt-7 max-h-48 w-full max-w-xs rounded-2xl object-contain"
+              alt="Estudiante y docente revisando una matrícula escolar en línea"
+              className="mx-auto mt-5 max-h-60 w-full max-w-sm object-contain drop-shadow-xl"
             />
           </div>
 

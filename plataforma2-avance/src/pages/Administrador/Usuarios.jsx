@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../../Config/env";
-import { getApiErrorMessage, getCollection } from "../Auth/authUtils";
+import { getApiErrorMessage, getCollection, getCurrentUserId, getDashboardPath } from "../Auth/authUtils";
 
 const emptyForm = {
     first_name: "",
@@ -53,6 +53,13 @@ const getFullName = (user) => [
     user.second_last_name,
 ].filter(Boolean).join(" ");
 
+const getUserRole = (user, roles) => {
+    const role = user.rol ?? user.role;
+    if (getDashboardPath(role)) return role;
+    const roleId = user.rol_id ?? user.role_id ?? role?.id ?? role;
+    return roles.find((item) => String(item.id) === String(roleId));
+};
+
 const Usuarios = () => {
     const [users, setUsers] = useState([]);
     const [roles, setRoles] = useState([]);
@@ -68,6 +75,8 @@ const Usuarios = () => {
     const [saving, setSaving] = useState(false);
     const [loadingDetails, setLoadingDetails] = useState(false);
     const [deletingId, setDeletingId] = useState(null);
+    const [userToDelete, setUserToDelete] = useState(null);
+    const currentUserId = getCurrentUserId();
 
     const loadData = async () => {
         setLoading(true);
@@ -254,14 +263,33 @@ const Usuarios = () => {
     };
 
     const deleteUser = async (user) => {
-        const name = getFullName(user) || user.username;
-        if (!window.confirm(`¿Eliminar al usuario "${name}"? Esta acción no se puede deshacer.`)) return;
+        if (!canDeleteUsers || String(user.id) === String(currentUserId)) return;
 
         setDeletingId(user.id);
         setError("");
         try {
+            const [studentsResponse, teachersResponse] = await Promise.all([
+                api.get("/students/list"),
+                api.get("/teachers/list"),
+            ]);
+            const student = getCollection(studentsResponse.data, "students").find((item) => (
+                String(item.user_system_id ?? item.user_system?.id ?? item.userSystem?.id) === String(user.id)
+            ));
+            const teacher = getCollection(teachersResponse.data, "teachers").find((item) => (
+                String(item.user_system_id ?? item.user_system?.id ?? item.userSystem?.id) === String(user.id)
+            ));
+
+            if (student) {
+                if (student.id == null) throw new Error("El estudiante asociado no tiene identificador.");
+                await api.delete(`/students/${student.id}`);
+            }
+            if (teacher) {
+                if (teacher.id == null) throw new Error("El docente asociado no tiene identificador.");
+                await api.delete(`/teachers/${teacher.id}`);
+            }
             await api.delete(`/user-systems/${user.id}`);
             setUsers((current) => current.filter((item) => item.id !== user.id));
+            setUserToDelete(null);
         } catch (deleteError) {
             console.error("Error al eliminar el usuario:", deleteError);
             setError(getApiErrorMessage(deleteError, "No se pudo eliminar el usuario."));
@@ -297,6 +325,8 @@ const Usuarios = () => {
         || user.institution?.name
         || institutions.find((institution) => String(institution.id) === String(user.institution_id))?.name_institution
         || "Sin institución";
+    const currentUser = users.find((user) => String(user.id) === String(currentUserId));
+    const canDeleteUsers = currentUser && getDashboardPath(getUserRole(currentUser, roles)) === "/admin";
 
     return (
         <main className="ml-64 min-h-[calc(100vh-76px)] w-[calc(100%-16rem)] bg-slate-50 px-7 py-8 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] max-sm:px-4 max-sm:py-5">
@@ -322,7 +352,7 @@ const Usuarios = () => {
                     </button>
                 </header>
 
-                {error && !modalOpen && (
+                {error && !modalOpen && !userToDelete && (
                     <div role="alert" className="mb-6 flex items-start justify-between gap-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                         <span>{error}</span>
                         <button type="button" onClick={loadData} className="shrink-0 font-bold underline">Reintentar</button>
@@ -440,15 +470,21 @@ const Usuarios = () => {
                                                             >
                                                                 <i className="bi bi-pencil" aria-hidden="true" />
                                                             </button>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => deleteUser(user)}
-                                                                disabled={deletingId === user.id}
-                                                                aria-label={`Eliminar ${getFullName(user) || user.username}`}
-                                                                className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-red-600 transition hover:border-red-200 hover:bg-red-50 disabled:opacity-50"
-                                                            >
-                                                                <i className={`bi ${deletingId === user.id ? "bi-arrow-repeat animate-spin" : "bi-trash3"}`} aria-hidden="true" />
-                                                            </button>
+                                                            {canDeleteUsers && (
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        setError("");
+                                                                        setUserToDelete(user);
+                                                                    }}
+                                                                    disabled={deletingId === user.id || String(user.id) === String(currentUserId)}
+                                                                    aria-label={`Eliminar ${getFullName(user) || user.username}`}
+                                                                    title={String(user.id) === String(currentUserId) ? "No puedes eliminar tu propio usuario." : undefined}
+                                                                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-red-600 transition hover:border-red-200 hover:bg-red-50 disabled:opacity-50"
+                                                                >
+                                                                    <i className={`bi ${deletingId === user.id ? "bi-arrow-repeat animate-spin" : "bi-trash3"}`} aria-hidden="true" />
+                                                                </button>
+                                                            )}
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -587,6 +623,64 @@ const Usuarios = () => {
                                 </>
                             )}
                         </form>
+                    </section>
+                </div>
+            )}
+
+            {userToDelete && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4 backdrop-blur-sm"
+                    onMouseDown={(event) => {
+                        if (event.target === event.currentTarget && deletingId == null) {
+                            setUserToDelete(null);
+                            setError("");
+                        }
+                    }}
+                >
+                    <section
+                        role="alertdialog"
+                        aria-modal="true"
+                        aria-labelledby="delete-user-title"
+                        aria-describedby="delete-user-description"
+                        className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl"
+                    >
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-50 text-xl text-rose-600">
+                            <i className="bi bi-trash3" aria-hidden="true" />
+                        </div>
+                        <h2 id="delete-user-title" className="mb-0 mt-4 text-xl font-bold text-slate-900">
+                            ¿Eliminar usuario?
+                        </h2>
+                        <p id="delete-user-description" className="mb-0 mt-2 text-sm leading-6 text-slate-600">
+                            ¿Eliminar este usuario? También se borrarán sus datos de estudiante o docente.
+                        </p>
+                        {error && (
+                            <div role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                                {error}
+                            </div>
+                        )}
+                        <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    if (deletingId != null) return;
+                                    setUserToDelete(null);
+                                    setError("");
+                                }}
+                                disabled={deletingId != null}
+                                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => deleteUser(userToDelete)}
+                                disabled={deletingId != null}
+                                className="inline-flex items-center justify-center gap-2 rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-60"
+                            >
+                                {deletingId != null && <i className="bi bi-arrow-repeat animate-spin" aria-hidden="true" />}
+                                {deletingId != null ? "Eliminando..." : "Sí, eliminar"}
+                            </button>
+                        </div>
                     </section>
                 </div>
             )}
