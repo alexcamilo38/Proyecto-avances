@@ -1,40 +1,112 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TeacherSessionContext from "../Config/TeacherSessionContext";
+import { getAuthSession } from "../Config/auth";
+import api from "../Config/env";
+import { getCurrentUserId } from "../pages/Auth/authUtils";
 import { getTeacherInitials } from "../Config/teacherProfile";
 
 const roleDetails = {
-  admin: { title: "Administración", search: "Buscar institución o estudiante", initials: "AD", profile: "/PerfilAd" },
-  teacher: { title: "Docencia", search: "Buscar módulo o alumno", initials: "CM", profile: "/PerfilDocente" },
-  student: { title: "Estudiante", search: "Buscar institución", initials: "JE", profile: "/PerfilEst" },
-  rector: { title: "Rector", search: "Buscar estudiante o matrícula", initials: "RC", profile: "/PerfilRec" },
+  admin: { title: "Administración", initials: "AD", profile: "/PerfilAd" },
+  teacher: { title: "Docencia", initials: "CM", profile: "/PerfilDocente" },
+  student: { title: "Estudiante", initials: "JE", profile: "/PerfilEst" },
+  rector: { title: "Rector", initials: "RC", profile: "/PerfilRec" },
 };
 
-// Muestra búsqueda y acceso al perfil con textos e iniciales según el rol.
+const getUserFromResponse = (responseData) => (
+  responseData?.user_system
+  || responseData?.user
+  || responseData?.data?.user_system
+  || responseData?.data?.user
+  || responseData?.data?.data
+  || responseData?.data
+  || responseData
+);
+
+const getFirstAndLastName = (user) => [
+  user?.first_name?.trim(),
+  user?.last_name?.trim(),
+].filter(Boolean).join(" ");
+
+// Muestra un acceso al perfil con la foto de la cuenta y un respaldo con iniciales.
 const Header = ({ role }) => {
-  const { title, search, initials: defaultInitials, profile: profilePath } = roleDetails[role];
+  const { title, initials: defaultInitials, profile: profilePath } = roleDetails[role];
   const teacherSession = useContext(TeacherSessionContext);
+  const teacherUser = role === "teacher" ? teacherSession?.profile?.user : null;
   const initials = role === "teacher"
     ? getTeacherInitials(teacherSession?.profile)
     : defaultInitials;
+  const teacherPhoto = teacherUser?.photo_url || "";
+  const teacherName = getFirstAndLastName(teacherUser);
+  const [profilePhoto, setProfilePhoto] = useState(teacherPhoto || "");
+  const [displayName, setDisplayName] = useState(teacherName);
+  const [photoFailed, setPhotoFailed] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    const controller = new AbortController();
+
+    const loadProfilePhoto = async () => {
+      if (role === "teacher" && teacherUser) {
+        setProfilePhoto(teacherPhoto);
+        setDisplayName(teacherName);
+        setPhotoFailed(false);
+        return;
+      }
+      if (role === "teacher" && teacherSession?.loading) return;
+
+      try {
+        const session = getAuthSession();
+        const userId = getCurrentUserId() ?? session?.user?.id ?? session?.user?.user_system_id;
+        if (userId == null) {
+          setProfilePhoto("");
+          return;
+        }
+
+        const response = await api.get(`/user-systems/${userId}`, { signal: controller.signal });
+        const user = getUserFromResponse(response.data);
+        if (!user || typeof user !== "object" || Array.isArray(user)) {
+          throw new Error("El servidor devolvió una respuesta inesperada al consultar la foto de perfil.");
+        }
+        if (active) {
+          setProfilePhoto(user.photo_url || "");
+          setDisplayName(getFirstAndLastName(user));
+          setPhotoFailed(false);
+        }
+      } catch (error) {
+        if (!active || controller.signal.aborted) return;
+        console.error("No se pudo cargar la foto de perfil del encabezado:", error);
+        setProfilePhoto("");
+      }
+    };
+
+    loadProfilePhoto();
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, [role, teacherName, teacherPhoto, teacherSession?.loading, teacherUser]);
 
   return (
-    <header className="ml-64 flex min-h-[76px] items-center gap-5 border-b border-slate-200 bg-[#f1f5f9] px-8 max-sm:ml-[72px] max-sm:gap-3 max-sm:px-4">
-      <label className="flex min-w-0 flex-1 items-center gap-3 rounded-full border border-slate-100 bg-white px-4 py-3 text-slate-400 shadow-sm">
-        <i className="bi bi-search shrink-0" aria-hidden="true" />
-        <span className="sr-only">{search}</span>
-        <input
-          type="search"
-          placeholder={search}
-          className="w-full min-w-0 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
-        />
-      </label>
+    <header className="ml-64 flex min-h-[76px] items-center justify-end border-b border-slate-200 bg-[#f1f5f9] px-8 max-sm:ml-[72px] max-sm:px-4">
+      {displayName && (
+        <span className="mr-3 text-sm font-medium text-slate-700">
+          {displayName}
+        </span>
+      )}
       <Link
         to={profilePath}
         aria-label={`Ver perfil de ${title}`}
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#111629] text-xs font-semibold text-white no-underline"
+        className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#111629] text-xs font-semibold text-white no-underline ring-2 ring-white shadow-sm"
       >
-        {initials}
+        {profilePhoto && !photoFailed ? (
+          <img
+            src={profilePhoto}
+            alt=""
+            className="h-full w-full object-cover"
+            onError={() => setPhotoFailed(true)}
+          />
+        ) : initials}
       </Link>
     </header>
   );
