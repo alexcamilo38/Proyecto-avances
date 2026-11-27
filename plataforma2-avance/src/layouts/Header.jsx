@@ -28,18 +28,24 @@ const getFirstAndLastName = (user) => [
   user?.last_name?.trim(),
 ].filter(Boolean).join(" ");
 
+const getUserInitials = (user) => [
+  user?.first_name?.trim()?.[0],
+  user?.last_name?.trim()?.[0],
+].filter(Boolean).join("").toLocaleUpperCase();
+
 // Muestra un acceso al perfil con la foto de la cuenta y un respaldo con iniciales.
 const Header = ({ role }) => {
   const { title, initials: defaultInitials, profile: profilePath } = roleDetails[role];
   const teacherSession = useContext(TeacherSessionContext);
   const teacherUser = role === "teacher" ? teacherSession?.profile?.user : null;
-  const initials = role === "teacher"
+  const defaultProfileInitials = role === "teacher"
     ? getTeacherInitials(teacherSession?.profile)
     : defaultInitials;
   const teacherPhoto = teacherUser?.photo_url || "";
   const teacherName = getFirstAndLastName(teacherUser);
   const [profilePhoto, setProfilePhoto] = useState(teacherPhoto || "");
   const [displayName, setDisplayName] = useState(teacherName);
+  const [profileInitials, setProfileInitials] = useState(defaultProfileInitials);
   const [photoFailed, setPhotoFailed] = useState(false);
 
   useEffect(() => {
@@ -50,6 +56,7 @@ const Header = ({ role }) => {
       if (role === "teacher" && teacherUser) {
         setProfilePhoto(teacherPhoto);
         setDisplayName(teacherName);
+        setProfileInitials(getUserInitials(teacherUser) || defaultProfileInitials);
         setPhotoFailed(false);
         return;
       }
@@ -60,6 +67,8 @@ const Header = ({ role }) => {
         const userId = getCurrentUserId() ?? session?.user?.id ?? session?.user?.user_system_id;
         if (userId == null) {
           setProfilePhoto("");
+          setDisplayName("");
+          setProfileInitials(defaultProfileInitials);
           return;
         }
 
@@ -71,6 +80,7 @@ const Header = ({ role }) => {
         if (active) {
           setProfilePhoto(user.photo_url || "");
           setDisplayName(getFirstAndLastName(user));
+          setProfileInitials(getUserInitials(user) || defaultProfileInitials);
           setPhotoFailed(false);
         }
       } catch (error) {
@@ -85,7 +95,7 @@ const Header = ({ role }) => {
       active = false;
       controller.abort();
     };
-  }, [role, teacherName, teacherPhoto, teacherSession?.loading, teacherUser]);
+  }, [defaultProfileInitials, role, teacherName, teacherPhoto, teacherSession?.loading, teacherUser]);
 
   return (
     <header className="ml-64 flex min-h-[76px] items-center justify-end border-b border-slate-200 bg-[#f1f5f9] px-8 max-sm:ml-[72px] max-sm:px-4">
@@ -106,7 +116,7 @@ const Header = ({ role }) => {
             className="h-full w-full object-cover"
             onError={() => setPhotoFailed(true)}
           />
-        ) : initials}
+        ) : profileInitials}
       </Link>
     </header>
   );
