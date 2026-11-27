@@ -19,8 +19,21 @@ const emptyForm = {
     allow_self_enrollment: true,
 };
 
-const fieldClass = "w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-sky-500 focus:bg-white focus:ring-4 focus:ring-sky-500/10";
-const labelClass = "mb-2 block text-sm font-semibold text-slate-700";
+const fieldClass = "mt-2 min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 shadow-sm outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10";
+const labelClass = "block text-sm font-semibold text-slate-700";
+
+const FormSectionHeading = ({ number, title, description, icon }) => (
+    <div className="flex items-start gap-3 border-b border-slate-100 pb-4 md:col-span-2">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
+            <i className={`bi ${icon}`} aria-hidden="true" />
+        </span>
+        <div>
+            <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.16em] text-sky-600">Paso {number}</p>
+            <h3 className="m-0 text-base font-semibold text-slate-900">{title}</h3>
+            <p className="mb-0 mt-1 text-sm text-slate-500">{description}</p>
+        </div>
+    </div>
+);
 
 const getCollection = (responseData, key) => {
     if (Array.isArray(responseData)) return responseData;
@@ -51,7 +64,10 @@ const getTeacherName = (teacher) => {
 };
 
 const getClassGroupName = (group) => {
-    const grade = group.grade_level?.name || group.gradeLevel?.name || `Grado #${group.grade_level_id}`;
+    const gradeId = group.grade_level_id ?? group.gradeLevel?.id ?? group.grade_level?.id;
+    const grade = group.grade_level?.name
+        || group.gradeLevel?.name
+        || (gradeId != null ? `Grado #${gradeId}` : "Grupo");
     const campus = group.campus?.name || group.campuse?.name;
     return [
         `${grade}${group.section ? ` ${group.section}` : ""}`,
@@ -301,24 +317,42 @@ const SubirModulo = () => {
         }
     };
 
+    const completedSteps = [
+        Boolean(form.name_module.trim() && form.subject_id),
+        Boolean((isTeacher ? currentTeacherId : form.teacher_id) && form.class_group_id && form.academic_period_id),
+        Boolean(form.schedule.trim() && form.duration.trim() && form.seats && form.weekly_hours),
+        Boolean(form.enrollment_opens_at && form.enrollment_closes_at),
+        Boolean(form.description_module.trim() && (isEditing || syllabus)),
+    ].filter(Boolean).length;
+    const progressPercentage = Math.round((completedSteps / 5) * 100);
+    const selectedSubject = catalogs.subjects.find((subject) => String(subject.id) === String(form.subject_id));
+    const selectedGroup = catalogs.classGroups.find((group) => String(group.id) === String(form.class_group_id));
+    const selectedPeriod = catalogs.periods.find((period) => String(period.id) === String(form.academic_period_id));
+
     return (
-        <main className="ml-64 min-h-screen w-[calc(100%-16rem)] bg-slate-100 px-5 py-7 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] md:px-8">
-            <div className="mx-auto max-w-7xl">
-                <header className="mb-6 flex flex-col gap-5 rounded-2xl bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h1 className="mb-1 mt-0 flex items-center gap-3 text-3xl font-bold text-slate-900">
-                            <i className={`bi ${isEditing ? "bi-pencil-square" : "bi-cloud-arrow-up-fill"} text-sky-500`} aria-hidden="true" />
-                            {isEditing ? "Editar módulo" : "Configuración y Carga de Módulos"}
-                        </h1>
-                        <p className="mb-0 font-semibold text-sky-600">
-                            {isEditing ? "Actualiza los datos de tu módulo" : "Oferta Académica e Inscripciones"}
-                        </p>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-3">
+        <main className="ml-64 min-h-screen w-[calc(100%-16rem)] bg-gradient-to-br from-slate-50 via-sky-50/40 to-slate-100 px-5 py-7 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] md:px-8">
+            <div className="mx-auto max-w-7xl space-y-6">
+                <header className="overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-sky-950 p-6 text-white shadow-xl shadow-slate-900/10 sm:p-8">
+                    <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="max-w-2xl">
+                            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-sky-100">
+                                <i className="bi bi-mortarboard-fill" aria-hidden="true" />
+                                Espacio docente
+                            </span>
+                            <h1 className="mb-0 mt-0 text-2xl font-bold tracking-tight sm:text-3xl">
+                                {isEditing ? "Editar módulo" : "Publica un nuevo módulo"}
+                            </h1>
+                            <p className="mb-0 mt-2 max-w-xl text-sm leading-6 text-slate-300">
+                                {isEditing
+                                    ? "Actualiza la información y conserva el syllabus actual."
+                                    : "Completa la información académica para ofrecer el módulo a tus estudiantes."}
+                            </p>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-3">
                         {isEditing && (
                             <Link
                                 to="/DocenteMo"
-                                className="rounded-xl border border-slate-200 px-5 py-3 text-center font-semibold text-slate-700 no-underline transition hover:bg-slate-50"
+                                className="rounded-xl border border-white/20 bg-white/5 px-5 py-3 text-center text-sm font-semibold text-white no-underline transition hover:bg-white/10"
                             >
                                 Cancelar
                             </Link>
@@ -327,16 +361,17 @@ const SubirModulo = () => {
                             type="submit"
                             form="form-subir-modulo"
                             disabled={saving || catalogLoading || moduleLoading || Boolean(moduleLoadError)}
-                            className="rounded-xl bg-sky-500 px-5 py-3 font-semibold text-white transition hover:bg-sky-600 disabled:cursor-not-allowed disabled:opacity-60"
+                            className="inline-flex whitespace-nowrap items-center justify-center gap-2 rounded-xl bg-sky-400 px-5 py-3 text-sm font-bold text-slate-950 shadow-lg shadow-sky-950/20 transition hover:bg-sky-300 focus:outline-none focus:ring-4 focus:ring-sky-200/40 disabled:cursor-not-allowed disabled:opacity-60"
                         >
-                            <i className={`bi ${isEditing ? "bi-check-lg" : "bi-plus-circle"} mr-2`} aria-hidden="true" />
+                            <i className={`bi ${isEditing ? "bi-check-lg" : "bi-cloud-arrow-up-fill"}`} aria-hidden="true" />
                             {saving ? (isEditing ? "Guardando..." : "Publicando...") : (isEditing ? "Guardar cambios" : "Publicar módulo")}
                         </button>
+                        </div>
                     </div>
                 </header>
 
                 {catalogError && (
-                    <div role="alert" className="mb-5 flex items-start justify-between gap-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                    <div role="alert" className="flex items-start justify-between gap-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4 text-sm text-amber-900">
                         <span>{catalogError}</span>
                         <button
                             type="button"
@@ -347,18 +382,23 @@ const SubirModulo = () => {
                         </button>
                     </div>
                 )}
-                {error && <p role="alert" className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
-                {success && <p role="status" className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">{success}</p>}
+                {error && <p role="alert" className="m-0 rounded-2xl border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700">{error}</p>}
+                {success && <p role="status" className="m-0 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4 text-sm text-emerald-800">{success}</p>}
 
-                <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-[2fr_1fr]">
-                    <section className="rounded-2xl bg-white p-6 shadow-sm">
-                        <h2 className="mb-6 mt-0 flex items-center gap-2 text-xl font-semibold text-slate-900">
-                            <i className="bi bi-sliders text-sky-500" aria-hidden="true" />
-                            Parámetros de la Asignatura
-                        </h2>
+                <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-[minmax(0,1.8fr)_minmax(290px,0.8fr)]">
+                    <section className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_16px_45px_rgba(15,23,42,0.07)] sm:p-8">
+                        <div className="mb-7 flex items-start gap-3">
+                            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-lg text-sky-600">
+                                <i className="bi bi-sliders" aria-hidden="true" />
+                            </span>
+                            <div>
+                                <h2 className="m-0 text-xl font-semibold text-slate-900">Información del módulo</h2>
+                                <p className="mb-0 mt-1 text-sm leading-5 text-slate-500">Completa los pasos para configurar la oferta académica.</p>
+                            </div>
+                        </div>
 
                         {catalogLoading || moduleLoading ? (
-                            <p role="status" className="mb-0 text-sm text-slate-600">
+                            <p role="status" className="mb-0 rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
                                 {moduleLoading ? "Cargando los datos del módulo..." : "Cargando cursos, periodos, asignaturas y docentes..."}
                             </p>
                         ) : moduleLoadError ? (
@@ -369,7 +409,8 @@ const SubirModulo = () => {
                                 </Link>
                             </div>
                         ) : (
-                            <form id="form-subir-modulo" onSubmit={handleSubmit} className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                            <form id="form-subir-modulo" onSubmit={handleSubmit} className="grid grid-cols-1 gap-x-5 gap-y-6 md:grid-cols-2">
+                                <FormSectionHeading number="1" title="Datos principales" description="Define el nombre y la asignatura del módulo." icon="bi-book" />
                                 <div className="md:col-span-2">
                                     <label className={labelClass} htmlFor="nombreModulo">Nombre del módulo</label>
                                     <input
@@ -385,7 +426,7 @@ const SubirModulo = () => {
                                     />
                                 </div>
 
-                                <div>
+                                <div className="md:col-span-2">
                                     <label className={labelClass} htmlFor="asignatura">Asignatura</label>
                                     <select className={fieldClass} id="asignatura" name="subject_id" value={form.subject_id} onChange={handleChange} required>
                                         <option value="">Selecciona una asignatura...</option>
@@ -394,6 +435,7 @@ const SubirModulo = () => {
                                         ))}
                                     </select>
                                 </div>
+                                <FormSectionHeading number="2" title="Asignación académica" description="Vincula el módulo con el responsable, grupo y periodo." icon="bi-diagram-3" />
                                 <div>
                                     <label className={labelClass} htmlFor="docente">Docente responsable</label>
                                     <select
@@ -437,6 +479,7 @@ const SubirModulo = () => {
                                         ))}
                                     </select>
                                 </div>
+                                <FormSectionHeading number="3" title="Organización del módulo" description="Indica horarios, duración y capacidad del grupo." icon="bi-calendar2-week" />
                                 <div>
                                     <label className={labelClass} htmlFor="schedule">Horario</label>
                                     <input className={fieldClass} id="schedule" name="schedule" type="text" maxLength="255" value={form.schedule} onChange={handleChange} placeholder="Ej. Lunes y miércoles, 8:00 a. m." required />
@@ -453,14 +496,16 @@ const SubirModulo = () => {
                                     <label className={labelClass} htmlFor="horas">Horas semanales</label>
                                     <input className={fieldClass} id="horas" name="weekly_hours" type="number" min="1" max="60" value={form.weekly_hours} onChange={handleChange} placeholder="Ej. 4" required />
                                 </div>
+                                <FormSectionHeading number="4" title="Periodo de inscripción" description="Establece cuándo podrán inscribirse los estudiantes." icon="bi-calendar-check" />
                                 <div>
                                     <label className={labelClass} htmlFor="fechaApertura">Fecha de apertura</label>
-                                    <input className={fieldClass} id="fechaApertura" name="enrollment_opens_at" type="date" value={form.enrollment_opens_at} onChange={handleChange} required />
+                                    <input className={fieldClass} id="fechaApertura" name="enrollment_opens_at" type="date" value={form.enrollment_opens_at} onChange={handleChange} max={form.enrollment_closes_at || undefined} required />
                                 </div>
                                 <div>
                                     <label className={labelClass} htmlFor="fechaCierre">Fecha límite / cierre</label>
-                                    <input className={fieldClass} id="fechaCierre" name="enrollment_closes_at" type="date" value={form.enrollment_closes_at} onChange={handleChange} required />
+                                    <input className={fieldClass} id="fechaCierre" name="enrollment_closes_at" type="date" value={form.enrollment_closes_at} onChange={handleChange} min={form.enrollment_opens_at || undefined} required />
                                 </div>
+                                <FormSectionHeading number="5" title="Descripción y material" description="Explica el contenido y adjunta la guía curricular." icon="bi-file-earmark-text" />
                                 <div className="md:col-span-2">
                                     <label className={labelClass} htmlFor="descripcion">Descripción del módulo y competencias</label>
                                     <textarea
@@ -483,10 +528,13 @@ const SubirModulo = () => {
                                                     href={currentSyllabusUrl}
                                                     target="_blank"
                                                     rel="noreferrer"
-                                                    className="inline-flex rounded-lg border border-slate-200 px-4 py-3 text-sm font-semibold text-sky-700 no-underline hover:bg-sky-50"
+                                                    className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-semibold text-sky-700 no-underline transition hover:border-sky-200 hover:bg-sky-50"
                                                 >
-                                                    <i className="bi bi-file-earmark-image mr-2" aria-hidden="true" />
-                                                    Ver syllabus actual
+                                                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-lg text-sky-600 shadow-sm">
+                                                        <i className="bi bi-file-earmark-image" aria-hidden="true" />
+                                                    </span>
+                                                    <span>Ver syllabus actual</span>
+                                                    <i className="bi bi-box-arrow-up-right ml-auto" aria-hidden="true" />
                                                 </a>
                                             ) : (
                                                 <p className="mb-0 text-sm text-slate-500">Este módulo no tiene un syllabus adjunto.</p>
@@ -497,61 +545,122 @@ const SubirModulo = () => {
                                         </>
                                     ) : (
                                         <>
-                                            <label className={labelClass} htmlFor="documento">Syllabus / guía curricular (JPG, PNG o WEBP; máximo 5 MB)</label>
-                                            <input
-                                                className={`${fieldClass} file:mr-4 file:rounded-lg file:border-0 file:bg-sky-50 file:px-4 file:py-2 file:font-semibold file:text-sky-700`}
-                                                id="documento"
-                                                ref={syllabusInputRef}
-                                                type="file"
-                                                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-                                                onChange={handleSyllabusChange}
-                                                required
-                                            />
-                                            {syllabus && <p className="mb-0 mt-2 text-xs text-slate-500">{syllabus.name}</p>}
+                                            <span className={labelClass}>Syllabus / guía curricular</span>
+                                            <label htmlFor="documento" className="relative mt-2 flex min-h-32 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50/70 px-5 py-6 text-center transition hover:border-sky-400 hover:bg-sky-50/70">
+                                                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-xl text-sky-600 shadow-sm">
+                                                    <i className="bi bi-cloud-arrow-up" aria-hidden="true" />
+                                                </span>
+                                                <span className="text-sm font-semibold text-slate-800">
+                                                    {syllabus ? "Cambiar archivo seleccionado" : "Selecciona la guía curricular"}
+                                                </span>
+                                                <span className="text-xs text-slate-500">JPG, PNG o WEBP · máximo 5 MB</span>
+                                                <input
+                                                    className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                                                    id="documento"
+                                                    ref={syllabusInputRef}
+                                                    type="file"
+                                                    accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                                                    onChange={handleSyllabusChange}
+                                                    required
+                                                />
+                                            </label>
+                                            {syllabus && (
+                                                <p className="mb-0 mt-2 flex items-center gap-2 text-xs font-medium text-emerald-700">
+                                                    <i className="bi bi-check-circle-fill" aria-hidden="true" />
+                                                    {syllabus.name}
+                                                </p>
+                                            )}
                                         </>
                                     )}
                                 </div>
-                                <label className="flex items-center gap-3 text-sm font-medium text-slate-700 md:col-span-2">
+                                <label className="flex items-start gap-3 rounded-2xl border border-sky-100 bg-sky-50/70 p-4 text-sm text-slate-700 md:col-span-2">
                                     <input
                                         type="checkbox"
                                         name="allow_self_enrollment"
                                         checked={form.allow_self_enrollment}
                                         onChange={handleChange}
-                                        className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500"
+                                        className="mt-1 h-4 w-4 shrink-0 rounded border-slate-300 text-sky-600 focus:ring-sky-500"
                                     />
-                                    Permitir auto-inscripción del alumnado
+                                    <span>
+                                        <span className="block font-semibold text-slate-800">Permitir auto-inscripción</span>
+                                        <span className="mt-1 block text-xs leading-5 text-slate-500">Los estudiantes podrán inscribirse al módulo durante las fechas establecidas.</span>
+                                    </span>
                                 </label>
+                                <div className="flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:items-center sm:justify-between md:col-span-2">
+                                    <p className="m-0 text-xs text-slate-500">Completa los campos obligatorios para continuar.</p>
+                                    <button
+                                        type="submit"
+                                        disabled={saving || catalogLoading || moduleLoading || Boolean(moduleLoadError)}
+                                        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-sky-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-sky-600/20 transition hover:bg-sky-700 focus:outline-none focus:ring-4 focus:ring-sky-500/25 disabled:cursor-not-allowed disabled:opacity-60"
+                                    >
+                                        <i className={`bi ${isEditing ? "bi-check-lg" : "bi-cloud-arrow-up-fill"}`} aria-hidden="true" />
+                                        {saving ? (isEditing ? "Guardando..." : "Publicando...") : (isEditing ? "Guardar cambios" : "Publicar módulo")}
+                                    </button>
+                                </div>
                             </form>
                         )}
                     </section>
 
-                    <aside className="flex flex-col gap-6">
-                        <section className="rounded-2xl bg-white p-6 shadow-sm">
-                            <h2 className="mb-4 mt-0 flex items-center gap-2 text-xl font-semibold text-slate-900">
-                                <i className="bi bi-info-circle text-sky-500" aria-hidden="true" />
-                                Estado de oferta
-                            </h2>
-                            <p className="mb-5 leading-7 text-slate-600">
-                                {isEditing
-                                    ? "Al guardar, se actualizarán los datos del módulo y se conservará el syllabus actual."
-                                    : "Al publicar, el módulo queda disponible para el proceso de selección de asignaturas del alumnado."}
-                            </p>
-                            <div className="flex items-center gap-3 border-t border-slate-100 pt-4 text-sm text-slate-700">
-                                <i className="bi bi-check-circle-fill text-emerald-500" aria-hidden="true" />
-                                {isEditing ? "Se conservará el estado de publicación actual." : "Se publicará al enviar el formulario."}
+                    <aside className="flex flex-col gap-6 xl:sticky xl:top-6">
+                        <section className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_16px_45px_rgba(15,23,42,0.07)]">
+                            <div className="mb-5 flex items-start justify-between gap-4">
+                                <div>
+                                    <h2 className="m-0 text-lg font-semibold text-slate-900">Resumen del módulo</h2>
+                                    <p className="mb-0 mt-1 text-sm text-slate-500">Avance de la configuración.</p>
+                                </div>
+                                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
+                                    <i className="bi bi-clipboard2-check" aria-hidden="true" />
+                                </span>
                             </div>
+                            <div className="mb-5">
+                                <div className="mb-2 flex items-center justify-between text-xs font-semibold">
+                                    <span className="text-slate-600">{completedSteps} de 5 pasos</span>
+                                    <span className="text-sky-700">{progressPercentage}%</span>
+                                </div>
+                                <div
+                                    className="h-2 overflow-hidden rounded-full bg-slate-100"
+                                    role="progressbar"
+                                    aria-label="Progreso de configuración del módulo"
+                                    aria-valuemin={0}
+                                    aria-valuemax={100}
+                                    aria-valuenow={progressPercentage}
+                                >
+                                    <div className="h-full rounded-full bg-gradient-to-r from-sky-500 to-cyan-400 transition-all" style={{ width: `${progressPercentage}%` }} />
+                                </div>
+                            </div>
+                            <dl className="m-0 space-y-3 border-t border-slate-100 pt-4">
+                                {[
+                                    ["Nombre", form.name_module || "Por definir"],
+                                    ["Asignatura", selectedSubject?.name_subject || "Por seleccionar"],
+                                    ["Grupo", selectedGroup ? getClassGroupName(selectedGroup) : "Por seleccionar"],
+                                    ["Periodo", selectedPeriod?.name || "Por seleccionar"],
+                                ].map(([label, value]) => (
+                                    <div key={label} className="flex items-start justify-between gap-3 text-sm">
+                                        <dt className="shrink-0 text-slate-500">{label}</dt>
+                                        <dd className="m-0 break-words text-right font-semibold text-slate-800">{value}</dd>
+                                    </div>
+                                ))}
+                            </dl>
                         </section>
 
-                        <section className="rounded-2xl bg-white p-6 shadow-sm">
-                            <h2 className="mb-4 mt-0 flex items-center gap-2 text-xl font-semibold text-slate-900">
-                                <i className="bi bi-lightbulb text-sky-500" aria-hidden="true" />
-                                Consejos útiles
-                            </h2>
-                            <ul className="mb-0 space-y-3 pl-5 leading-7 text-slate-600">
+                        <section className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_16px_45px_rgba(15,23,42,0.07)]">
+                            <div className="mb-4 flex items-center gap-3">
+                                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
+                                    <i className="bi bi-lightbulb" aria-hidden="true" />
+                                </span>
+                                <h2 className="m-0 text-lg font-semibold text-slate-900">Consejos útiles</h2>
+                            </div>
+                            <ul className="mb-0 space-y-3 pl-5 text-sm leading-6 text-slate-600 marker:text-sky-500">
                                 <li>Establece los cupos de acuerdo con la capacidad del grupo.</li>
-                                <li>Verifica las fechas de apertura y cierre de inscripciones.</li>
+                                <li>Verifica que las fechas de inscripción sean correctas.</li>
                                 <li>El grupo y el periodo deben pertenecer al mismo año lectivo.</li>
                             </ul>
+                            <div className="mt-5 flex items-start gap-2 rounded-xl bg-sky-50 p-3 text-xs leading-5 text-sky-800">
+                                <i className="bi bi-info-circle mt-0.5 shrink-0" aria-hidden="true" />
+                                {isEditing
+                                    ? "Al guardar, se actualizarán los datos y se conservará el syllabus actual."
+                                    : "Al publicar, el módulo quedará disponible para los estudiantes."}
+                            </div>
                         </section>
                     </aside>
                 </div>

@@ -25,6 +25,7 @@ const navigation = {
     { to: "/RegistrarIns", label: "Institución", icon: "bi-building-add" },
     { to: "/RevisarMa", label: "Revisar matrículas", icon: "bi-clipboard-check" },
     { to: "/EstudiantesAp", label: "Estudiantes", icon: "bi-people" },
+    { to: "/ProfesorAc", label: "Profesores", icon: "bi-person-video3" },
     { to: "/CatalogoMa", label: "Catálogo académico", icon: "bi-journal-bookmark" },
     { to: "/PerfilRec", label: "Mi perfil", icon: "bi-person-badge" },
   ],

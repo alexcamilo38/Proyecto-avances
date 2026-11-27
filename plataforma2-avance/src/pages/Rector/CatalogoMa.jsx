@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../Config/env";
+import { getAuthSession } from "../../Config/auth";
+import { getCurrentUserId } from "../Auth/authUtils";
 
 const emptyGradeForm = { name: "", cycle: "", sort_order: "" };
+const emptySubjectForm = { name_subject: "", description_subject: "", duration: "" };
 const emptyAcademicYearForm = { name: "", starts_on: "", ends_on: "", is_current: false };
 const emptyClassGroupForm = {
   section: "",
@@ -93,36 +96,57 @@ const getErrorMessage = (error, fallback) => {
   return firstValidationError || error.response?.data?.message || error.message || fallback;
 };
 
+const getUserFromResponse = (responseData) => {
+  const user = responseData?.user_system
+    || responseData?.user
+    || responseData?.data?.user_system
+    || responseData?.data?.user
+    || responseData?.data?.data
+    || responseData?.data
+    || responseData;
+
+  if (!user || typeof user !== "object" || Array.isArray(user)) {
+    throw new Error("El servidor devolvió una respuesta inesperada al consultar el usuario.");
+  }
+  return user;
+};
+
 // Gestiona los catálogos académicos de la institución.
 const CatalogoMa = () => {
   const [institution, setInstitution] = useState(null);
   const [gradeLevels, setGradeLevels] = useState([]);
+  const [subjects, setSubjects] = useState([]);
   const [academicYears, setAcademicYears] = useState([]);
   const [campuses, setCampuses] = useState([]);
   const [classGroups, setClassGroups] = useState([]);
   const [academicPeriods, setAcademicPeriods] = useState([]);
   const [requirementTypes, setRequirementTypes] = useState([]);
   const [loadingGrades, setLoadingGrades] = useState(true);
+  const [loadingSubjects, setLoadingSubjects] = useState(true);
   const [loadingAcademicYears, setLoadingAcademicYears] = useState(true);
   const [loadingClassGroups, setLoadingClassGroups] = useState(true);
   const [loadingAcademicPeriods, setLoadingAcademicPeriods] = useState(true);
   const [loadingRequirementTypes, setLoadingRequirementTypes] = useState(true);
   const [gradeForm, setGradeForm] = useState(emptyGradeForm);
+  const [subjectForm, setSubjectForm] = useState(emptySubjectForm);
   const [academicYearForm, setAcademicYearForm] = useState(emptyAcademicYearForm);
   const [classGroupForm, setClassGroupForm] = useState(emptyClassGroupForm);
   const [academicPeriodForm, setAcademicPeriodForm] = useState(emptyAcademicPeriodForm);
   const [requirementTypeForm, setRequirementTypeForm] = useState(emptyRequirementTypeForm);
   const [editingGradeId, setEditingGradeId] = useState(null);
+  const [editingSubjectId, setEditingSubjectId] = useState(null);
   const [editingAcademicYearId, setEditingAcademicYearId] = useState(null);
   const [editingClassGroupId, setEditingClassGroupId] = useState(null);
   const [editingAcademicPeriodId, setEditingAcademicPeriodId] = useState(null);
   const [editingRequirementTypeId, setEditingRequirementTypeId] = useState(null);
   const [savingGrade, setSavingGrade] = useState(false);
+  const [savingSubject, setSavingSubject] = useState(false);
   const [savingAcademicYear, setSavingAcademicYear] = useState(false);
   const [savingClassGroup, setSavingClassGroup] = useState(false);
   const [savingAcademicPeriod, setSavingAcademicPeriod] = useState(false);
   const [savingRequirementType, setSavingRequirementType] = useState(false);
   const [deletingGradeId, setDeletingGradeId] = useState(null);
+  const [deletingSubjectId, setDeletingSubjectId] = useState(null);
   const [deletingAcademicYearId, setDeletingAcademicYearId] = useState(null);
   const [deletingClassGroupId, setDeletingClassGroupId] = useState(null);
   const [deletingAcademicPeriodId, setDeletingAcademicPeriodId] = useState(null);
@@ -135,25 +159,34 @@ const CatalogoMa = () => {
 
     const loadCatalogs = async () => {
       setLoadingGrades(true);
+      setLoadingSubjects(true);
       setLoadingAcademicYears(true);
       setLoadingClassGroups(true);
       setLoadingAcademicPeriods(true);
       setLoadingRequirementTypes(true);
       setApiError("");
 
+      const session = getAuthSession();
+      const userId = getCurrentUserId() ?? session?.user?.id ?? session?.user?.user_system_id;
       const requests = [
+        { key: "currentUser", responseKey: "user", path: userId == null ? null : `/user-systems/${userId}` },
         { key: "institutions", responseKey: "institutions", path: "/institutions/list" },
         { key: "gradeLevels", responseKey: "grade_levels", path: "/grade-levels/list" },
+        { key: "subjects", responseKey: "subjects", path: "/subjects/list" },
         { key: "academicYears", responseKey: "academic_years", path: "/academic-years/list" },
         { key: "campuses", responseKey: "campuses", path: "/campuses/list" },
         { key: "classGroups", responseKey: "class_groups", path: "/class-groups/list" },
         { key: "academicPeriods", responseKey: "academic_periods", path: "/academic-periods/list" },
         { key: "requirementTypes", responseKey: "requirement_types", path: "/requirement-types/list" },
       ];
-      const results = await Promise.allSettled(requests.map(({ path }) => api.get(path)));
+      const results = await Promise.allSettled(requests.map(({ path }) => (
+        path ? api.get(path) : Promise.reject(new Error("No se encontró la sesión del rector."))
+      )));
       const catalogs = {
+        currentUser: null,
         institutions: [],
         gradeLevels: [],
+        subjects: [],
         academicYears: [],
         campuses: [],
         classGroups: [],
@@ -164,6 +197,10 @@ const CatalogoMa = () => {
 
       results.forEach((result, index) => {
         const { key, responseKey, path } = requests[index];
+        if (!path) {
+          errors.push("No se encontró la sesión del rector para consultar su institución.");
+          return;
+        }
         if (result.status === "rejected") {
           console.error(`Error al consultar ${path}:`, result.reason);
           errors.push(getErrorMessage(result.reason, `No se pudo consultar ${path}.`));
@@ -171,18 +208,25 @@ const CatalogoMa = () => {
         }
 
         try {
-          catalogs[key] = getCollection(result.value.data, responseKey);
+          catalogs[key] = key === "currentUser"
+            ? getUserFromResponse(result.value.data)
+            : getCollection(result.value.data, responseKey);
         } catch (parseError) {
           console.error(`Error al leer ${path}:`, parseError);
           errors.push(parseError.message);
         }
       });
 
-      const currentInstitution = catalogs.institutions[0] || null;
+      const userInstitutionId = catalogs.currentUser?.institution_id
+        ?? catalogs.currentUser?.institution?.id;
+      const currentInstitution = catalogs.institutions.find((item) => (
+        String(item.id) === String(userInstitutionId)
+      )) || catalogs.currentUser?.institution || null;
       const belongsToInstitution = (item) => (
         String(item.institution_id ?? item.institution?.id) === String(currentInstitution?.id)
       );
       const institutionGrades = currentInstitution ? catalogs.gradeLevels.filter(belongsToInstitution) : [];
+      const institutionSubjects = currentInstitution ? catalogs.subjects.filter(belongsToInstitution) : [];
       const institutionAcademicYears = currentInstitution ? catalogs.academicYears.filter(belongsToInstitution) : [];
       const institutionCampuses = currentInstitution ? catalogs.campuses.filter(belongsToInstitution) : [];
       const institutionClassGroups = currentInstitution
@@ -205,6 +249,7 @@ const CatalogoMa = () => {
       if (!ignore) {
         setInstitution(currentInstitution);
         setGradeLevels(institutionGrades);
+        setSubjects(institutionSubjects);
         setAcademicYears(institutionAcademicYears);
         setCampuses(institutionCampuses);
         setClassGroups(institutionClassGroups);
@@ -212,6 +257,7 @@ const CatalogoMa = () => {
         setRequirementTypes(institutionRequirementTypes);
         setApiError(errors.join(" "));
         setLoadingGrades(false);
+        setLoadingSubjects(false);
         setLoadingAcademicYears(false);
         setLoadingClassGroups(false);
         setLoadingAcademicPeriods(false);
@@ -298,6 +344,87 @@ const CatalogoMa = () => {
       setApiError(getErrorMessage(deleteError, "No se pudo eliminar el grado."));
     } finally {
       setDeletingGradeId(null);
+    }
+  };
+
+  const handleSubjectFormChange = (event) => {
+    const { name, value } = event.target;
+    setSubjectForm((current) => ({ ...current, [name]: value }));
+  };
+
+  const resetSubjectForm = () => {
+    setSubjectForm(emptySubjectForm);
+    setEditingSubjectId(null);
+  };
+
+  const saveSubject = async (event) => {
+    event.preventDefault();
+    setApiError("");
+    setNotice("");
+
+    if (!institution?.id) {
+      setApiError("Registra primero la institución para asociar las materias.");
+      return;
+    }
+
+    setSavingSubject(true);
+    const payload = {
+      name_subject: subjectForm.name_subject.trim(),
+      description_subject: subjectForm.description_subject.trim(),
+      duration: subjectForm.duration.trim(),
+      institution_id: Number(institution.id),
+    };
+
+    try {
+      if (editingSubjectId) {
+        await api.put(`/subjects/${editingSubjectId}`, payload);
+      } else {
+        await api.post("/subjects/store", payload);
+      }
+
+      const response = await api.get("/subjects/list");
+      const allSubjects = getCollection(response.data, "subjects");
+      setSubjects(allSubjects.filter((item) => (
+        String(item.institution_id ?? item.institution?.id) === String(institution.id)
+      )));
+      setNotice(editingSubjectId ? "La materia se actualizó correctamente." : "La materia se creó correctamente.");
+      resetSubjectForm();
+    } catch (saveError) {
+      console.error("Error al guardar la materia:", saveError);
+      setApiError(getErrorMessage(saveError, "No se pudo guardar la materia."));
+    } finally {
+      setSavingSubject(false);
+    }
+  };
+
+  const editSubject = (subject) => {
+    setSubjectForm({
+      name_subject: subject.name_subject || "",
+      description_subject: subject.description_subject || "",
+      duration: subject.duration || "",
+    });
+    setEditingSubjectId(subject.id);
+    setApiError("");
+    setNotice("");
+  };
+
+  const deleteSubject = async (subject) => {
+    if (!window.confirm(`¿Eliminar la materia "${subject.name_subject}" de la base de datos?`)) return;
+
+    setDeletingSubjectId(subject.id);
+    setApiError("");
+    setNotice("");
+
+    try {
+      await api.delete(`/subjects/${subject.id}`);
+      setSubjects((current) => current.filter(({ id }) => id !== subject.id));
+      if (editingSubjectId === subject.id) resetSubjectForm();
+      setNotice(`La materia ${subject.name_subject} se eliminó correctamente.`);
+    } catch (deleteError) {
+      console.error("Error al eliminar la materia:", deleteError);
+      setApiError(getErrorMessage(deleteError, "No se pudo eliminar la materia."));
+    } finally {
+      setDeletingSubjectId(null);
     }
   };
 
@@ -689,7 +816,7 @@ const CatalogoMa = () => {
             Oferta educativa
           </span>
           <h1 className="text-3xl font-bold tracking-tight text-slate-900">Catálogo académico</h1>
-          <p className="mt-2 text-sm text-slate-500">Administra grados, años académicos, grupos y periodos de tu institución.</p>
+          <p className="mt-2 text-sm text-slate-500">Administra grados, materias, años académicos, grupos y periodos de tu institución.</p>
         </header>
 
         {apiError && (
@@ -758,6 +885,109 @@ const CatalogoMa = () => {
               </ul>
             ) : (
               <p className="mb-0 text-sm text-slate-500">Todavía no hay grados registrados para esta institución.</p>
+            )}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-100 bg-white p-5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] sm:p-7">
+          <div className="mb-5">
+            <h2 className="m-0 text-lg font-semibold text-slate-900">Materias de la institución</h2>
+            <p className="mb-0 mt-1 text-sm text-slate-500">Registra las asignaturas disponibles y define su descripción y duración.</p>
+          </div>
+          <form onSubmit={saveSubject} className="grid grid-cols-1 items-end gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <label className="text-sm font-semibold text-slate-700">
+              Nombre de la materia
+              <input
+                name="name_subject"
+                value={subjectForm.name_subject}
+                onChange={handleSubjectFormChange}
+                maxLength={255}
+                className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-700 outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                placeholder="Ej. Ciencias naturales"
+                required
+              />
+            </label>
+            <label className="text-sm font-semibold text-slate-700">
+              Descripción
+              <input
+                name="description_subject"
+                value={subjectForm.description_subject}
+                onChange={handleSubjectFormChange}
+                maxLength={255}
+                className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-700 outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                placeholder="Descripción de la materia"
+                required
+              />
+            </label>
+            <label className="text-sm font-semibold text-slate-700">
+              Duración
+              <input
+                name="duration"
+                value={subjectForm.duration}
+                onChange={handleSubjectFormChange}
+                maxLength={255}
+                className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-700 outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                placeholder="Ej. 12 semanas"
+                required
+              />
+            </label>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="submit"
+                disabled={savingSubject || !institution?.id}
+                className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-violet-700 px-5 py-3 text-sm font-bold text-white transition hover:bg-violet-800 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <i className={`bi ${editingSubjectId ? "bi-check-lg" : "bi-plus-lg"}`} aria-hidden="true" />
+                {savingSubject ? "Guardando..." : editingSubjectId ? "Actualizar materia" : "Crear materia"}
+              </button>
+              {editingSubjectId && (
+                <button
+                  type="button"
+                  onClick={resetSubjectForm}
+                  className="min-h-[48px] rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+                >
+                  Cancelar
+                </button>
+              )}
+            </div>
+          </form>
+
+          <div className="mt-6 border-t border-slate-100 pt-5">
+            {loadingSubjects ? (
+              <p role="status" className="mb-0 text-sm text-slate-500">Cargando materias...</p>
+            ) : subjects.length ? (
+              <ul className="m-0 grid list-none gap-3 p-0 sm:grid-cols-2 xl:grid-cols-3">
+                {subjects.map((subject) => (
+                  <li key={subject.id} className="flex items-center justify-between gap-3 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3">
+                    <div className="min-w-0">
+                      <p className="m-0 truncate font-semibold text-slate-800">{subject.name_subject}</p>
+                      <p className="mb-0 mt-1 break-words text-xs text-slate-500">{subject.description_subject}</p>
+                      <p className="mb-0 mt-1 text-xs text-violet-700">Duración: {subject.duration}</p>
+                    </div>
+                    <div className="flex shrink-0 gap-1">
+                      <button
+                        type="button"
+                        onClick={() => editSubject(subject)}
+                        aria-label={`Editar materia ${subject.name_subject}`}
+                        className="rounded-lg p-2 text-slate-500 hover:bg-violet-100 hover:text-violet-700"
+                      >
+                        <i className="bi bi-pencil" aria-hidden="true" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => deleteSubject(subject)}
+                        disabled={deletingSubjectId === subject.id}
+                        aria-label={`Eliminar materia ${subject.name_subject}`}
+                        className="rounded-lg p-2 text-slate-500 hover:bg-red-100 hover:text-red-600 disabled:opacity-50"
+                      >
+                        <i className="bi bi-trash3" aria-hidden="true" />
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mb-0 text-sm text-slate-500">Todavía no hay materias registradas para esta institución.</p>
             )}
           </div>
         </section>

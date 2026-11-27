@@ -1,115 +1,181 @@
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+
+const isTrue = (value) => value === true || value === 1 || value === "1";
+
+const getDateOnly = (value) => {
+  const date = String(value ?? "").slice(0, 10);
+  return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null;
+};
+
+const getLocalDate = () => {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${now.getFullYear()}-${month}-${day}`;
+};
+
+const formatDate = (value) => {
+  const date = getDateOnly(value);
+  if (!date) return null;
+
+  const [year, month, day] = date.split("-").map(Number);
+  return new Intl.DateTimeFormat("es-CO", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(year, month - 1, day));
+};
 
 const DetalleM = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const modulo = state?.modulo ?? null;
 
-  const esVirtual = String(modulo?.modalidad ?? "").toLowerCase() === "virtual";
   const iniciales = modulo?.docente
     ? modulo.docente.trim().split(/\s+/).map((parte) => parte[0]).slice(0, 2).join("").toUpperCase()
     : "?";
+  const cuposAgotados = modulo?.cupos !== null
+    && modulo?.cupos !== undefined
+    && Number(modulo.cupos) <= 0;
+  const fechaApertura = getDateOnly(modulo?.enrollment_opens_at);
+  const fechaCierre = getDateOnly(modulo?.enrollment_closes_at);
+  const fechaActual = getLocalDate();
+  const periodoNoAbierto = fechaApertura && fechaApertura > fechaActual;
+  const periodoCerrado = fechaCierre && fechaCierre < fechaActual;
+  const publicado = isTrue(modulo?.is_published);
+  const permiteAutoinscripcion = isTrue(modulo?.allow_self_enrollment);
+  const puedePostularse = publicado
+    && permiteAutoinscripcion
+    && !cuposAgotados
+    && !periodoNoAbierto
+    && !periodoCerrado;
+
+  let estadoInscripcion = "Inscripciones abiertas";
+  if (!publicado) estadoInscripcion = "Módulo no publicado";
+  else if (!permiteAutoinscripcion) estadoInscripcion = "Inscripción no disponible";
+  else if (cuposAgotados) estadoInscripcion = "Sin cupos disponibles";
+  else if (periodoNoAbierto) estadoInscripcion = "Inscripciones aún no abiertas";
+  else if (periodoCerrado) estadoInscripcion = "Periodo de inscripción finalizado";
+
+  const periodoInscripcion = `${formatDate(modulo?.enrollment_opens_at) || "Sin apertura"} – ${formatDate(modulo?.enrollment_closes_at) || "Sin cierre"}`;
+  const detalles = [
+    { label: "Días", value: modulo?.dias || "Por definir", icon: "bi-calendar-week" },
+    { label: "Horario", value: modulo?.horario || "Por definir", icon: "bi-clock-fill" },
+    { label: "Lugar", value: modulo?.lugar || "Por definir", icon: "bi-geo-alt-fill" },
+    { label: "Duración", value: modulo?.duracion || "Por definir", icon: "bi-hourglass-split" },
+  ];
 
   return (
-    <div className="ml-64 min-h-[calc(100vh-76px)] w-[calc(100%-16rem)] bg-slate-100 px-7 py-8 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] max-sm:px-4 max-sm:py-5">
-      <div className="mx-auto w-full max-w-[1100px] pb-10">
+    <main className="ml-64 min-h-screen w-[calc(100%-16rem)] bg-gradient-to-br from-slate-50 via-sky-50/40 to-slate-100 px-5 py-7 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] max-sm:px-4 md:px-8">
+      <div className="mx-auto max-w-7xl space-y-6 pb-10">
         {!modulo ? (
-          <section className="rounded-3xl border border-slate-100 bg-white p-8 text-center shadow-[0_10px_25px_rgba(0,0,0,0.03)]">
-            <i className="bi bi-journal-x text-5xl text-slate-400" aria-hidden="true" />
-            <h1 className="mb-2 mt-3 text-2xl font-bold text-[#1a1c2d]">No se encontró el módulo</h1>
-            <p className="mx-auto mb-6 mt-0 max-w-lg text-slate-600">
-              Entra desde el catálogo y pulsa "Más Detalles" en el módulo que quieras ver.
+          <section className="mx-auto max-w-2xl rounded-3xl border border-slate-200 bg-white px-6 py-12 text-center shadow-lg shadow-slate-900/5 sm:px-10">
+            <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-sky-50 text-3xl text-sky-600">
+              <i className="bi bi-journal-x" aria-hidden="true" />
+            </span>
+            <h1 className="mb-0 mt-5 text-2xl font-bold text-slate-900">No se encontró el módulo</h1>
+            <p className="mx-auto mb-0 mt-2 max-w-lg text-sm leading-6 text-slate-600">
+              Entra desde el catálogo y selecciona “Ver detalles” en el módulo que quieres consultar.
             </p>
             <Link
               to="/ModulosAcademicos"
-              className="inline-flex items-center justify-center rounded-xl bg-[#1a1c2d] px-6 py-3 font-bold text-[#4facfe] no-underline transition hover:bg-[#2a2d45]"
+              className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-bold text-white no-underline transition hover:bg-sky-700"
             >
-              Ir a Módulos Académicos
+              <i className="bi bi-arrow-left" aria-hidden="true" />
+              Ir al catálogo
             </Link>
           </section>
         ) : (
           <>
-            <section className="relative mb-7 overflow-hidden rounded-3xl bg-[radial-gradient(circle_at_90%_0%,rgba(79,172,254,0.35),transparent_45%),linear-gradient(135deg,#1a1c2d,#2a2d45)] p-6 text-white shadow-[0_18px_40px_rgba(26,28,45,0.25)] sm:p-9">
-              <div className="mb-4 flex flex-wrap items-center gap-3.5">
-                <span className={`rounded-full px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-wide ${esVirtual ? "bg-[#f3e8ff] text-[#7e22ce]" : "bg-[#e0f2fe] text-[#0369a1]"}`}>
-                  {modulo.modalidad || "Presencial"}
-                </span>
-                {modulo.cupos !== undefined && (
-                  <span className="ml-auto rounded-full bg-white/10 px-3.5 py-1.5 text-sm font-semibold">
-                    <i className="bi bi-people-fill mr-1.5" aria-hidden="true" />
-                    {modulo.cupos} cupos libres
+            <Link
+              to="/ModulosAcademicos"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 no-underline shadow-sm transition hover:border-sky-200 hover:text-sky-700"
+            >
+              <i className="bi bi-arrow-left" aria-hidden="true" />
+              Volver al catálogo
+            </Link>
+
+            <header className="relative isolate overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-sky-950 p-6 text-white shadow-xl shadow-slate-900/10 sm:p-8 lg:p-10">
+              <div className="pointer-events-none absolute -right-14 -top-20 -z-10 h-72 w-72 rounded-full bg-sky-400/20 blur-3xl" />
+              <div className="pointer-events-none absolute bottom-0 right-1/4 -z-10 h-40 w-40 rounded-full bg-indigo-400/15 blur-3xl" />
+              <div className="relative">
+                <div className="mb-5 flex flex-wrap items-center gap-3">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-sky-100 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wide text-sky-800">
+                    <i className="bi bi-journal-bookmark-fill" aria-hidden="true" />
+                    Detalle del módulo
                   </span>
-                )}
-              </div>
+                  <span className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-semibold ${puedePostularse ? "bg-emerald-400/15 text-emerald-100" : "bg-white/10 text-slate-200"}`}>
+                    <span className={`h-1.5 w-1.5 rounded-full ${puedePostularse ? "bg-emerald-400" : "bg-slate-400"}`} />
+                    {estadoInscripcion}
+                  </span>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-slate-100 sm:ml-auto">
+                    <i className="bi bi-people-fill" aria-hidden="true" />
+                    {modulo.cupos === null || modulo.cupos === undefined
+                      ? "Cupos no definidos"
+                      : cuposAgotados
+                        ? "Sin cupos"
+                        : `${modulo.cupos} ${Number(modulo.cupos) === 1 ? "cupo libre" : "cupos libres"}`}
+                  </span>
+                </div>
 
-              <h1 className="mb-6 mt-0 break-words text-3xl font-extrabold leading-tight text-white sm:text-4xl">
-                {modulo.nombre}
-              </h1>
+                <h1 className="mb-0 mt-0 max-w-4xl break-words text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+                  {modulo.nombre || "Módulo académico"}
+                </h1>
 
-              <div className="mb-7 flex items-center gap-3.5">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#4facfe] font-extrabold text-[#1a1c2d]">
-                  {iniciales}
-                </span>
-                <div className="flex min-w-0 flex-col">
-                  <small className="text-xs text-slate-400">Docente a cargo</small>
-                  <strong className="break-words text-lg">{modulo.docente || "Por asignar"}</strong>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-4 gap-3.5 max-[1100px]:grid-cols-2 max-[600px]:grid-cols-1">
-                <div className="flex min-w-0 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.07] p-3.5 sm:px-4">
-                  <i className="bi bi-calendar-week shrink-0 text-xl text-[#4facfe]" aria-hidden="true" />
+                <div className="mt-7 flex items-center gap-3.5">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-cyan-300 font-bold text-slate-900 shadow-lg shadow-slate-950/20">
+                    {iniciales}
+                  </span>
                   <div className="min-w-0">
-                    <small className="block text-xs text-slate-400">Días</small>
-                    <span className="break-words text-sm font-semibold">{modulo.dias || "Por definir"}</span>
-                  </div>
-                </div>
-                <div className="flex min-w-0 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.07] p-3.5 sm:px-4">
-                  <i className="bi bi-clock shrink-0 text-xl text-[#4facfe]" aria-hidden="true" />
-                  <div className="min-w-0">
-                    <small className="block text-xs text-slate-400">Horario</small>
-                    <span className="break-words text-sm font-semibold">{modulo.horario || "Por definir"}</span>
-                  </div>
-                </div>
-                <div className="flex min-w-0 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.07] p-3.5 sm:px-4">
-                  <i className={`bi ${esVirtual ? "bi-laptop" : "bi-geo-alt"} shrink-0 text-xl text-[#4facfe]`} aria-hidden="true" />
-                  <div className="min-w-0">
-                    <small className="block text-xs text-slate-400">{esVirtual ? "Plataforma" : "Lugar"}</small>
-                    <span className="break-words text-sm font-semibold">{modulo.lugar || "Por definir"}</span>
-                  </div>
-                </div>
-                <div className="flex min-w-0 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.07] p-3.5 sm:px-4">
-                  <i className="bi bi-hourglass-split shrink-0 text-xl text-[#4facfe]" aria-hidden="true" />
-                  <div className="min-w-0">
-                    <small className="block text-xs text-slate-400">Duración</small>
-                    <span className="break-words text-sm font-semibold">{modulo.duracion || "Por definir"}</span>
+                    <p className="m-0 text-xs font-medium text-slate-300">Docente a cargo</p>
+                    <p className="m-0 mt-0.5 break-words text-base font-semibold text-white sm:text-lg">
+                      {modulo.docente || "Por asignar"}
+                    </p>
                   </div>
                 </div>
               </div>
+            </header>
+
+            <section aria-label="Detalles del módulo" className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              {detalles.map((detalle) => (
+                <article key={detalle.label} className="flex min-w-0 items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm shadow-slate-900/5 sm:p-5">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-lg text-sky-700">
+                    <i className={`bi ${detalle.icon}`} aria-hidden="true" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="m-0 text-xs font-medium uppercase tracking-wide text-slate-400">{detalle.label}</p>
+                    <p className="m-0 mt-1 break-words text-sm font-semibold text-slate-800">{detalle.value}</p>
+                  </div>
+                </article>
+              ))}
             </section>
 
-            <div className="grid items-start gap-3 [grid-template-columns:minmax(0,1fr)_320px] max-[950px]:grid-cols-1">
-              <div className="flex min-w-0 flex-col gap-3">
-                {modulo.descripcion && (
-                  <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                    <h2 className="mb-2.5 flex items-center gap-2 border-b border-slate-200 pb-2.5 text-sm font-semibold text-[#1a1c2d]">
-                      <i className="bi bi-info-circle text-xs text-[#4facfe]" aria-hidden="true" />
-                      Acerca del módulo
-                    </h2>
-                    <p className="m-0 text-xs leading-5 text-slate-600 sm:text-sm">{modulo.descripcion}</p>
-                  </section>
-                )}
+            <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
+              <div className="flex min-w-0 flex-col gap-5">
+                <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm shadow-slate-900/5 sm:p-7">
+                  <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-slate-900">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-50 text-sky-700">
+                      <i className="bi bi-info-circle-fill" aria-hidden="true" />
+                    </span>
+                    Acerca del módulo
+                  </h2>
+                  <p className="mb-0 whitespace-pre-line text-sm leading-7 text-slate-600">
+                    {modulo.descripcion || "Todavía no se ha agregado una descripción para este módulo."}
+                  </p>
+                </section>
 
                 {modulo.temario?.length > 0 && (
-                  <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                    <h2 className="mb-2.5 flex items-center gap-2 border-b border-slate-200 pb-2.5 text-sm font-semibold text-[#1a1c2d]">
-                      <i className="bi bi-list-check text-xs text-[#4facfe]" aria-hidden="true" />
+                  <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm shadow-slate-900/5 sm:p-7">
+                    <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-slate-900">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700">
+                        <i className="bi bi-list-check" aria-hidden="true" />
+                      </span>
                       Contenido del módulo
                     </h2>
-                    <ol className="m-0 flex list-none flex-col gap-2 p-0">
+                    <ol className="m-0 flex list-none flex-col gap-2.5 p-0">
                       {modulo.temario.map((tema, index) => (
-                        <li key={`${tema}-${index}`} className="flex min-w-0 items-center gap-2.5 rounded-xl bg-slate-50 px-2.5 py-2 text-xs text-slate-700 sm:text-sm">
-                          <span className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full bg-[#1a1c2d] text-[10px] font-extrabold text-[#4facfe]">
+                        <li key={`${tema}-${index}`} className="flex min-w-0 items-start gap-3 rounded-xl bg-slate-50 p-3 text-sm leading-6 text-slate-700">
+                          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-slate-900 text-xs font-bold text-cyan-300">
                             {String(index + 1).padStart(2, "0")}
                           </span>
                           <span className="break-words">{tema}</span>
@@ -120,16 +186,18 @@ const DetalleM = () => {
                 )}
 
                 {modulo.requisitos?.length > 0 && (
-                  <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                    <h2 className="mb-2.5 flex items-center gap-2 border-b border-slate-200 pb-2.5 text-sm font-semibold text-[#1a1c2d]">
-                      <i className="bi bi-patch-check text-xs text-[#4facfe]" aria-hidden="true" />
-                      Requisitos obligatorios
+                  <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm shadow-slate-900/5 sm:p-7">
+                    <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-slate-900">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                        <i className="bi bi-patch-check-fill" aria-hidden="true" />
+                      </span>
+                      Requisitos
                     </h2>
-                    <ul className="m-0 flex list-none flex-col gap-2 p-0">
+                    <ul className="m-0 flex list-none flex-col gap-3 p-0">
                       {modulo.requisitos.map((requisito, index) => (
-                        <li key={`${requisito}-${index}`} className="flex items-start gap-2 text-xs text-slate-600 sm:text-sm">
-                          <i className="bi bi-check-circle-fill mt-0.5 shrink-0 text-[11px] text-emerald-500" aria-hidden="true" />
-                          <span className="break-words leading-5">{requisito}</span>
+                        <li key={`${requisito}-${index}`} className="flex items-start gap-3 text-sm leading-6 text-slate-600">
+                          <i className="bi bi-check-circle-fill mt-1 shrink-0 text-emerald-500" aria-hidden="true" />
+                          <span className="break-words">{requisito}</span>
                         </li>
                       ))}
                     </ul>
@@ -137,57 +205,72 @@ const DetalleM = () => {
                 )}
               </div>
 
-              <aside className="sticky top-6 max-[950px]:static">
-                <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                  <h2 className="mb-3 border-b border-slate-200 pb-2.5 text-sm font-semibold text-[#1a1c2d]">Resumen</h2>
-                  <dl className="mb-4 mt-0">
-                    <div className="flex justify-between gap-3 border-b border-dashed border-slate-200 py-2">
-                      <dt className="text-xs text-slate-400">Modalidad</dt>
-                      <dd className="m-0 text-right text-xs font-semibold text-slate-800">{modulo.modalidad || "Presencial"}</dd>
+              <aside className="lg:sticky lg:top-6">
+                <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-slate-900/5">
+                  <div className="bg-gradient-to-r from-slate-900 to-sky-950 px-4 py-3 text-white">
+                    <h2 className="m-0 flex items-center gap-2 text-sm font-bold">
+                      <i className="bi bi-clipboard2-check-fill text-cyan-300" aria-hidden="true" />
+                      Inscripción
+                    </h2>
+                  </div>
+                  <div className="p-4">
+                    <div className={`mb-3 flex items-start gap-2.5 rounded-xl p-3 ${puedePostularse ? "bg-emerald-50 text-emerald-800" : "bg-amber-50 text-amber-800"}`}>
+                      <i className={`bi ${puedePostularse ? "bi-check-circle-fill" : "bi-exclamation-circle-fill"} mt-0.5 shrink-0`} aria-hidden="true" />
+                      <div>
+                        <p className="m-0 text-xs font-bold leading-5">{estadoInscripcion}</p>
+                        <p className="mb-0 mt-0.5 text-[11px] leading-4 opacity-80">
+                          {puedePostularse
+                            ? "Puedes iniciar tu postulación desde aquí."
+                            : "Por ahora no es posible postularse a este módulo."}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex justify-between gap-3 border-b border-dashed border-slate-200 py-2">
-                      <dt className="text-xs text-slate-400">Días</dt>
-                      <dd className="m-0 text-right text-xs font-semibold text-slate-800">{modulo.dias || "Por definir"}</dd>
-                    </div>
-                    <div className="flex justify-between gap-3 border-b border-dashed border-slate-200 py-2">
-                      <dt className="text-xs text-slate-400">Horario</dt>
-                      <dd className="m-0 text-right text-xs font-semibold text-slate-800">{modulo.horario || "Por definir"}</dd>
-                    </div>
-                    <div className="flex justify-between gap-3 border-b border-dashed border-slate-200 py-2">
-                      <dt className="text-xs text-slate-400">{esVirtual ? "Plataforma" : "Lugar"}</dt>
-                      <dd className="m-0 max-w-[60%] break-words text-right text-xs font-semibold text-slate-800">{modulo.lugar || "Por definir"}</dd>
-                    </div>
-                    <div className="flex justify-between gap-3 border-b border-dashed border-slate-200 py-2">
-                      <dt className="text-xs text-slate-400">Duración</dt>
-                      <dd className="m-0 text-right text-xs font-semibold text-slate-800">{modulo.duracion || "Por definir"}</dd>
-                    </div>
-                    <div className="flex justify-between gap-3 py-2">
-                      <dt className="text-xs text-slate-400">Cupos libres</dt>
-                      <dd className="m-0 text-right text-sm font-bold text-[#0369a1]">{modulo.cupos ?? "—"}</dd>
-                    </div>
-                  </dl>
 
-                  <button
-                    type="button"
-                    className="mb-2.5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#1a1c2d] to-[#2a2d45] p-2.5 text-xs font-bold text-[#4facfe] transition hover:-translate-y-0.5 hover:shadow-lg"
-                    onClick={() => navigate("/FormMod", { state: { modulo } })}
-                  >
-                    Postularme <i className="bi bi-send-fill" aria-hidden="true" />
-                  </button>
-                  <button
-                    type="button"
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-100 p-2.5 text-xs font-bold text-slate-600 transition hover:bg-slate-200"
-                    onClick={() => navigate(-1)}
-                  >
-                    Volver al catálogo
-                  </button>
+                    <dl className="mb-4 mt-0 divide-y divide-dashed divide-slate-200">
+                      <div className="flex items-center justify-between gap-3 py-2.5">
+                        <dt className="text-xs text-slate-500">Cupos libres</dt>
+                        <dd className="m-0 text-right text-xs font-bold text-slate-900">{modulo.cupos ?? "No definidos"}</dd>
+                      </div>
+                      <div className="flex items-start justify-between gap-3 py-2.5">
+                        <dt className="shrink-0 text-xs text-slate-500">Período</dt>
+                        <dd className="m-0 max-w-[70%] text-right text-xs font-semibold leading-5 text-slate-800">{periodoInscripcion}</dd>
+                      </div>
+                    </dl>
+
+                    {puedePostularse ? (
+                      <button
+                        type="button"
+                        className="mb-2.5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-sm font-bold text-white transition hover:bg-sky-700 focus:outline-none focus:ring-4 focus:ring-sky-100"
+                        onClick={() => navigate("/FormMod", { state: { modulo } })}
+                      >
+                        Postularme
+                        <i className="bi bi-arrow-right" aria-hidden="true" />
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled
+                        className="mb-2.5 inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-400"
+                      >
+                        Postulación no disponible
+                        <i className="bi bi-lock-fill" aria-hidden="true" />
+                      </button>
+                    )}
+                    <Link
+                      to="/ModulosAcademicos"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-600 no-underline transition hover:border-sky-200 hover:bg-sky-50 hover:text-sky-700"
+                    >
+                      <i className="bi bi-arrow-left" aria-hidden="true" />
+                      Volver al catálogo
+                    </Link>
+                  </div>
                 </section>
               </aside>
             </div>
           </>
         )}
       </div>
-    </div>
+    </main>
   );
 };
 

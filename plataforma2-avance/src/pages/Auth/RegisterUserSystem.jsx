@@ -48,6 +48,7 @@ const RegisterUserSystem = ({ roleKey }) => {
   const [error, setError] = useState("");
 
   const selectedRole = useMemo(() => findRole(roles, roleKey), [roles, roleKey]);
+  const noInstitutionsAvailable = requiresInstitution && institutions.length === 0;
 
   useEffect(() => {
     let ignore = false;
@@ -130,6 +131,10 @@ const RegisterUserSystem = ({ roleKey }) => {
       setError(`No se encontró el rol de ${config.title}.`);
       return;
     }
+    if (requiresInstitution && !form.institution_id) {
+      setError("Selecciona una institución para completar el registro docente.");
+      return;
+    }
     if (requiresInstitution && !institutions.some((institution) => String(institution.id) === form.institution_id)) {
       setError("Selecciona una institución válida.");
       return;
@@ -155,7 +160,11 @@ const RegisterUserSystem = ({ roleKey }) => {
         photo_public_id: photoData.publicId,
         username: form.username.trim() || slugify(`${form.first_name} ${form.last_name}`),
         status: true,
-        institution_id: form.institution_id ? Number(form.institution_id) : null,
+        institution_id: requiresInstitution
+          ? Number(form.institution_id)
+          : form.institution_id
+            ? Number(form.institution_id)
+            : null,
         rol_id: Number(selectedRole.id),
         ...(roleKey === "teacher" ? { specialty: form.specialty.trim() } : {}),
       };
@@ -258,10 +267,14 @@ const RegisterUserSystem = ({ roleKey }) => {
               </label>
               {showsInstitution && (
                 <label className={labelClass}>
-                  Institución
+                  Institución{requiresInstitution ? " (obligatoria)" : ""}
                   <select className={fieldClass} name="institution_id" value={form.institution_id} onChange={handleChange} required={requiresInstitution}>
                     <option value="" disabled={requiresInstitution}>
-                      {requiresInstitution ? "Selecciona una institución" : "La registraré después"}
+                      {noInstitutionsAvailable
+                        ? "No hay instituciones disponibles"
+                        : requiresInstitution
+                          ? "Selecciona una institución"
+                          : "La registraré después"}
                     </option>
                     {institutions.map((institution) => (
                       <option key={institution.id} value={institution.id}>
@@ -269,6 +282,11 @@ const RegisterUserSystem = ({ roleKey }) => {
                       </option>
                     ))}
                   </select>
+                  {noInstitutionsAvailable && (
+                    <span className="mt-1 block text-xs font-normal text-amber-700">
+                      El registro docente requiere una institución. Contacta al administrador si no aparece ninguna.
+                    </span>
+                  )}
                 </label>
               )}
               {roleKey === "teacher" && (
@@ -291,7 +309,7 @@ const RegisterUserSystem = ({ roleKey }) => {
               </label>
             </div>
 
-            <button type="submit" disabled={saving || !selectedRole} className="w-full rounded-xl bg-blue-700 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-700/20 transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60">
+            <button type="submit" disabled={saving || !selectedRole || noInstitutionsAvailable} className="w-full rounded-xl bg-blue-700 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-700/20 transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60">
               {saving ? "Creando cuenta..." : "Crear cuenta"}
             </button>
           </form>

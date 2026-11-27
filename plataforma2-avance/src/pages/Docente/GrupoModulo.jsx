@@ -67,6 +67,7 @@ const GrupoModulo = () => {
     const [gradeLevels, setGradeLevels] = useState([]);
     const [teachers, setTeachers] = useState([]);
     const [gradeValues, setGradeValues] = useState({});
+    const [search, setSearch] = useState("");
     const [loading, setLoading] = useState(Boolean(moduleId));
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
@@ -242,12 +243,13 @@ const GrupoModulo = () => {
         const currentGrade = finalGradeFor(studentId);
         const payload = {
             grade: numericGrade,
+            recovery_grade: currentGrade?.recovery_grade ?? 0,
             evaluation_type: "Final",
             registration_date: today(),
             student_id: studentId,
             module_id: Number(moduleId),
         };
-        if (moduleAcademicPeriodId) payload.academic_period_id = moduleAcademicPeriodId;
+        if (moduleAcademicPeriodId) payload.academic__period_id = moduleAcademicPeriodId;
         if (recordedBy) payload.recorded_by = recordedBy;
 
         const response = currentGrade?.id
@@ -332,48 +334,88 @@ const GrupoModulo = () => {
         setSaving(false);
     };
 
+    const filteredRoster = useMemo(() => {
+        const query = search.trim().toLocaleLowerCase();
+        if (!query) return roster;
+
+        return roster.filter((row) => {
+            const enrollmentCode = row.enrollment?.enrollment_code || row.enrollment_code || "";
+            return [getStudentName(row), enrollmentCode, getStudentId(row)]
+                .some((value) => String(value ?? "").toLocaleLowerCase().includes(query));
+        });
+    }, [roster, search]);
+
+    const finalGradeStudentIds = new Set(
+        grades
+            .filter((grade) => String(grade.evaluation_type || "").toLowerCase() === "final")
+            .map((grade) => grade.student_id ?? grade.student?.id)
+            .filter((studentId) => studentId !== null && studentId !== undefined)
+            .map(String),
+    );
+    const gradedStudentCount = roster.filter(
+        (row) => finalGradeStudentIds.has(String(getStudentId(row))),
+    ).length;
+
     if (!moduleId) {
         return (
-            <main className="ml-64 min-h-screen w-[calc(100%-16rem)] bg-slate-50 px-5 py-10 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] md:px-8">
-                <section className="mx-auto max-w-3xl rounded-2xl bg-white p-8 text-center shadow-sm">
-                    <h1 className="mt-0 text-2xl font-bold text-slate-900">Selecciona un módulo</h1>
-                    <p className="text-slate-600">No llegó el identificador del módulo que quieres revisar.</p>
-                    <Link to="/DocenteMo" className="font-semibold text-sky-700">Volver a Mis Módulos</Link>
+            <main className="ml-64 min-h-screen w-[calc(100%-16rem)] bg-gradient-to-br from-slate-50 via-sky-50/40 to-slate-100 px-5 py-10 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] md:px-8">
+                <section className="mx-auto max-w-3xl rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-lg shadow-slate-900/5">
+                    <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-sky-50 text-3xl text-sky-600">
+                        <i className="bi bi-journal-x" aria-hidden="true" />
+                    </span>
+                    <h1 className="mb-0 mt-5 text-2xl font-bold text-slate-900">Selecciona un módulo</h1>
+                    <p className="mb-0 mt-2 text-slate-600">No llegó el identificador del módulo que quieres revisar.</p>
+                    <Link to="/DocenteMo" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-sky-600 px-5 py-3 font-semibold text-white no-underline transition hover:bg-sky-700">
+                        <i className="bi bi-arrow-left" aria-hidden="true" />
+                        Volver a Mis Módulos
+                    </Link>
                 </section>
             </main>
         );
     }
 
     return (
-        <main className="ml-64 min-h-screen w-[calc(100%-16rem)] bg-slate-50 px-5 py-8 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] md:px-8">
-            <div className="mx-auto max-w-7xl">
-                <header className="mb-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <div className="flex items-center gap-3">
-                            <Link to="/DocenteMo" className="text-3xl text-slate-500 no-underline hover:text-sky-600" aria-label="Volver a mis módulos">
-                                <i className="bi bi-arrow-left-short" aria-hidden="true" />
+        <main className="ml-64 min-h-screen w-[calc(100%-16rem)] bg-gradient-to-br from-slate-50 via-sky-50/40 to-slate-100 px-5 py-7 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] md:px-8">
+            <div className="mx-auto max-w-7xl space-y-6">
+                <header className="overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-sky-950 p-6 text-white shadow-xl shadow-slate-900/10 sm:p-8">
+                    <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                        <div className="max-w-3xl">
+                            <Link to="/DocenteMo" className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-sky-100 no-underline transition hover:bg-white/15">
+                                <i className="bi bi-arrow-left" aria-hidden="true" />
+                                Volver a Mis Módulos
                             </Link>
-                            <h1 className="mb-0 mt-0 text-3xl font-semibold text-slate-900">Estudiantes e Historial de Notas</h1>
+                            <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-sky-100">
+                                <i className="bi bi-mortarboard-fill" aria-hidden="true" />
+                                Gestión académica
+                            </span>
+                            <h1 className="mb-0 mt-0 text-2xl font-bold leading-tight sm:text-3xl">Estudiantes e historial de notas</h1>
+                            <p className="mb-0 mt-2 text-sm leading-6 text-slate-300 sm:text-base">
+                                {module?.name_module || (loading ? "Cargando módulo..." : "Módulo no disponible")}
+                            </p>
+                            <span className="mt-4 inline-flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-sm text-sky-100">
+                                <i className="bi bi-people-fill" aria-hidden="true" />
+                                {module ? getGroupLabel() : loading ? "Cargando grupo..." : "Grupo no disponible"}
+                            </span>
                         </div>
-                        <p className="mb-0 mt-2 text-slate-600">
-                            Módulo: <strong>{module?.name_module || "Cargando módulo..."}</strong>
-                            {module && <strong> ({getGroupLabel()})</strong>}
-                        </p>
+                        <div className="flex flex-col gap-2 sm:flex-row lg:flex-col">
+                            <button
+                                type="button"
+                                onClick={handleSaveAll}
+                                disabled={loading || saving || roster.length === 0}
+                                className="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-5 py-3 font-bold text-slate-950 shadow-lg shadow-cyan-950/20 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60"
+                            >
+                                <i className={`bi ${saving ? "bi-arrow-repeat animate-spin" : "bi-save"}`} aria-hidden="true" />
+                                {saving ? "Guardando..." : "Guardar todas las notas"}
+                            </button>
+                            <p className="m-0 text-center text-xs text-slate-300">Se guardarán las notas ingresadas</p>
+                        </div>
                     </div>
-                    <button
-                        type="button"
-                        onClick={handleSaveAll}
-                        disabled={loading || saving || roster.length === 0}
-                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-5 py-3 font-semibold text-white transition hover:bg-sky-600 disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                        <i className="bi bi-save" aria-hidden="true" />
-                        {saving ? "Guardando..." : "Guardar Todas las Notas"}
-                    </button>
                 </header>
 
                 {error && (
-                    <div role="alert" className="mb-5 flex items-start justify-between gap-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-                        <span>{error}</span>
+                    <div role="alert" className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4 text-sm text-amber-900">
+                        <i className="bi bi-exclamation-triangle-fill mt-0.5 shrink-0" aria-hidden="true" />
+                        <span className="flex-1">{error}</span>
                         <button
                             type="button"
                             onClick={() => {
@@ -381,80 +423,143 @@ const GrupoModulo = () => {
                                 setError("");
                                 setReloadKey((current) => current + 1);
                             }}
-                            className="shrink-0 font-semibold underline"
+                            className="shrink-0 font-semibold underline underline-offset-2"
                         >
                             Reintentar
                         </button>
                     </div>
                 )}
-                {success && <p role="status" className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">{success}</p>}
+                {success && (
+                    <p role="status" className="m-0 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4 text-sm font-medium text-emerald-800">
+                        <i className="bi bi-check-circle-fill" aria-hidden="true" />
+                        {success}
+                    </p>
+                )}
 
-                <section className="rounded-2xl bg-white p-6 shadow-sm">
-                    <div className="overflow-x-auto">
-                        <table className="w-full min-w-[850px] border-collapse text-left">
-                            <thead className="bg-slate-50">
-                                <tr>
-                                    {["N°", "Nombre completo", "ID Matrícula", "Género", "Nota final", "Acciones"].map((heading) => (
-                                        <th key={heading} className="px-4 py-4 text-sm font-bold text-slate-900">{heading}</th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {loading && (
-                                    <tr>
-                                        <td colSpan="6" className="px-4 py-10 text-center text-sm text-slate-500">Cargando estudiantes y notas...</td>
-                                    </tr>
-                                )}
-                                {!loading && roster.length === 0 && (
-                                    <tr>
-                                        <td colSpan="6" className="px-4 py-10 text-center text-sm text-slate-500">
-                                            No hay estudiantes inscritos en este módulo.
-                                        </td>
-                                    </tr>
-                                )}
-                                {!loading && roster.map((row, index) => {
-                                    const studentId = getStudentId(row);
-                                    const key = String(studentId ?? row.id);
-                                    const enrollmentCode = row.enrollment?.enrollment_code
-                                        || row.enrollment_code
-                                        || "—";
-                                    return (
-                                        <tr key={key} className="border-b border-slate-100 last:border-0">
-                                            <td className="px-4 py-5 text-sm text-slate-500">{String(index + 1).padStart(2, "0")}</td>
-                                            <td className="px-4 py-5 text-sm font-semibold text-slate-900">{getStudentName(row)}</td>
-                                            <td className="px-4 py-5">
-                                                <span className="inline-flex rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700">{enrollmentCode}</span>
-                                            </td>
-                                            <td className="px-4 py-5 text-sm text-slate-600">{displayGender(row.student?.gender ?? row.gender)}</td>
-                                            <td className="px-4 py-5">
-                                                <input
-                                                    type="number"
-                                                    step="0.1"
-                                                    min="0"
-                                                    max="5"
-                                                    value={gradeValues[key] ?? ""}
-                                                    onChange={(event) => setGradeValues((current) => ({ ...current, [key]: event.target.value }))}
-                                                    aria-label={`Nota final de ${getStudentName(row)}`}
-                                                    className="w-24 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-center font-semibold text-slate-800 outline-none focus:border-sky-500"
-                                                />
-                                            </td>
-                                            <td className="px-4 py-5">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleSaveOne(row)}
-                                                    disabled={saving}
-                                                    className="flex h-10 w-10 items-center justify-center rounded-lg border-0 bg-emerald-50 text-emerald-600 transition hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50"
-                                                    title="Guardar nota individual"
-                                                    aria-label={`Guardar nota de ${getStudentName(row)}`}
-                                                >
-                                                    <i className="bi bi-check-lg" aria-hidden="true" />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
+                <section aria-label="Resumen del grupo" className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    {[
+                        { label: "Estudiantes inscritos", value: loading ? "..." : roster.length, icon: "bi-people-fill", tone: "bg-sky-50 text-sky-700" },
+                        { label: "Notas registradas", value: loading ? "..." : gradedStudentCount, icon: "bi-journal-check", tone: "bg-emerald-50 text-emerald-700" },
+                        { label: "Pendientes por calificar", value: loading ? "..." : roster.length - gradedStudentCount, icon: "bi-hourglass-split", tone: "bg-amber-50 text-amber-700" },
+                    ].map((item) => (
+                        <article key={item.label} className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm shadow-slate-900/5">
+                            <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${item.tone}`}>
+                                <i className={`bi ${item.icon} text-xl`} aria-hidden="true" />
+                            </span>
+                            <div>
+                                <p className="m-0 text-sm text-slate-500">{item.label}</p>
+                                <p className="m-0 mt-1 text-2xl font-bold leading-none text-slate-900">{item.value}</p>
+                            </div>
+                        </article>
+                    ))}
+                </section>
+
+                <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm shadow-slate-900/5">
+                    <div className="flex flex-col gap-4 border-b border-slate-100 p-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+                        <div>
+                            <div className="flex flex-wrap items-center gap-3">
+                                <h2 className="m-0 text-lg font-bold text-slate-900">Lista de estudiantes</h2>
+                                {!loading && <span className="rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">{filteredRoster.length} de {roster.length}</span>}
+                            </div>
+                            <p className="mb-0 mt-1 text-sm text-slate-500">Ingresa las notas finales en una escala de 0 a 5.</p>
+                        </div>
+                        <label className="relative block w-full sm:max-w-sm">
+                            <span className="sr-only">Buscar estudiante o matrícula</span>
+                            <i className="bi bi-search pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
+                            <input
+                                type="search"
+                                value={search}
+                                onChange={(event) => setSearch(event.target.value)}
+                                placeholder="Buscar estudiante o matrícula..."
+                                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
+                            />
+                        </label>
+                    </div>
+
+                    <div className="space-y-3 p-4 sm:p-6">
+                        {loading ? (
+                            <div role="status" className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-5 py-12 text-center text-sm text-slate-500">
+                                <i className="bi bi-arrow-repeat animate-spin text-2xl text-sky-600" aria-hidden="true" />
+                                Cargando estudiantes y notas...
+                            </div>
+                        ) : roster.length === 0 ? (
+                            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-5 py-12 text-center">
+                                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-2xl text-sky-600 shadow-sm">
+                                    <i className={`bi ${error ? "bi-cloud-slash" : "bi-people"}`} aria-hidden="true" />
+                                </span>
+                                <h3 className="mb-0 mt-4 text-base font-semibold text-slate-900">
+                                    {error ? "No se pudo verificar el grupo" : "Aún no hay estudiantes"}
+                                </h3>
+                                <p className="mb-0 mt-1 text-sm text-slate-500">
+                                    {error
+                                        ? "Revisa el error mostrado arriba y vuelve a intentarlo."
+                                        : "Los estudiantes inscritos en este módulo aparecerán aquí."}
+                                </p>
+                            </div>
+                        ) : filteredRoster.length === 0 ? (
+                            <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-5 py-10 text-center">
+                                <i className="bi bi-search text-2xl text-slate-400" aria-hidden="true" />
+                                <p className="mb-0 mt-3 text-sm text-slate-600">No encontramos estudiantes que coincidan con “{search}”.</p>
+                            </div>
+                        ) : filteredRoster.map((row, index) => {
+                            const studentId = getStudentId(row);
+                            const key = String(studentId ?? row.id);
+                            const studentName = getStudentName(row);
+                            const enrollmentCode = row.enrollment?.enrollment_code
+                                || row.enrollment_code
+                                || "—";
+                            const initials = studentName
+                                .split(/\s+/)
+                                .slice(0, 2)
+                                .map((part) => part.charAt(0))
+                                .join("")
+                                .toUpperCase();
+
+                            return (
+                                <article key={key} className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-sky-200 hover:shadow-sm sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:p-5">
+                                    <div className="flex min-w-0 items-center gap-4">
+                                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-100 to-indigo-100 text-sm font-bold text-sky-800">
+                                            {initials || <i className="bi bi-person-fill" aria-hidden="true" />}
+                                        </span>
+                                        <div className="min-w-0">
+                                            <div className="flex flex-wrap items-center gap-2">
+                                                <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Estudiante {String(index + 1).padStart(2, "0")}</span>
+                                                <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">{enrollmentCode}</span>
+                                            </div>
+                                            <h3 className="mb-0 mt-1 break-words text-base font-semibold text-slate-900">{studentName}</h3>
+                                            <p className="mb-0 mt-1 text-sm text-slate-500">{displayGender(row.student?.gender ?? row.gender)}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-end gap-3 sm:shrink-0">
+                                        <label className="flex-1 sm:flex-none">
+                                            <span className="mb-1.5 block text-xs font-semibold text-slate-600">Nota final (0–5)</span>
+                                            <input
+                                                type="number"
+                                                step="0.1"
+                                                min="0"
+                                                max="5"
+                                                value={gradeValues[key] ?? ""}
+                                                onChange={(event) => setGradeValues((current) => ({ ...current, [key]: event.target.value }))}
+                                                aria-label={`Nota final de ${studentName}`}
+                                                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-center font-semibold text-slate-800 outline-none transition focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100 sm:w-28"
+                                            />
+                                        </label>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleSaveOne(row)}
+                                            disabled={saving}
+                                            className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 font-semibold text-emerald-700 transition hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50"
+                                            title="Guardar nota individual"
+                                            aria-label={`Guardar nota de ${studentName}`}
+                                        >
+                                            <i className="bi bi-check-lg" aria-hidden="true" />
+                                            <span className="sm:hidden">Guardar</span>
+                                        </button>
+                                    </div>
+                                </article>
+                            );
+                        })}
                     </div>
                 </section>
             </div>

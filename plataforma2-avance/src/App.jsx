@@ -45,6 +45,7 @@ import PerfilAd from './pages/Administrador/Perfil/PerfilAd';
 import RegistrarIns from './pages/Rector/RegistrarIns';
 import RevisarMa from './pages/Rector/RevisarMa';
 import EstudiantesAp from './pages/Rector/EstudiantesAp';
+import ProfesorAc from './pages/Rector/ProfesorAc';
 import CatalogoMa from './pages/Rector/CatalogoMa';
 import RectorDashboard from './pages/Rector/RectorDashboard';
 import RegistroRector from './pages/Rector/RegistroRector';
@@ -168,6 +169,7 @@ const App = () => {
           <Route path="/RegistrarIns" element={<RegistrarIns />} />
           <Route path="/RevisarMa" element={<RevisarMa />} />
           <Route path="/EstudiantesAp" element={<EstudiantesAp />} />
+          <Route path="/ProfesorAc" element={<ProfesorAc />} />
           <Route path="/CatalogoMa" element={<CatalogoMa />} />
         </Route>
 
