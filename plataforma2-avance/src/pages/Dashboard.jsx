@@ -1,12 +1,10 @@
-import { useContext, useEffect, useMemo, useState } from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../Config/env";
 import colegioSanVicente from "../assets/cole1.jpg";
 import colegioComuner from "../assets/cole2.jpg";
 import colegioTecnico from "../assets/cole3.jpg";
 import { getApiErrorMessage, getCollection } from "./Auth/authUtils";
-import api from "../Config/env";
 import TeacherSessionContext from "../Config/TeacherSessionContext";
 import { getTeacherName } from "../Config/teacherProfile";
 
@@ -248,14 +246,6 @@ const AdminDashboard = () => {
       </SectionCard>
     </div>
   );
-};
-
-const getCollection = (responseData, key) => {
-  if (Array.isArray(responseData)) return responseData;
-  if (Array.isArray(responseData?.data)) return responseData.data;
-  if (Array.isArray(responseData?.[key])) return responseData[key];
-  if (Array.isArray(responseData?.data?.data)) return responseData.data.data;
-  throw new Error(`El servidor devolvió una respuesta inesperada al consultar ${key}.`);
 };
 
 const isPublished = (module) => (
