@@ -6,7 +6,7 @@ import { getTeacherInitials } from "../Config/teacherProfile";
 const roleDetails = {
   admin: { title: "Administración", search: "Buscar institución o estudiante", initials: "AD", profile: "/PerfilAd" },
   teacher: { title: "Docencia", search: "Buscar módulo o alumno", initials: "CM", profile: "/PerfilDocente" },
-  student: { title: "Estudiante", search: "Buscar institución", initials: "JE", profile: "/PerfilUsuario" },
+  student: { title: "Estudiante", search: "Buscar institución", initials: "JE", profile: "/PerfilEst" },
   rector: { title: "Rector", search: "Buscar estudiante o matrícula", initials: "RC", profile: "/PerfilRec" },
 };
 

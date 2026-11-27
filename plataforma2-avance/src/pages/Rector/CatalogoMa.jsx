@@ -19,6 +19,12 @@ const emptyAcademicPeriodForm = {
   sort_orden: "",
   academic_year_id: "",
 };
+const emptyRequirementTypeForm = {
+  name: "",
+  code: "",
+  is_required: true,
+  applies_to_cycle: "",
+};
 
 const compareGradeOrder = (first, second) => {
   const firstOrder = Number(first.sort_order);
@@ -29,6 +35,7 @@ const compareGradeOrder = (first, second) => {
 };
 
 const isCurrentYear = (value) => value === true || value === 1 || value === "1";
+const isRequirementRequired = (value) => value === true || value === 1 || value === "1" || value === "true";
 
 const getClassGroupReferences = (group) => [
   group.campuse_id ?? group.campus_id ?? group.campuse?.id ?? group.campus?.id,
@@ -94,26 +101,32 @@ const CatalogoMa = () => {
   const [campuses, setCampuses] = useState([]);
   const [classGroups, setClassGroups] = useState([]);
   const [academicPeriods, setAcademicPeriods] = useState([]);
+  const [requirementTypes, setRequirementTypes] = useState([]);
   const [loadingGrades, setLoadingGrades] = useState(true);
   const [loadingAcademicYears, setLoadingAcademicYears] = useState(true);
   const [loadingClassGroups, setLoadingClassGroups] = useState(true);
   const [loadingAcademicPeriods, setLoadingAcademicPeriods] = useState(true);
+  const [loadingRequirementTypes, setLoadingRequirementTypes] = useState(true);
   const [gradeForm, setGradeForm] = useState(emptyGradeForm);
   const [academicYearForm, setAcademicYearForm] = useState(emptyAcademicYearForm);
   const [classGroupForm, setClassGroupForm] = useState(emptyClassGroupForm);
   const [academicPeriodForm, setAcademicPeriodForm] = useState(emptyAcademicPeriodForm);
+  const [requirementTypeForm, setRequirementTypeForm] = useState(emptyRequirementTypeForm);
   const [editingGradeId, setEditingGradeId] = useState(null);
   const [editingAcademicYearId, setEditingAcademicYearId] = useState(null);
   const [editingClassGroupId, setEditingClassGroupId] = useState(null);
   const [editingAcademicPeriodId, setEditingAcademicPeriodId] = useState(null);
+  const [editingRequirementTypeId, setEditingRequirementTypeId] = useState(null);
   const [savingGrade, setSavingGrade] = useState(false);
   const [savingAcademicYear, setSavingAcademicYear] = useState(false);
   const [savingClassGroup, setSavingClassGroup] = useState(false);
   const [savingAcademicPeriod, setSavingAcademicPeriod] = useState(false);
+  const [savingRequirementType, setSavingRequirementType] = useState(false);
   const [deletingGradeId, setDeletingGradeId] = useState(null);
   const [deletingAcademicYearId, setDeletingAcademicYearId] = useState(null);
   const [deletingClassGroupId, setDeletingClassGroupId] = useState(null);
   const [deletingAcademicPeriodId, setDeletingAcademicPeriodId] = useState(null);
+  const [deletingRequirementTypeId, setDeletingRequirementTypeId] = useState(null);
   const [apiError, setApiError] = useState("");
   const [notice, setNotice] = useState("");
 
@@ -125,6 +138,7 @@ const CatalogoMa = () => {
       setLoadingAcademicYears(true);
       setLoadingClassGroups(true);
       setLoadingAcademicPeriods(true);
+      setLoadingRequirementTypes(true);
       setApiError("");
 
       const requests = [
@@ -134,6 +148,7 @@ const CatalogoMa = () => {
         { key: "campuses", responseKey: "campuses", path: "/campuses/list" },
         { key: "classGroups", responseKey: "class_groups", path: "/class-groups/list" },
         { key: "academicPeriods", responseKey: "academic_periods", path: "/academic-periods/list" },
+        { key: "requirementTypes", responseKey: "requirement_types", path: "/requirement-types/list" },
       ];
       const results = await Promise.allSettled(requests.map(({ path }) => api.get(path)));
       const catalogs = {
@@ -143,6 +158,7 @@ const CatalogoMa = () => {
         campuses: [],
         classGroups: [],
         academicPeriods: [],
+        requirementTypes: [],
       };
       const errors = [];
 
@@ -180,6 +196,11 @@ const CatalogoMa = () => {
       const institutionAcademicPeriods = currentInstitution
         ? filterAcademicPeriodsByYears(catalogs.academicPeriods, institutionAcademicYears)
         : [];
+      const institutionRequirementTypes = currentInstitution
+        ? catalogs.requirementTypes.filter((item) => (
+          String(item.institution_id ?? item.institution?.id) === String(currentInstitution.id)
+        ))
+        : [];
 
       if (!ignore) {
         setInstitution(currentInstitution);
@@ -188,11 +209,13 @@ const CatalogoMa = () => {
         setCampuses(institutionCampuses);
         setClassGroups(institutionClassGroups);
         setAcademicPeriods(institutionAcademicPeriods);
+        setRequirementTypes(institutionRequirementTypes);
         setApiError(errors.join(" "));
         setLoadingGrades(false);
         setLoadingAcademicYears(false);
         setLoadingClassGroups(false);
         setLoadingAcademicPeriods(false);
+        setLoadingRequirementTypes(false);
       }
     };
 
@@ -569,6 +592,94 @@ const CatalogoMa = () => {
     }
   };
 
+  const handleRequirementTypeFormChange = (event) => {
+    const { name, value, checked, type } = event.target;
+    setRequirementTypeForm((current) => ({
+      ...current,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const resetRequirementTypeForm = () => {
+    setRequirementTypeForm(emptyRequirementTypeForm);
+    setEditingRequirementTypeId(null);
+  };
+
+  const saveRequirementType = async (event) => {
+    event.preventDefault();
+    setApiError("");
+    setNotice("");
+
+    if (!institution?.id) {
+      setApiError("Registra primero la institución para asociar los requisitos documentales.");
+      return;
+    }
+
+    setSavingRequirementType(true);
+    const payload = {
+      name: requirementTypeForm.name.trim(),
+      code: requirementTypeForm.code.trim(),
+      is_required: Boolean(requirementTypeForm.is_required),
+      applies_to_cycle: requirementTypeForm.applies_to_cycle.trim(),
+      institution_id: Number(institution.id),
+    };
+
+    try {
+      if (editingRequirementTypeId) {
+        await api.put(`/requirement-types/${editingRequirementTypeId}`, payload);
+      } else {
+        await api.post("/requirement-types/store", payload);
+      }
+
+      const response = await api.get("/requirement-types/list");
+      const allRequirementTypes = getCollection(response.data, "requirement_types");
+      setRequirementTypes(allRequirementTypes.filter((item) => (
+        String(item.institution_id ?? item.institution?.id) === String(institution.id)
+      )));
+      setNotice(editingRequirementTypeId
+        ? "El requisito documental se actualizó correctamente."
+        : "El requisito documental se creó correctamente.");
+      resetRequirementTypeForm();
+    } catch (saveError) {
+      console.error("Error al guardar el requisito documental:", saveError);
+      setApiError(getErrorMessage(saveError, "No se pudo guardar el requisito documental."));
+    } finally {
+      setSavingRequirementType(false);
+    }
+  };
+
+  const editRequirementType = (item) => {
+    setRequirementTypeForm({
+      name: item.name || "",
+      code: item.code || "",
+      is_required: isRequirementRequired(item.is_required),
+      applies_to_cycle: item.applies_to_cycle || "",
+    });
+    setEditingRequirementTypeId(item.id);
+    setApiError("");
+    setNotice("");
+  };
+
+  const deleteRequirementType = async (item) => {
+    if (!window.confirm(`¿Eliminar el requisito "${item.name}"?`)) return;
+
+    setDeletingRequirementTypeId(item.id);
+    setApiError("");
+    setNotice("");
+
+    try {
+      await api.delete(`/requirement-types/${item.id}`);
+      setRequirementTypes((current) => current.filter(({ id }) => id !== item.id));
+      if (editingRequirementTypeId === item.id) resetRequirementTypeForm();
+      setNotice(`El requisito ${item.name} se eliminó correctamente.`);
+    } catch (deleteError) {
+      console.error("Error al eliminar el requisito documental:", deleteError);
+      setApiError(getErrorMessage(deleteError, "No se pudo eliminar el requisito documental."));
+    } finally {
+      setDeletingRequirementTypeId(null);
+    }
+  };
+
   return (
     <div className="ml-64 min-h-[calc(100vh-76px)] w-[calc(100%-16rem)] px-7 py-8 max-sm:ml-[72px] max-sm:w-[calc(100%-72px)] max-sm:px-4 max-sm:py-5">
       <div className="mx-auto max-w-7xl space-y-6">
@@ -902,6 +1013,134 @@ const CatalogoMa = () => {
               </ul>
             ) : (
               <p className="mb-0 text-sm text-slate-500">Todavía no hay periodos académicos registrados.</p>
+            )}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-100 bg-white p-5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] sm:p-7">
+          <div className="mb-5">
+            <h2 className="m-0 text-lg font-semibold text-slate-900">Requisitos documentales</h2>
+            <p className="mb-0 mt-1 text-sm text-slate-500">
+              Configura los documentos solicitados durante la matrícula. El ciclo debe coincidir con el ciclo de los grados.
+            </p>
+          </div>
+          <form onSubmit={saveRequirementType} className="grid grid-cols-1 items-end gap-4 sm:grid-cols-2 xl:grid-cols-5">
+            <label className="text-sm font-semibold text-slate-700">
+              Nombre del requisito
+              <input
+                name="name"
+                value={requirementTypeForm.name}
+                onChange={handleRequirementTypeFormChange}
+                maxLength={255}
+                className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-700 outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                placeholder="Ej. Documento de identidad"
+                required
+              />
+            </label>
+            <label className="text-sm font-semibold text-slate-700">
+              Código
+              <input
+                name="code"
+                value={requirementTypeForm.code}
+                onChange={handleRequirementTypeFormChange}
+                maxLength={255}
+                className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-700 outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                placeholder="Ej. DOC_IDENTIDAD"
+                required
+              />
+            </label>
+            <label className="text-sm font-semibold text-slate-700">
+              Aplica al ciclo
+              <input
+                name="applies_to_cycle"
+                value={requirementTypeForm.applies_to_cycle}
+                onChange={handleRequirementTypeFormChange}
+                list="requirement-cycle-options"
+                maxLength={255}
+                className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-700 outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                placeholder="Ej. Primaria"
+                required
+              />
+              <datalist id="requirement-cycle-options">
+                {[...new Set(gradeLevels.map(({ cycle }) => cycle).filter(Boolean))]
+                  .map((cycle) => <option key={cycle} value={cycle} />)}
+                <option value="Todos los ciclos" />
+              </datalist>
+            </label>
+            <label className="flex min-h-[48px] items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm font-semibold text-slate-700">
+              <input
+                type="checkbox"
+                name="is_required"
+                checked={requirementTypeForm.is_required}
+                onChange={handleRequirementTypeFormChange}
+                className="h-4 w-4 rounded border-slate-300 text-violet-600 focus:ring-violet-500"
+              />
+              Requisito obligatorio
+            </label>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="submit"
+                disabled={savingRequirementType || !institution?.id}
+                className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-violet-700 px-5 py-3 text-sm font-bold text-white transition hover:bg-violet-800 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <i className={`bi ${editingRequirementTypeId ? "bi-check-lg" : "bi-plus-lg"}`} aria-hidden="true" />
+                {savingRequirementType
+                  ? "Guardando..."
+                  : editingRequirementTypeId
+                    ? "Actualizar requisito"
+                    : "Crear requisito"}
+              </button>
+              {editingRequirementTypeId && (
+                <button
+                  type="button"
+                  onClick={resetRequirementTypeForm}
+                  className="min-h-[48px] rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+                >
+                  Cancelar
+                </button>
+              )}
+            </div>
+          </form>
+
+          <div className="mt-6 border-t border-slate-100 pt-5">
+            {loadingRequirementTypes ? (
+              <p role="status" className="mb-0 text-sm text-slate-500">Cargando requisitos documentales...</p>
+            ) : requirementTypes.length ? (
+              <ul className="m-0 grid list-none gap-3 p-0 sm:grid-cols-2 xl:grid-cols-3">
+                {requirementTypes.map((requirement) => (
+                  <li key={requirement.id} className="flex items-center justify-between gap-3 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3">
+                    <div className="min-w-0">
+                      <p className="m-0 truncate font-semibold text-slate-800">{requirement.name}</p>
+                      <p className="mb-0 mt-1 truncate text-xs text-violet-700">Código: {requirement.code}</p>
+                      <p className="mb-0 mt-1 text-xs text-slate-500">Ciclo: {requirement.applies_to_cycle}</p>
+                      <span className={`mt-2 inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${isRequirementRequired(requirement.is_required) ? "bg-rose-50 text-rose-700" : "bg-slate-200 text-slate-600"}`}>
+                        {isRequirementRequired(requirement.is_required) ? "Obligatorio" : "Opcional"}
+                      </span>
+                    </div>
+                    <div className="flex shrink-0 gap-1">
+                      <button
+                        type="button"
+                        onClick={() => editRequirementType(requirement)}
+                        aria-label={`Editar requisito ${requirement.name}`}
+                        className="rounded-lg p-2 text-slate-500 hover:bg-violet-100 hover:text-violet-700"
+                      >
+                        <i className="bi bi-pencil" aria-hidden="true" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => deleteRequirementType(requirement)}
+                        disabled={deletingRequirementTypeId === requirement.id}
+                        aria-label={`Eliminar requisito ${requirement.name}`}
+                        className="rounded-lg p-2 text-slate-500 hover:bg-red-100 hover:text-red-600 disabled:opacity-50"
+                      >
+                        <i className="bi bi-trash3" aria-hidden="true" />
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mb-0 text-sm text-slate-500">Todavía no hay requisitos documentales para esta institución.</p>
             )}
           </div>
         </section>

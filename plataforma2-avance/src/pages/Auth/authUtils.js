@@ -52,16 +52,21 @@ const roleAliases = {
 };
 
 export const getDashboardPath = (roleValue) => {
-  const normalizedRole = slugify(String(roleValue || ""));
+  const candidates = roleValue && typeof roleValue === "object"
+    ? [roleValue.slug, roleValue.name_role, roleValue.name]
+    : [roleValue];
 
-  for (const [role, aliases] of Object.entries(roleAliases)) {
-    if (aliases.includes(normalizedRole)) {
-      return {
-        admin: "/admin",
-        rector: "/rector",
-        teacher: "/teacher",
-        student: "/student",
-      }[role];
+  for (const candidate of candidates) {
+    const normalizedRole = slugify(String(candidate || ""));
+    for (const [role, aliases] of Object.entries(roleAliases)) {
+      if (aliases.includes(normalizedRole)) {
+        return {
+          admin: "/admin",
+          rector: "/rector",
+          teacher: "/teacher",
+          student: "/student",
+        }[role];
+      }
     }
   }
 

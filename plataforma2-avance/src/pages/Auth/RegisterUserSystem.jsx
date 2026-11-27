@@ -36,6 +36,8 @@ const labelClass = "text-sm font-semibold text-slate-700";
 const RegisterUserSystem = ({ roleKey }) => {
   const navigate = useNavigate();
   const config = rolesConfig[roleKey];
+  const requiresInstitution = roleKey === "teacher";
+  const showsInstitution = roleKey === "rector" || requiresInstitution;
   const [form, setForm] = useState(initialForm);
   const [roles, setRoles] = useState([]);
   const [institutions, setInstitutions] = useState([]);
@@ -57,7 +59,7 @@ const RegisterUserSystem = ({ roleKey }) => {
       try {
         const [rolesResponse, institutionsResponse] = await Promise.all([
           api.get("/rols/list"),
-          roleKey === "student" ? Promise.resolve(null) : api.get("/institutions/list"),
+          showsInstitution ? api.get("/institutions/list") : Promise.resolve(null),
         ]);
         const loadedRoles = getCollection(rolesResponse.data, "roles");
         const loadedInstitutions = institutionsResponse
@@ -83,7 +85,7 @@ const RegisterUserSystem = ({ roleKey }) => {
     return () => {
       ignore = true;
     };
-  }, [config.title, roleKey]);
+  }, [config.title, requiresInstitution, roleKey, showsInstitution]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -128,7 +130,7 @@ const RegisterUserSystem = ({ roleKey }) => {
       setError(`No se encontró el rol de ${config.title}.`);
       return;
     }
-    if (roleKey !== "student" && !institutions.some((institution) => String(institution.id) === form.institution_id)) {
+    if (requiresInstitution && !institutions.some((institution) => String(institution.id) === form.institution_id)) {
       setError("Selecciona una institución válida.");
       return;
     }
@@ -222,7 +224,7 @@ const RegisterUserSystem = ({ roleKey }) => {
                 <select className={fieldClass} name="document_type" value={form.document_type} onChange={handleChange} required>
                   <option value="" disabled>Selecciona un tipo</option>
                   <option value="CC">Cédula de ciudadanía</option>
-                  <option value="TI">Tarjeta de identidad</option>
+                  {roleKey === "student" && <option value="TI">Tarjeta de identidad</option>}
                   <option value="CE">Cédula de extranjería</option>
                   <option value="RC">Registro civil</option>
                   <option value="PP">Pasaporte</option>
@@ -254,11 +256,13 @@ const RegisterUserSystem = ({ roleKey }) => {
                   required
                 />
               </label>
-              {roleKey !== "student" && (
+              {showsInstitution && (
                 <label className={labelClass}>
                   Institución
-                  <select className={fieldClass} name="institution_id" value={form.institution_id} onChange={handleChange} required>
-                    <option value="" disabled>Selecciona una institución</option>
+                  <select className={fieldClass} name="institution_id" value={form.institution_id} onChange={handleChange} required={requiresInstitution}>
+                    <option value="" disabled={requiresInstitution}>
+                      {requiresInstitution ? "Selecciona una institución" : "La registraré después"}
+                    </option>
                     {institutions.map((institution) => (
                       <option key={institution.id} value={institution.id}>
                         {institution.name_institution || institution.name || `Institución ${institution.id}`}

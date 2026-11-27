@@ -47,6 +47,17 @@ const normalizeStatus = (status) => {
   return "Pendiente";
 };
 
+const normalizeDocumentStatus = (status) => {
+  const value = String(status || "").trim().toLowerCase();
+  if (["en_revision", "en revisión", "revision", "revisión", "review", "in_review"].includes(value)) return "En revisión";
+  if (["aprobado", "aprobada", "approved"].includes(value)) return "Aprobado";
+  if (["rechazado", "rechazada", "rejected"].includes(value)) return "Rechazado";
+  if (["pendiente", "pending", "submitted"].includes(value)) return "Pendiente";
+  return status || "Sin estado";
+};
+
+const isDocumentPending = (document) => normalizeDocumentStatus(document.status) === "Pendiente";
+
 const getStatusClasses = (status) => {
   const normalizedStatus = normalizeStatus(status);
   if (normalizedStatus === "Aprobada") return "border-emerald-200 bg-emerald-50 text-emerald-700";
@@ -151,6 +162,7 @@ const RevisarMa = () => {
   const [statusFilter, setStatusFilter] = useState("Todos");
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState(null);
+  const [savingDocumentId, setSavingDocumentId] = useState(null);
   const [error, setError] = useState("");
   const [warning, setWarning] = useState("");
   const [notice, setNotice] = useState("");
@@ -416,6 +428,49 @@ const RevisarMa = () => {
       setError(getErrorMessage(saveError, "No se pudo guardar la decisión. Verifica los datos e inténtalo nuevamente."));
     } finally {
       setSavingId(null);
+    }
+  };
+
+  const handleDocumentReview = async (document, enrollment) => {
+    if (!document?.id || !isDocumentPending(document)) return;
+
+    setSavingDocumentId(document.id);
+    setError("");
+    setNotice("");
+
+    const requirementTypeId = (
+      document.requirement__type_id
+      ?? document.requirement_type_id
+      ?? document.requirement__type?.id
+      ?? document.requirement_type?.id
+      ?? document.requirementType?.id
+      ?? null
+    );
+    const payload = {
+      status: "en_revision",
+      file_url: document.file_url
+        ?? document.document_url
+        ?? document.image_url
+        ?? document.imagen_url
+        ?? document.url
+        ?? document.imagen
+        ?? "",
+      file_public_id: document.file_public_id ?? document.public_id ?? "",
+      enrollment_id: document.enrollment_id ?? document.enrollment?.id ?? enrollment.id,
+      requirement__type_id: requirementTypeId,
+    };
+
+    try {
+      await api.put(`/enrollment-documents/${document.id}`, payload);
+      setDocuments((current) => current.map((item) => (
+        String(item.id) === String(document.id) ? { ...item, status: "en_revision" } : item
+      )));
+      setNotice(`${getDocumentName(document, requirementTypesById)} pasó a En revisión.`);
+    } catch (saveError) {
+      console.error("Error al actualizar el estado del documento:", saveError);
+      setError(getErrorMessage(saveError, "No se pudo actualizar el estado del documento."));
+    } finally {
+      setSavingDocumentId(null);
     }
   };
 
@@ -696,20 +751,33 @@ const RevisarMa = () => {
                             <i className="bi bi-file-earmark-text mt-0.5 text-violet-700" aria-hidden="true" />
                             <div className="min-w-0">
                               <p className="m-0 break-words text-sm font-semibold text-slate-700">{getDocumentName(document, requirementTypesById)}</p>
-                              <p className="mb-0 mt-1 text-xs text-slate-500">Estado: {document.status || "Sin estado"}</p>
+                              <p className="mb-0 mt-1 text-xs text-slate-500">Estado: {normalizeDocumentStatus(document.status)}</p>
                             </div>
                           </div>
-                          {documentUrl && (
-                            <a
-                              href={documentUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex w-fit shrink-0 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-violet-700 transition hover:bg-violet-50"
-                            >
-                              <i className="bi bi-box-arrow-up-right" aria-hidden="true" />
-                              Abrir archivo
-                            </a>
-                          )}
+                          <div className="flex shrink-0 flex-wrap items-center gap-2">
+                            {documentUrl && (
+                              <a
+                                href={documentUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex w-fit items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-violet-700 transition hover:bg-violet-50"
+                              >
+                                <i className="bi bi-box-arrow-up-right" aria-hidden="true" />
+                                Abrir archivo
+                              </a>
+                            )}
+                            {isDocumentPending(document) && (
+                              <button
+                                type="button"
+                                onClick={() => handleDocumentReview(document, selectedApplication)}
+                                disabled={savingDocumentId !== null}
+                                className="inline-flex w-fit items-center gap-2 rounded-lg border border-sky-200 bg-white px-3 py-2 text-xs font-semibold text-sky-700 transition hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50"
+                              >
+                                <i className="bi bi-search" aria-hidden="true" />
+                                {savingDocumentId === document.id ? "Actualizando..." : "Marcar en revisión"}
+                              </button>
+                            )}
+                          </div>
                         </li>
                       );
                     })}

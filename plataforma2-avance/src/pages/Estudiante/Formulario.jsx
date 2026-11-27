@@ -266,6 +266,9 @@ const Formulario = () => {
             if (!form.terms_accepted) throw new Error("Debes aceptar la certificación de veracidad.");
             if (!form.student.document.trim()) throw new Error("Ingresa el documento asociado a tu cuenta.");
             if (!form.student.document_type) throw new Error("Selecciona el tipo de documento del estudiante.");
+            if (!form.student.birth_date) throw new Error("Ingresa la fecha de nacimiento del estudiante.");
+            if (!form.student.gender) throw new Error("Selecciona el género del estudiante.");
+            if (!form.student.address.trim()) throw new Error("Ingresa la dirección de residencia del estudiante.");
             if (!form.student.socioeconomic_stratum) throw new Error("Selecciona el estrato socioeconómico.");
             if (form.student.gender === "Otro" && !form.student.gender_other.trim()) {
                 throw new Error("Especifica el género del estudiante.");
@@ -330,6 +333,22 @@ const Formulario = () => {
                     if (String(linkedUserId) !== String(currentUserId)) {
                         throw new Error("El documento ya está asociado a otro usuario. Verifica los datos ingresados.");
                     }
+                    await api.put(`/students/${existingStudent.id}`, {
+                        birth_date: form.student.birth_date,
+                        gender: form.student.gender === "Otro"
+                            ? form.student.gender_other.trim()
+                            : form.student.gender,
+                        address: form.student.address.trim(),
+                        socieconomic_stratum: Number(form.student.socioeconomic_stratum),
+                        user_system_id: Number(linkedUserId),
+                        institution_id: existingStudent.institution_id ?? existingStudent.institution?.id ?? null,
+                        grade_level_id: existingStudent.grade_level_id ?? existingStudent.grade_level?.id ?? null,
+                        class__group_id: existingStudent.class__group_id
+                            ?? existingStudent.class_group?.id
+                            ?? existingStudent.classGroup?.id
+                            ?? null,
+                        guardian_id: existingStudent.guardian_id ?? existingStudent.guardian?.id ?? null,
+                    });
                     studentId = existingStudent.id;
                 } else {
                     const studentPayload = {

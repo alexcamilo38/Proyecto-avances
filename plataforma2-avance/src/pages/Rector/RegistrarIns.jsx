@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import api from "../../Config/env";
+import { getAuthSession, saveAuthSession } from "../../Config/auth";
+import { getCurrentUserId } from "../Auth/authUtils";
 import CampusManager from "../Administrador/CampusManager";
 
 const fieldClass = "w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-500/10";
@@ -46,10 +48,43 @@ const getInstitutions = (responseData) => {
   throw new Error("El servidor devolvió una respuesta inesperada al consultar las instituciones.");
 };
 
+const getUser = (responseData) => {
+  const user = responseData?.user_system
+    || responseData?.user
+    || responseData?.data?.user_system
+    || responseData?.data?.user
+    || responseData?.data?.data
+    || responseData?.data
+    || responseData;
+
+  if (!user || typeof user !== "object" || Array.isArray(user)) {
+    throw new Error("El servidor devolvió una respuesta inesperada al consultar el usuario.");
+  }
+  return user;
+};
+
 const requestInstitution = async () => {
+  const session = getAuthSession();
+  const userId = getCurrentUserId()
+    ?? session?.user?.id
+    ?? session?.user?.user_system_id;
+  if (userId == null) {
+    throw new Error("No se encontró la sesión del rector para consultar su institución.");
+  }
+
+  const userResponse = await api.get(`/user-systems/${userId}`);
+  const user = getUser(userResponse.data);
+  const institutionId = user.institution_id ?? user.institution?.id;
+  if (session) {
+    saveAuthSession({ ...session, user: { ...session.user, ...user } });
+  }
+  if (institutionId == null) return null;
+
   const response = await api.get("/institutions/list");
   const institutions = getInstitutions(response.data);
-  return institutions[0] ? normalizeInstitution(institutions[0]) : null;
+  const institution = institutions.find((item) => String(item.id) === String(institutionId));
+  if (institution) return normalizeInstitution(institution);
+  return user.institution?.id != null ? normalizeInstitution(user.institution) : null;
 };
 
 const getErrorMessage = (error, fallback) => {
@@ -57,6 +92,63 @@ const getErrorMessage = (error, fallback) => {
   const firstValidationError = validationErrors && Object.values(validationErrors).flat()[0];
 
   return firstValidationError || error.response?.data?.message || error.message || fallback;
+};
+
+const getCreatedInstitution = async (responseData, nit) => {
+  const responseInstitution = responseData?.institution
+    || responseData?.data?.institution
+    || responseData?.data
+    || responseData;
+
+  if (responseInstitution?.id != null) return normalizeInstitution(responseInstitution);
+
+  const institutionsResponse = await api.get("/institutions/list");
+  const institutions = getInstitutions(institutionsResponse.data);
+  const createdInstitution = institutions.find((institution) => String(institution.nit) === String(nit));
+  return createdInstitution ? normalizeInstitution(createdInstitution) : null;
+};
+
+const assignInstitutionToCurrentUser = async (institution) => {
+  const session = getAuthSession();
+  const userId = getCurrentUserId()
+    ?? session?.user?.id
+    ?? session?.user?.user_system_id;
+  if (userId == null) {
+    throw new Error("No se encontró la sesión del rector para asociar la institución.");
+  }
+
+  const response = await api.get(`/user-systems/${userId}`);
+  const user = getUser(response.data);
+  const roleId = user.rol_id ?? user.rol?.id ?? user.role?.id;
+  const payload = {
+    first_name: user.first_name,
+    middle_name: user.middle_name || null,
+    last_name: user.last_name,
+    second_last_name: user.second_last_name || null,
+    document: user.document,
+    document_type: user.document_type,
+    phone: user.phone,
+    email: user.email,
+    username: user.username,
+    status: user.status ?? true,
+    institution_id: Number(institution.id),
+    ...(roleId == null ? {} : { rol_id: Number(roleId) }),
+    photo_url: user.photo_url || "",
+    photo_public_id: user.photo_public_id || "",
+  };
+
+  await api.put(`/user-systems/${userId}`, payload);
+  if (session) {
+    saveAuthSession({
+      ...session,
+      user: {
+        ...session.user,
+        ...user,
+        institution_id: Number(institution.id),
+        institution,
+      },
+    });
+  }
 };
 
 const uploadInstitutionImage = async (file, label) => {
@@ -277,9 +369,19 @@ const RegistrarIns = () => {
         setNotice("Los datos de la institución se actualizaron correctamente.");
       } else {
         const response = await api.post("/institutions/store", payload);
-        const createdInstitution = response.data?.institution || response.data?.data || payload;
-        const normalizedInstitution = normalizeInstitution(createdInstitution);
-        setInstitution(normalizedInstitution.id ? normalizedInstitution : await requestInstitution());
+        const normalizedInstitution = await getCreatedInstitution(response.data, payload.nit);
+        if (!normalizedInstitution?.id) {
+          throw new Error("La institución se creó, pero no se pudo identificar para asociarla a tu cuenta.");
+        }
+        try {
+          await assignInstitutionToCurrentUser(normalizedInstitution);
+        } catch (assignmentError) {
+          throw new Error(
+            `La institución se creó, pero no se pudo asociar a tu cuenta: ${getErrorMessage(assignmentError, "error desconocido")}`,
+            { cause: assignmentError },
+          );
+        }
+        setInstitution(normalizedInstitution);
         setNotice("La institución se registró correctamente.");
       }
 

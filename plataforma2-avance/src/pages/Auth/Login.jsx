@@ -25,18 +25,27 @@ const Login = () => {
       const responseData = response.data;
       const user = responseData?.user || responseData?.data?.user || responseData?.data?.user_system || responseData?.data;
       const embeddedRole = user?.rol || user?.role;
-      let dashboard = getDashboardPath(
-        typeof embeddedRole === "string"
-          ? embeddedRole
-          : embeddedRole?.slug || embeddedRole?.name_role || embeddedRole?.name ||
-            user?.role_slug || user?.rol_slug || user?.role_name,
-      );
+      let dashboard = [
+        embeddedRole,
+        user?.role_slug,
+        user?.rol_slug,
+        user?.role_name,
+        user?.rol_name,
+      ].map(getDashboardPath).find(Boolean) || null;
 
-      if (!dashboard && (user?.rol_id || user?.role_id)) {
+      const embeddedRoleId = typeof embeddedRole === "number"
+        || (typeof embeddedRole === "string" && /^\d+$/.test(embeddedRole))
+        ? embeddedRole
+        : null;
+      const roleId = user?.rol_id ?? user?.role_id ?? embeddedRole?.id ?? embeddedRoleId;
+
+      if (!dashboard && roleId != null) {
         const rolesResponse = await api.get("/rols/list");
         const roles = getCollection(rolesResponse.data, "roles");
-        const userRole = roles.find((role) => String(role.id) === String(user.rol_id || user.role_id));
-        dashboard = getDashboardPath(userRole?.slug || userRole?.name_role);
+        const userRole = roles.find((role) => (
+          String(role.id ?? role.rol_id ?? role.role_id) === String(roleId)
+        ));
+        dashboard = getDashboardPath(userRole);
       }
 
       if (!user || !dashboard) {

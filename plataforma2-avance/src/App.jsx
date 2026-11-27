@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 {/* Componentes globales */}
 import Footer from "./Components/Footer";
@@ -21,7 +21,7 @@ import RectorLayout from './layouts/RectorLayout';
 import SelecionRol from './pages/Auth/SelecionRol';
 import ReperaContra from './pages/Contrarecuperar/ReperaContra';
 import RegistroU from './pages/Estudiante/RegistroU';
-import PerfilUsuario from './pages/Estudiante/PerfilUsuario';
+import PerfilEst from './pages/Estudiante/PerfilEst';
 import Colegios from './pages/Estudiante/Colegios';
 import InfoSede from './pages/Estudiante/InfoSede';
 import MatriculasE from './pages/Estudiante/MatriculasE';
@@ -124,7 +124,8 @@ const App = () => {
         <Route path="/RegistroU" element={<RegistroU />} />
         <Route element={<StudentLayout />}>
           <Route path="/student" element={<Dashboard role="student" />} />
-          <Route path="/PerfilUsuario" element={<PerfilUsuario />} />
+          <Route path="/PerfilEst" element={<PerfilEst />} />
+          <Route path="/PerfilUsuario" element={<Navigate to="/PerfilEst" replace />} />
           <Route path="/Colegios" element={<Colegios />} />
           <Route path="/InfoSede" element={<InfoSede />} />
           <Route path="/MatriculasE" element={<MatriculasE />} />

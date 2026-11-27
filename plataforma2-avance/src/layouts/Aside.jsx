@@ -19,7 +19,7 @@ const navigation = {
     { to: "/Colegios", label: "Instituciones", icon: "bi-bank" },
     { to: "/MatriculasE", label: "Mis matrículas", icon: "bi-journal-bookmark" },
     { to: "/ModulosAcademicos", label: "Catálogos", icon: "bi-folder2-open" },
-    { to: "/PerfilUsuario", label: "Mi perfil", icon: "bi-person-badge" },
+    { to: "/PerfilEst", label: "Mi perfil", icon: "bi-person-badge" },
   ],
   rector: [
     { to: "/RegistrarIns", label: "Institución", icon: "bi-building-add" },
